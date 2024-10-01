@@ -13,7 +13,7 @@ const BottomTabNavigator = () => {
       <Tab.Navigator >
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="LeaderBoard" component={LeaderBoardScreen} />
-        <Tab.Screen name="Stack" component={StackNavigator} />
+        <Tab.Screen name="User" component={StackNavigator} options={{ headerShown: false }} />
       </Tab.Navigator>
     </>
   );

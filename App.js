@@ -1,5 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native";
-import BottomTabNavigator from "./components/BottomTabNavigator";
+import BottomTabNavigator from "./navigation/BottomTabNavigator";
 
 
 export default function App() {

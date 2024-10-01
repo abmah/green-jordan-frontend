@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native';
-import StackNavigator from '../components/StackNavigator';
+import StackNavigator from '../navigation/StackNavigator';
 
 const HomeScreen = () => {
   return (
