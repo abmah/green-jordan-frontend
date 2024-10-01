@@ -1,23 +1,25 @@
-import { View, Text, TextInput, Pressable, Button, ActivityIndicator } from 'react-native';
-import { useState } from 'react';
-import Loader from './components/Loader';
-import Error from './components/ErrorMessage';
-import useFetch from '../api/useFetch';
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, ActivityIndicator, Pressable, StyleSheet } from 'react-native';
 import { login } from '../api';
+import * as SecureStore from 'expo-secure-store';
+import useUserStore from '../stores/useUserStore';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { setuserId } = useUserStore();
 
-  const submit = async () => {
+  const handleLogin = async () => {
     setLoading(true);
     setError(null);
     try {
       const response = await login(email, password);
-      setData(response);
+      const userId = response.data._id;
+      await SecureStore.setItemAsync('userId', userId);
+      await setuserId(userId);
+      navigation.navigate('Profile');
     } catch (error) {
       console.error('API call error:', error);
       setError('Login failed. Please check your credentials and try again.');
@@ -26,53 +28,66 @@ const LoginScreen = ({ navigation }) => {
     }
   };
 
-
-
   return (
-    <View style={{ padding: 10, flex: 1, backgroundColor: '#f9f9f9' }}>
+    <View style={styles.container}>
       <Text>Email</Text>
       <TextInput
+        placeholder='Enter your email'
         value={email}
-        placeholder='email'
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}
-        onChangeText={(text) => setEmail(text)}
-        keyboardType='email-address' // Better user experience for email input
-        autoCapitalize='none'
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        style={styles.input}
       />
-
       <Text>Password</Text>
       <TextInput
+        placeholder='Enter your password'
         value={password}
-        placeholder='password'
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}
-        onChangeText={(text) => setPassword(text)}
-        secureTextEntry // Hide password input
+        onChangeText={setPassword}
+        secureTextEntry
+        style={styles.input}
       />
-
       {loading ? (
         <ActivityIndicator size="large" color="blue" />
       ) : (
-        <Button onPress={submit} title="Login" />
+        <Button title="Login" onPress={handleLogin} />
       )}
-
-      {error && (
-        <Error message={error} /> // Assuming Error component displays the error message
-      )}
-
-      <Text style={{ marginTop: 10 }}>Don't have an account?</Text>
-      <Pressable onPress={() => navigation.navigate('Signup')} style={{ marginTop: 10, backgroundColor: 'blue', padding: 10 }}>
-        <Text style={{ color: 'white' }}>Signup now</Text>
+      {error && <Text style={styles.errorText}>{error}</Text>}
+      <Text style={styles.signupText}>Don't have an account?</Text>
+      <Pressable onPress={() => navigation.navigate('Signup Screen')} style={styles.signupButton}>
+        <Text style={styles.signupButtonText}>Signup now</Text>
       </Pressable>
-
-      {
-        data && (
-          <View style={{ marginTop: 20 }}>
-            <Text>{JSON.stringify(data)}</Text>
-          </View>
-        )
-      }
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 10,
+    flex: 1,
+    backgroundColor: '#f9f9f9',
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
+  errorText: {
+    color: 'red',
+    marginTop: 10,
+  },
+  signupText: {
+    marginTop: 10,
+  },
+  signupButton: {
+    marginTop: 10,
+    backgroundColor: 'blue',
+    padding: 10,
+  },
+  signupButtonText: {
+    color: 'white',
+  },
+});
 
 export default LoginScreen;

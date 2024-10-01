@@ -1,6 +1,6 @@
-
-import { View, Text, FlatList, StyleSheet } from 'react-native';
-import useFetch from '../api/useFetch';
+import React from 'react';
+import { View, FlatList, StyleSheet, Text } from 'react-native';
+import useFetch from '../hooks/useFetch';
 import { getLeaderboard } from '../api';
 import LeaderboardItem from './components/LeaderboardItem';
 import Loader from './components/Loader';
@@ -15,20 +15,18 @@ const LeaderboardScreen = () => {
   }
 
   if (error) {
-    return <Error message={error} />;
+    return <Error message={`Error fetching leaderboard: ${error}`} />;
   }
-
-  const leaderboardData = data?.leaderboard || [];
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={leaderboardData}
+        data={data?.leaderboard || []}
         keyExtractor={(item) => item.rank.toString()}
         renderItem={({ item }) => (
           <LeaderboardItem rank={item.rank} username={item.username} points={item.points} />
         )}
-        ListEmptyComponent={<EmptyState message="No leaderboard data available." />} // Use the EmptyState component
+        ListEmptyComponent={<EmptyState message="No leaderboard data available." />}
       />
     </View>
   );
@@ -40,7 +38,11 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#fff',
   },
-
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
 });
 
 export default LeaderboardScreen;

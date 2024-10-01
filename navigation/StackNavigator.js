@@ -8,8 +8,8 @@ const Stack = createStackNavigator();
 const StackNavigator = () => {
   return (
     <Stack.Navigator initialRouteName="Login">
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Signup" component={SignupScreen} />
+      <Stack.Screen name="Login Screen" component={LoginScreen} />
+      <Stack.Screen name="Signup Screen" component={SignupScreen} />
     </Stack.Navigator>
   );
 }
