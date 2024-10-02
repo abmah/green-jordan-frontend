@@ -17,11 +17,11 @@ const SignupScreen = ({ navigation }) => {
     setError(null);
     try {
       const response = await Signup(username, email, password);
-      const userId = response.data._id; // Adjust according to your API response
+      const userId = response.data._id;
 
       await SecureStore.setItemAsync('userId', userId);
       await setuserId(userId);
-      navigation.navigate('Profile'); // Navigate to Profile on successful signup
+      navigation.navigate('Profile');
     } catch (error) {
       console.error('API call error:', error);
       setError('Signup failed. Please try again.');
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     marginBottom: 10,
-    paddingHorizontal: 10, // Added padding for better input experience
+    paddingHorizontal: 10,
   },
   errorText: {
     color: 'red',

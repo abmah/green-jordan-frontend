@@ -17,3 +17,4 @@ export const getLeaderboard = async () => {
     throw error;
   }
 };
+

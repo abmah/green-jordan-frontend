@@ -21,14 +21,16 @@ const HomeScreen = () => {
 
 
   return (
-    <View style={{ flex: 1, padding: 10 }}>
-      <FlatList
-        ListEmptyComponent={<EmptyState message="No posts available." />}
-        data={data?.data} // Accessing the posts array from the response
-        keyExtractor={(item) => item._id}
-        renderItem={({ item }) => <Post post={item} />}
-      />
-    </View>
+
+    <FlatList
+      style={{ paddingTop: 10 }}
+      ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+      ListEmptyComponent={<EmptyState message="No posts available." />}
+      data={data?.data}
+      keyExtractor={(item) => item._id}
+      renderItem={({ item }) => <Post post={item} />}
+    />
+
   );
 };
 

@@ -10,7 +10,6 @@ const LeaderboardItem = ({ rank, username, points }) => {
   );
 };
 
-// Styles for LeaderboardItem
 const styles = StyleSheet.create({
   item: {
     padding: 10,

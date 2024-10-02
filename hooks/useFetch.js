@@ -1,5 +1,4 @@
-
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 const useFetch = (apiFunction, params = null, options = {}) => {
   const { maxRetries = 3, retryDelay = 2000 } = options;
@@ -7,10 +6,13 @@ const useFetch = (apiFunction, params = null, options = {}) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchData = async (retries = maxRetries) => {
+  const fetchData = useCallback(async (retries = maxRetries) => {
+
     try {
+      setLoading(true);
       const result = await apiFunction(params);
       setData(result);
+      setError(null);
     } catch (err) {
       if (retries > 0) {
         setTimeout(() => fetchData(retries - 1), retryDelay);
@@ -20,13 +22,13 @@ const useFetch = (apiFunction, params = null, options = {}) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [apiFunction, params, maxRetries, retryDelay]);
 
   useEffect(() => {
     fetchData();
-  }, [apiFunction, params]);
+  }, [fetchData]);
 
-  return { data, loading, error };
+  return { data, loading, error, refetch: fetchData }
 };
 
 export default useFetch;
