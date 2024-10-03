@@ -30,3 +30,14 @@ export const createPost = async (description, userId, image) => {
     throw error;
   }
 };
+
+
+export const likeOrUnlikePost = async (postId, userId) => {
+  try {
+    const response = await apiClient.put(`/posts/like-post/${postId}`, { userId });
+    return response.data;
+  } catch (error) {
+    console.error('Error submitting form:', error);
+    throw error;
+  }
+}

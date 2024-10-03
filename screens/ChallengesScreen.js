@@ -30,7 +30,6 @@ const ChallengesScreen = () => {
     setIsUploading(true);
     try {
       const response = await createPost(description, userId, image);
-      console.log(response);
       setDescription('');
       setImage(null);
     } catch (error) {

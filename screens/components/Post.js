@@ -1,30 +1,37 @@
-import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
-import useFetch from '../../hooks/useFetch';
-import { getUser } from '../../api';
-import { useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, StyleSheet, Pressable, Alert } from 'react-native';
+import { likeOrUnlikePost } from '../../api';
+import useUserStore from '../../stores/useUserStore';
+import CommentsModal from './CommentsModal';
 
 const Post = ({ post }) => {
-  const fetchUser = useMemo(() => () => getUser(post.userId), [post.userId]);
+  const { userId } = useUserStore();
+  const [isLiked, setIsLiked] = useState(post.likes.includes(userId));
+  const [likesCount, setLikesCount] = useState(post.likes.length);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const { data, loading, error } = useFetch(fetchUser, null, { maxRetries: 3, retryDelay: 2000 });
+  useEffect(() => {
+    setIsLiked(post.likes.includes(userId));
+  }, [userId, post.likes]);
 
-  const handleLike = () => {
+  const handleLike = async () => {
+    const wasLiked = isLiked;
+    const updatedLikesCount = wasLiked ? likesCount - 1 : likesCount + 1;
+
+    setIsLiked(!wasLiked);
+    setLikesCount(updatedLikesCount);
+
+    try {
+      await likeOrUnlikePost(post._id, userId);
+    } catch (error) {
+      Alert.alert('Error', 'Unable to like or unlike the post. Please try again.');
+      setIsLiked(wasLiked);
+      setLikesCount(wasLiked ? updatedLikesCount + 1 : updatedLikesCount - 1);
+    }
   };
 
-  const handleOpenComments = () => {
-  };
-
-  const userProfilePicture = data?.user?.profilePicture || 'https://via.placeholder.com/150';
-  const username = data?.user?.username || 'User123';
-
-
-  if (loading) {
-    return <Text>Loading user...</Text>;
-  }
-
-  if (error) {
-    return <Text>Error fetching user data: {error.message}</Text>;
-  }
+  const userProfilePicture = post.userId.profilePicture || 'https://via.placeholder.com/150';
+  const username = post.userId.username || 'User';
 
   return (
     <View style={styles.container}>
@@ -46,15 +53,21 @@ const Post = ({ post }) => {
       <View style={styles.footer}>
         <View style={styles.likesComments}>
           <Pressable onPress={handleLike}>
-            <Text style={styles.likes}>{post.likes.length} likes</Text>
+            <Text style={styles.likes}>{likesCount} likes</Text>
           </Pressable>
-          <Pressable onPress={handleOpenComments}>
+          <Pressable onPress={() => setIsModalVisible(true)}>
             <Text style={styles.comments}>View comments</Text>
           </Pressable>
         </View>
-
         <Text style={styles.timestamp}>{new Date(post.createdAt).toLocaleString()}</Text>
       </View>
+
+      <CommentsModal
+        comments={post.comments}
+        visible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+        postId={post._id}
+      />
     </View>
   );
 };
