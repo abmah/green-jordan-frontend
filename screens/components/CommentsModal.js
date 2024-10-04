@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Modal, TouchableOpacity, StyleSheet, FlatList, TextInput, Button } from 'react-native';
+import { View, Text, Modal, TouchableOpacity, StyleSheet, FlatList, TextInput, Button, Image } from 'react-native';
 import { postComment } from '../../api';
 import useUserStore from '../../stores/useUserStore';
 
@@ -8,7 +8,6 @@ const CommentsModal = ({ visible, onClose, postId, comments: initialComments }) 
   const [comments, setComments] = useState(initialComments);
   const [newComment, setNewComment] = useState('');
   const [error, setError] = useState(null);
-
 
   useEffect(() => {
     setComments(initialComments);
@@ -26,14 +25,12 @@ const CommentsModal = ({ visible, onClose, postId, comments: initialComments }) 
     try {
       const response = await postComment(commentToPost);
 
-
       const newCommentObject = {
         _id: response._id,
         text: newComment,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        userId,
-        username: 'Anonymous',
+        userId: { _id: userId, username: 'You', profilePicture: '' },
       };
 
       setComments(prevComments => [...prevComments, newCommentObject]);
@@ -47,8 +44,17 @@ const CommentsModal = ({ visible, onClose, postId, comments: initialComments }) 
 
   const renderComment = ({ item }) => (
     <View style={styles.comment}>
-      <Text style={styles.username}>{item.username || 'Anonymous'}</Text>
-      <Text style={styles.commentText}>{item.text}</Text>
+      <View style={styles.commentHeader}>
+        {item.userId.profilePicture ? (
+          <Image source={{ uri: item.userId.profilePicture }} style={styles.profilePicture} />
+        ) : (
+          <View style={styles.profilePicturePlaceholder} />
+        )}
+        <View style={styles.commentContent}>
+          <Text style={styles.username}>{item.userId.username || 'Anonymous'}</Text>
+          <Text style={styles.commentText}>{item.text}</Text>
+        </View>
+      </View>
     </View>
   );
 
@@ -66,7 +72,7 @@ const CommentsModal = ({ visible, onClose, postId, comments: initialComments }) 
           <FlatList
             data={comments}
             renderItem={renderComment}
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={(item) => item._id}
             ListEmptyComponent={<Text>No comments yet. Be the first to comment!</Text>}
           />
 
@@ -116,6 +122,26 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
+  },
+  commentHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  profilePicture: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  profilePicturePlaceholder: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#ccc',
+    marginRight: 10,
+  },
+  commentContent: {
+    flex: 1,
   },
   username: {
     fontSize: 14,

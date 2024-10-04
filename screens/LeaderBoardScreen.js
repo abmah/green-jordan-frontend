@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import useFetch from '../hooks/useFetch';
 import { getLeaderboard } from '../api';
@@ -9,7 +9,7 @@ import EmptyState from './components/EmptyState';
 
 const LeaderboardScreen = () => {
   const { data, loading, error, refetch } = useFetch(getLeaderboard, null, { maxRetries: 3, retryDelay: 2000 });
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -29,9 +29,14 @@ const LeaderboardScreen = () => {
     <View style={styles.container}>
       <FlatList
         data={data?.leaderboard || []}
-        keyExtractor={(item) => item.rank.toString()}
-        renderItem={({ item }) => (
-          <LeaderboardItem rank={item.rank} username={item.username} points={item.points} />
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item, index }) => (
+          <LeaderboardItem
+            rank={index + 1}
+            username={item.username}
+            points={item.allTimePoints}
+            profilePicture={item.profilePicture}
+          />
         )}
         refreshing={refreshing}
         onRefresh={onRefresh}

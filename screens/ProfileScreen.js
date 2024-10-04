@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, Button, Alert } from 'react-native';
 import useUserStore from '../stores/useUserStore';
+import * as SecureStore from 'expo-secure-store';
 import useFetch from '../hooks/useFetch';
 import { getSelf } from '../api/user';
 
@@ -26,6 +27,7 @@ const ProfileScreen = () => {
         onPress: async () => {
           await clearuserId();
           Alert.alert("Logged out successfully");
+          await SecureStore.deleteItemAsync('userId');
         }
       }
     ]);

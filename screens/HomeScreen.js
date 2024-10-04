@@ -25,7 +25,6 @@ const HomeScreen = () => {
     return <Error message={`Error fetching feed: ${error}`} />;
   }
 
-  // Reverse the data array
   const reversedData = data?.data ? [...data.data].reverse() : [];
 
   return (

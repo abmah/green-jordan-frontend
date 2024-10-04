@@ -56,6 +56,8 @@ const LoginScreen = ({ navigation }) => {
       <Pressable onPress={() => navigation.navigate('Signup Screen')} style={styles.signupButton}>
         <Text style={styles.signupButtonText}>Signup now</Text>
       </Pressable>
+
+
     </View>
   );
 };

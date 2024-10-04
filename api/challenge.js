@@ -10,7 +10,18 @@ const apiClient = axios.create({
 
 export const getLeaderboard = async () => {
   try {
-    const response = await apiClient.get('/task/leaderboard');
+    const response = await apiClient.get('/challenge/leaderboard');
+    return response.data;
+  } catch (error) {
+    console.error('API call error:', error);
+    throw error;
+  }
+};
+
+
+export const getAllChallenges = async () => {
+  try {
+    const response = await apiClient.get('/challenge/available');
     return response.data;
   } catch (error) {
     console.error('API call error:', error);

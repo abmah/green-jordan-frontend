@@ -15,6 +15,11 @@ const Post = ({ post }) => {
   }, [userId, post.likes]);
 
   const handleLike = async () => {
+    if (!userId) {
+      Alert.alert('Error', 'You must be logged in to like a post.');
+      return;
+    }
+
     const wasLiked = isLiked;
     const updatedLikesCount = wasLiked ? likesCount - 1 : likesCount + 1;
 
@@ -52,8 +57,10 @@ const Post = ({ post }) => {
 
       <View style={styles.footer}>
         <View style={styles.likesComments}>
-          <Pressable onPress={handleLike}>
-            <Text style={styles.likes}>{likesCount} likes</Text>
+          <Pressable onPress={handleLike} disabled={!userId}>
+            <Text style={[styles.likes, !userId && styles.disabledText]}>
+              {likesCount} likes
+            </Text>
           </Pressable>
           <Pressable onPress={() => setIsModalVisible(true)}>
             <Text style={styles.comments}>View comments</Text>
@@ -135,6 +142,9 @@ const styles = StyleSheet.create({
   },
   timestamp: {
     fontSize: 12,
+    color: 'lightgray',
+  },
+  disabledText: {
     color: 'lightgray',
   },
 });

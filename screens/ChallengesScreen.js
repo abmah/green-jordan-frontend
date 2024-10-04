@@ -1,43 +1,33 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Image, Pressable, StyleSheet, Alert, ActivityIndicator } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image
+} from 'react-native';
 import useUserStore from '../stores/useUserStore';
-import { createPost } from '../api/post';
-import { requestCameraPermissions, pickImage } from './components/ImagePickerHandler';
+import ChallengeItem from './components/ChallengeItem';
+import { getAllChallenges } from '../api/challenge';
+import { useEffect, useState } from 'react';
 
 const ChallengesScreen = () => {
+  const [dailyChallenge, setDailyChallenge] = useState(null);
+  const [freeChallenges, setFreeChallenges] = useState([]);
   const { userId } = useUserStore();
-  const [description, setDescription] = useState('');
-  const [image, setImage] = useState(null);
-  const [isUploading, setIsUploading] = useState(false);
 
-  const handleCameraPress = async () => {
-    if (await requestCameraPermissions()) {
-      await pickImage('camera', setImage);
-    }
-  };
+  useEffect(() => {
+    const fetchChallenges = async () => {
+      try {
+        const { dailyChallenge, freeChallenges } = await getAllChallenges();
+        setDailyChallenge(dailyChallenge);
+        setFreeChallenges(freeChallenges);
+      } catch (error) {
+        console.error('Failed to fetch challenges:', error);
+      }
+    };
 
-  const handleLibraryPress = async () => {
-    await pickImage('library', setImage);
-  };
-
-  const handleSubmit = async () => {
-    if (!description.trim() || !image) {
-      Alert.alert('Validation Error', 'Please provide a description and select an image.');
-      return;
-    }
-
-    setIsUploading(true);
-    try {
-      const response = await createPost(description, userId, image);
-      setDescription('');
-      setImage(null);
-    } catch (error) {
-      console.error('Error submitting form:', error);
-    } finally {
-      setIsUploading(false);
-    }
-  };
+    fetchChallenges();
+  }, []);
 
   if (!userId) {
     return (
@@ -48,40 +38,31 @@ const ChallengesScreen = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Post Something</Text>
-      <TextInput
-        placeholder="Description"
-        value={description}
-        onChangeText={setDescription}
-        style={styles.input}
-      />
-      <View style={styles.buttonContainer}>
-        <Pressable style={({ pressed }) => [styles.imageButton, pressed && styles.buttonPressed]} onPress={handleCameraPress}>
-          <Text style={styles.buttonText}>Take a Photo</Text>
-        </Pressable>
-        <Pressable style={({ pressed }) => [styles.imageButton, pressed && styles.buttonPressed]} onPress={handleLibraryPress}>
-          <Text style={styles.buttonText}>Select from Library</Text>
-        </Pressable>
+    <ScrollView style={styles.container}>
+      <Text style={styles.title}>Available Challenges</Text>
+
+      {dailyChallenge && (
+        <View style={styles.challengeSection}>
+          <Text style={styles.sectionTitle}>Daily Challenge</Text>
+          <ChallengeItem
+            key={dailyChallenge._id}
+            challenge={dailyChallenge}
+            userId={userId}
+          />
+        </View>
+      )}
+
+      <View style={styles.challengeSection}>
+        <Text style={styles.sectionTitle}>Free Challenges</Text>
+        {freeChallenges.map((challenge) => (
+          <ChallengeItem
+            key={challenge._id}
+            challenge={challenge}
+            userId={userId}
+          />
+        ))}
       </View>
-      {image && (
-        <Image
-          source={{ uri: image.uri }}
-          style={styles.image}
-        />
-      )}
-      {isUploading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : (
-        <Pressable
-          style={({ pressed }) => [styles.submitButton, pressed && styles.buttonPressed]}
-          onPress={handleSubmit}
-          disabled={isUploading}
-        >
-          <Text style={styles.submitButtonText}>Create Post</Text>
-        </Pressable>
-      )}
-    </View>
+    </ScrollView>
   );
 };
 
@@ -89,61 +70,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#F5F5F5',
   },
   title: {
     fontSize: 24,
-    marginBottom: 20,
+    marginBottom: 10,
     fontWeight: 'bold',
-  },
-  input: {
-    borderWidth: 1,
-    padding: 10,
-    marginBottom: 20,
-    borderColor: '#ccc',
-    borderRadius: 5,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-  imageButton: {
-    flex: 1,
-    backgroundColor: '#007BFF',
-    padding: 15,
-    borderRadius: 5,
-    marginHorizontal: 5,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  buttonPressed: {
-    opacity: 0.7,
-  },
-  submitButton: {
-    backgroundColor: '#28A745',
-    padding: 15,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  submitButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  image: {
-    width: '100%',
-    height: 200,
-    marginVertical: 10,
-    alignSelf: 'center',
+    color: '#333',
   },
   loginPrompt: {
     fontSize: 18,
-    textAlign: 'center',
-    marginTop: 20,
+    color: '#ff4d4d',
+  },
+  challengeSection: {
+    marginBottom: 20,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#555',
   },
 });
 
