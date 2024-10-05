@@ -27,7 +27,7 @@ const BottomTabNavigator = () => {
   }
 
   return (
-    <Tab.Navigator>
+    <Tab.Navigator screenOptions={{ headerShown: false }}>
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="LeaderBoard" component={LeaderBoardScreen} />
       <Tab.Screen name="Challenges" component={ChallengesScreen} />

@@ -10,6 +10,7 @@ import ChallengeItem from './components/ChallengeItem';
 import { getAllChallenges } from '../api/challenge';
 import { useEffect, useState } from 'react';
 
+
 const ChallengesScreen = () => {
   const [dailyChallenge, setDailyChallenge] = useState(null);
   const [freeChallenges, setFreeChallenges] = useState([]);
