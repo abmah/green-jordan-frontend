@@ -18,9 +18,9 @@ const ChallengesScreen = () => {
   useEffect(() => {
     const fetchChallenges = async () => {
       try {
-        const { dailyChallenge, freeChallenges } = await getAllChallenges();
+        const { dailyChallenge, freeChallenges } = await getAllChallenges(userId);
         setDailyChallenge(dailyChallenge);
-        setFreeChallenges(freeChallenges);
+        // setFreeChallenges(freeChallenges);
       } catch (error) {
         console.error('Failed to fetch challenges:', error);
       }
