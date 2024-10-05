@@ -26,16 +26,21 @@ const LoginScreen = ({ navigation }) => {
       navigation.navigate('Profile');
     } catch (error) {
       console.error('API call error:', error);
-      setError('Login failed. Please check your credentials and try again.');
+      setError('*Login failed. Please check your credentials and try again.');
+
+
+      setTimeout(() => {
+        setError(null);
+      }, 2000);
     } finally {
       setLoading(false);
     }
   };
 
-  // Create an animated value for the button's vertical position
+
+
   const buttonOffset = useState(new Animated.Value(0))[0];
 
-  // Function to animate the button down
   const handlePressIn = () => {
     Animated.timing(buttonOffset, {
       toValue: 4, // Move down by 4 pixels
@@ -45,15 +50,14 @@ const LoginScreen = ({ navigation }) => {
     }).start();
   };
 
-  // Function to reset the button position and trigger the login
   const handlePressOut = () => {
     Animated.timing(buttonOffset, {
-      toValue: 0, // Reset to original position
+      toValue: 0,
       duration: 0,
       easing: Easing.out(Easing.ease),
       useNativeDriver: true,
     }).start(() => {
-      handleLogin(); // Call handleLogin after the animation
+      handleLogin();
     });
   };
 
@@ -163,10 +167,10 @@ const styles = StyleSheet.create({
   },
 
   errorText: {
-    color: "#fff",
-    marginTop: 20,
+    color: "#ff4d4d",
+    marginTop: 12,
     textAlign: "center",
-    fontSize: 18,
+    fontSize: 16,
   },
 
   loginButtonContainer: {
@@ -211,7 +215,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 20,
+    marginTop: 10,
     width: "100%",
   },
 

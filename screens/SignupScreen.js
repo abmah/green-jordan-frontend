@@ -37,6 +37,9 @@ const SignupScreen = ({ navigation }) => {
     } catch (error) {
       console.error("API call error:", error);
       setError("Signup failed. Please try again.");
+      setTimeout(() => {
+        setError(null);
+      }, 2000);
     } finally {
       setLoading(false);
     }
@@ -225,10 +228,10 @@ const styles = StyleSheet.create({
   },
 
   errorText: {
-    color: "#fff",
-    marginTop: 20,
+    color: "#ff4d4d",
+    marginTop: 12,
     textAlign: "center",
-    fontSize: 18,
+    fontSize: 16,
   },
 
   loginContainer: {
