@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
 
   modalContent: {
     width: '80%',
-    height: 270,
+    minHeight: 270,
     backgroundColor: '#37464F',
     borderRadius: 15,
     padding: 16,
@@ -359,7 +359,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   instructionsModalContent: {
-
+    height: 270,
   },
   helpIcon: {
     alignSelf: 'flex-start',
