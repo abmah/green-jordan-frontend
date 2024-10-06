@@ -19,9 +19,9 @@ export const getLeaderboard = async () => {
 };
 
 
-export const getAllChallenges = async ({ userId }) => {
+export const getDailyChallenges = async (userId, challengeId) => {
   try {
-    const response = await apiClient.post('/challenge/daily', { userId });
+    const response = await apiClient.post('/challenge/daily', { userId, challengeId });
     return response.data;
   } catch (error) {
     console.error('API call error:', error);

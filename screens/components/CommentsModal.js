@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Modal, TouchableOpacity, StyleSheet, FlatList, TextInput, Button, Image } from 'react-native';
+import { View, Text, Modal, TouchableOpacity, StyleSheet, FlatList, TextInput, Pressable, Image } from 'react-native';
 import { postComment } from '../../api';
 import useUserStore from '../../stores/useUserStore';
+import { Ionicons } from '@expo/vector-icons'
 
 const CommentsModal = ({ visible, onClose, postId, comments: initialComments }) => {
   const { userId } = useUserStore();
@@ -24,7 +25,6 @@ const CommentsModal = ({ visible, onClose, postId, comments: initialComments }) 
 
     try {
       const response = await postComment(commentToPost);
-
       const newCommentObject = {
         _id: response._id,
         text: newComment,
@@ -46,12 +46,17 @@ const CommentsModal = ({ visible, onClose, postId, comments: initialComments }) 
     <View style={styles.comment}>
       <View style={styles.commentHeader}>
         {item.userId.profilePicture ? (
-          <Image source={{ uri: item.userId.profilePicture }} style={styles.profilePicture} />
+          <Image
+            source={{ uri: item.userId.profilePicture }}
+            style={styles.profilePicture}
+          />
         ) : (
           <View style={styles.profilePicturePlaceholder} />
         )}
         <View style={styles.commentContent}>
-          <Text style={styles.username}>{item.userId.username || 'Anonymous'}</Text>
+          <Text style={styles.username}>
+            {item.userId.username || "Anonymous"}
+          </Text>
           <Text style={styles.commentText}>{item.text}</Text>
         </View>
       </View>
@@ -59,13 +64,18 @@ const CommentsModal = ({ visible, onClose, postId, comments: initialComments }) 
   );
 
   return (
-    <Modal visible={visible} animationType="slide" transparent={true} onRequestClose={onClose}>
+    <Modal
+      visible={visible}
+      animationType="slide"
+      transparent={true}
+      onRequestClose={onClose}
+    >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>Comments</Text>
             <TouchableOpacity onPress={onClose}>
-              <Text style={styles.modalClose}>Close</Text>
+              <Ionicons name="close" size={24} color="#fff" />
             </TouchableOpacity>
           </View>
 
@@ -73,17 +83,29 @@ const CommentsModal = ({ visible, onClose, postId, comments: initialComments }) 
             data={comments}
             renderItem={renderComment}
             keyExtractor={(item) => item._id}
-            ListEmptyComponent={<Text>No comments yet. Be the first to comment!</Text>}
+            ListEmptyComponent={
+              <Text style={styles.noCommentsText}>No comments yet. Be the first to comment!</Text>
+            }
           />
 
-          <TextInput
-            style={styles.input}
-            placeholder="Add a comment..."
-            value={newComment}
-            onChangeText={setNewComment}
-          />
+          <View style={styles.commentInputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Write a comment..."
+              placeholderTextColor="#000000"
+              value={newComment}
+              onChangeText={setNewComment}
+            />
+
+            <Pressable
+              style={styles.submitButton}
+              onPress={handleCommentSubmit}
+            >
+              <Ionicons name="send" size={24} color="white" />
+            </Pressable>
+          </View>
+
           {error && <Text style={styles.errorText}>{error}</Text>}
-          <Button title="Submit" onPress={handleCommentSubmit} />
         </View>
       </View>
     </Modal>
@@ -93,72 +115,98 @@ const CommentsModal = ({ visible, onClose, postId, comments: initialComments }) 
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: "flex-end",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: "#0F1F26",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 20,
-    minHeight: '80%',
-    maxHeight: '80%',
+    minHeight: "80%",
+    maxHeight: "80%",
   },
   modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 22,
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
-  },
-  modalClose: {
-    color: 'blue',
-    fontSize: 16,
+    color: "#fff",
+    fontWeight: "bold",
   },
   comment: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
+    backgroundColor: "#0F2630",
+    borderRadius: 16,
+    marginBottom: 10,
+    padding: 16,
+  },
+  noCommentsText: {
+    color: "#fff",
+    fontSize: 16,
+    textAlign: "center",
   },
   commentHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   profilePicture: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    alignSelf: "flex-start",
+    width: 46,
+    height: 46,
+    borderRadius: 23,
     marginRight: 10,
   },
   profilePicturePlaceholder: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#ccc',
+    alignSelf: "flex-start",
+    width: 46,
+    height: 46,
+    borderRadius: 23,
+    backgroundColor: "#ccc",
     marginRight: 10,
   },
   commentContent: {
     flex: 1,
   },
   username: {
-    fontSize: 14,
-    fontWeight: 'bold',
+    fontSize: 18,
+    fontWeight: "900",
+    color: "#fff",
+    marginBottom: 5,
   },
   commentText: {
+    color: "#fff",
     fontSize: 16,
   },
-  errorText: {
-    color: 'red',
+
+  commentInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 10,
   },
   input: {
+    flex: 1,
+    backgroundColor: "#fff",
     borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 5,
+    borderColor: "#ddd",
+    borderRadius: 50,
     padding: 10,
-    marginVertical: 10,
+    marginRight: 10,
+    fontSize: 16,
+  },
+  submitButton: {
+    backgroundColor: "#8AC149",
+    padding: 10,
+    borderRadius: 25,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  errorText: {
+    color: "red",
+    marginTop: 5,
   },
 });
 

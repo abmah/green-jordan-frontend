@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import {
   View,
   Text,
@@ -7,19 +7,23 @@ import {
   StyleSheet,
   ActivityIndicator,
   Modal,
-  Animated,
   Image,
   Alert,
+  TouchableOpacity,
 } from 'react-native';
 import { createPost } from '../../api/post';
 import { requestCameraPermissions, pickImage } from './ImagePickerHandler';
+import Foundation from '@expo/vector-icons/Foundation';
+import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-const ChallengeItem = ({ challenge, userId }) => {
+const ChallengeItem = ({ challenge, userId, fetchChallenges }) => {
   const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const [instructionsVisible, setInstructionsVisible] = useState(false); // State for instructions modal
 
   const handleCameraPress = async () => {
     if (await requestCameraPermissions()) {
@@ -39,10 +43,11 @@ const ChallengeItem = ({ challenge, userId }) => {
 
     setIsUploading(true);
     try {
-      await createPost(description, userId, image);
+      await createPost(description, userId, image, challenge._id);
       setDescription('');
       setImage(null);
       setModalVisible(false);
+      fetchChallenges();
     } catch (error) {
       console.error('Error submitting form:', error);
     } finally {
@@ -50,125 +55,199 @@ const ChallengeItem = ({ challenge, userId }) => {
     }
   };
 
-  useEffect(() => {
-    if (modalVisible) {
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    } else {
-      fadeAnim.setValue(0);
-    }
-  }, [modalVisible]);
-
   return (
-    <View style={styles.challengeContainer}>
-      <Text style={styles.challengeTitle}>{challenge.title}</Text>
-      <Text style={styles.challengePoints}>Points: {challenge.points}</Text>
-      <Pressable
-        style={({ pressed }) => [styles.attemptButton, pressed && styles.buttonPressed]}
-        onPress={() => setModalVisible(true)}
-      >
-        <Text style={styles.attemptButtonText}>Attempt Challenge</Text>
-      </Pressable>
+    <View style={[styles.challengeContainer, challenge.completed && styles.completedContainer]}>
+      <View style={styles.cardContent}>
+        <View style={styles.challengeImage}>
+          <Foundation name="trees" size={100} color="#28A745" />
+        </View>
+        <View style={styles.textContent}>
+          <Text style={styles.challengeTitle}>{challenge.title}</Text>
+          <Text style={styles.challengePoints}>Points: {challenge.points}</Text>
+          <Text style={styles.challengeDescription}>{challenge.description}</Text>
 
+
+
+          <View style={styles.attemptButtonContainer}>
+            <Pressable
+              disabled={challenge.completed}
+              style={({ pressed }) => [
+                styles.attemptButton,
+                pressed && styles.buttonPressed,
+              ]}
+              onPress={() => setModalVisible(true)}
+            >
+              <Text style={[styles.attemptButtonText, challenge.completed && styles.completedText]}>
+                {challenge.completed ? 'DONE' : 'ATTEMPT'}
+              </Text>
+            </Pressable>
+            <View style={styles.attemptButtonUnderline}></View>
+          </View>
+        </View>
+      </View>
+
+      {/* Challenge Modal */}
       <Modal
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalContainer}>
-          <Animated.View style={[styles.modalContent, { opacity: fadeAnim }]}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <TouchableOpacity onPress={() => setInstructionsVisible(true)} style={styles.helpIcon}>
+                <Ionicons name="help" size={24} color="white" />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+                <Ionicons name="close" size={24} color="#fff" />
+              </TouchableOpacity>
+
+            </View>
             <Text style={styles.modalTitle}>{challenge.title}</Text>
-            <Text style={styles.modalDescription}>{challenge.description}</Text>
-            <Text style={styles.modalPoints}>Points: {challenge.points}</Text>
             {image && (
-              <Image
-                source={{ uri: image.uri }}
-                style={styles.imagePreview}
-              />
+              <Image source={{ uri: image.uri }} style={styles.imagePreview} />
             )}
             <TextInput
-              placeholder="Enter description for your activity..."
+              placeholder="Write a caption"
+              placeholderTextColor="#000"
               value={description}
               onChangeText={setDescription}
               style={styles.input}
             />
             <View style={styles.buttonContainer}>
-              <Pressable style={styles.modalButton} onPress={handleCameraPress}>
-                <Text style={styles.modalButtonText}>Take a Photo</Text>
-              </Pressable>
-              <Pressable style={styles.modalButton} onPress={handleLibraryPress}>
-                <Text style={styles.modalButtonText}>Select from Library</Text>
+              <View style={styles.imageOptionButtonContainer}>
+                <Pressable style={styles.modalButton} onPress={handleCameraPress}>
+                  <FontAwesome name="camera" size={24} color="#0f1f26" />
+                </Pressable>
+                <Pressable style={styles.modalButton} onPress={handleLibraryPress}>
+                  <MaterialIcons name="photo-library" size={24} color="#0f1f26" />
+                </Pressable>
+              </View>
+              <Pressable style={styles.submitButton} onPress={handleSubmit} disabled={isUploading}>
+                {isUploading ? (
+                  <ActivityIndicator size="small" color="#fff" />
+                ) : (
+                  <Text style={styles.submitButtonText}>SUBMIT</Text>
+                )}
               </Pressable>
             </View>
-            <Pressable style={styles.submitButton} onPress={handleSubmit} disabled={isUploading}>
-              {isUploading ? (
-                <ActivityIndicator size="small" color="#fff" />
-              ) : (
-                <Text style={styles.submitButtonText}>Submit Proof</Text>
-              )}
-            </Pressable>
-            <Pressable style={styles.modalCloseButton} onPress={() => setModalVisible(false)}>
-              <Text style={styles.modalButtonText}>Close</Text>
-            </Pressable>
-          </Animated.View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Instructions Modal */}
+      <Modal
+        transparent={true}
+        visible={instructionsVisible}
+        onRequestClose={() => setInstructionsVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+
+          <View style={[styles.modalContent, styles.instructionsModalContent]}>
+            <TouchableOpacity style={styles.closeButton} onPress={() => setInstructionsVisible(false)}>
+              <Ionicons name="close" size={24} color="#fff" />
+            </TouchableOpacity>
+            <View style={styles.instructionsText}>
+              <Text style={styles.instructionsTitle}>Instructions</Text>
+              <Text style={styles.instructions}>
+                Take a clear photo of the challenge with yourself visible. Poor quality or fake submissions
+                may result in dismissal or a ban.
+              </Text>
+            </View>
+          </View>
         </View>
       </Modal>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   challengeContainer: {
     marginBottom: 20,
     padding: 20,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#131F24',
+    borderRadius: 18,
+    borderColor: '#2F3D45',
+    borderWidth: 1,
+    minHeight: 185,
+  },
+  completedContainer: {
+    backgroundColor: '#2F3D45',
+  },
+  cardContent: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  challengeImage: {
+    width: '30%',
+    height: 100,
     borderRadius: 12,
-    borderColor: '#3D85C6',
-    borderWidth: 3,
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
+    resizeMode: 'cover',
+    marginRight: 10,
+  },
+  textContent: {
+    flex: 1,
+
   },
   challengeTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#2F2F2F',
+    color: '#fff',
   },
   challengePoints: {
     fontSize: 16,
-    color: '#28A745',
+    color: '#FF9804',
     marginVertical: 8,
     fontWeight: 'bold',
   },
-  attemptButton: {
-    borderWidth: 2,
-    borderColor: '#28A745',
-    borderRadius: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    marginTop: 15,
-    backgroundColor: '#28A745',
-    elevation: 2,
+  challengeDescription: {
+    fontSize: 14,
+    color: '#fff',
+    marginVertical: 5,
   },
+  attemptButtonContainer: {
+    marginTop: 10,
+  },
+  attemptButton: {
+    backgroundColor: '#202F36',
+    width: 85,
+    height: 25,
+    borderRadius: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+    zIndex: 1,
+  },
+  attemptButtonUnderline: {
+    width: 85,
+    height: 25,
+    borderRadius: 8,
+    position: 'absolute',
+    top: 4,
+    backgroundColor: '#18252B',
+    zIndex: 0,
+  },
+
   attemptButtonText: {
-    color: '#ffffff',
-    fontSize: 16,
+    color: '#8ac149',
+    fontSize: 12,
     fontWeight: 'bold',
   },
+
+  completedText: {
+    color: '#48BDF4',
+  },
+
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+
   },
+
   modalContent: {
-    width: '95%',
-    backgroundColor: '#ffffff',
+    width: '80%',
+    height: 270,
+    backgroundColor: '#37464F',
     borderRadius: 15,
     padding: 16,
     alignItems: 'center',
@@ -177,14 +256,27 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 10,
   },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  closeButton: {
+    alignSelf: 'flex-end',
+  },
   modalTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#2F2F2F',
+    color: '#fff',
+    marginBottom: 10,
+  },
+  instructions: {
+    color: '#fff',
+    fontWeight: 'bold',
     marginBottom: 10,
   },
   modalDescription: {
-    color: '#333',
+    color: '#fff',
     marginBottom: 15,
     textAlign: 'center',
     fontSize: 18,
@@ -203,45 +295,54 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   input: {
-    borderWidth: 1,
-    padding: 12,
-    marginBottom: 15,
-    borderColor: '#CCCCCC',
-    borderRadius: 8,
-    color: '#333',
+
+    padding: 10,
+    marginBottom: 20,
+    borderRadius: 30,
+    color: '#000',
     fontSize: 16,
     width: '100%',
-    backgroundColor: '#F8F8F8',
+    backgroundColor: '#fff',
+
   },
   buttonContainer: {
-    flexDirection: 'row',
+    // flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    marginBottom: 15,
+
+  },
+  imageOptionButtonContainer: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    // width: '50%',
+    gap: 10,
   },
   modalButton: {
     backgroundColor: '#1E90FF',
-    padding: 15,
-    borderRadius: 8,
-    flex: 1,
-    marginHorizontal: 5,
     alignItems: 'center',
-    elevation: 2,
+    justifyContent: 'center',
+    height: 45,
+    borderRadius: 8,
+    width: 130
   },
   modalButtonText: {
     color: '#ffffff',
     fontWeight: 'bold',
     textAlign: 'center',
-    fontSize: 16,
+    fontSize: 14,
   },
   submitButton: {
-    backgroundColor: '#28A745',
-    padding: 15,
-    borderRadius: 8,
+    width: 130,
+    backgroundColor: '#8AC149',
+    height: 45,
+    alignSelf: "flex-end",
     alignItems: 'center',
-    marginTop: 15,
-    width: '100%',
+    justifyContent: 'center',
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     elevation: 2,
+    marginTop: 10,
   },
   submitButtonText: {
     color: '#ffffff',
@@ -250,12 +351,41 @@ const styles = StyleSheet.create({
   },
   modalCloseButton: {
     backgroundColor: '#ff4d4d',
-    padding: 15,
+    padding: 12,
     borderRadius: 8,
     marginVertical: 5,
     width: '100%',
     alignItems: 'center',
     elevation: 2,
   },
+  instructionsModalContent: {
+
+  },
+  helpIcon: {
+    alignSelf: 'flex-start',
+  },
+  instructionsText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: "100%",
+
+  },
+  instructionsTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  instructions: {
+    color: '#fff',
+    fontWeight: 'bold',
+    marginBottom: 30,
+    textAlign: 'center',
+
+  },
+
 });
+
 export default ChallengeItem;

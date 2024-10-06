@@ -7,5 +7,5 @@ export { likeOrUnlikePost } from './post'
 export { createPost } from './post'
 export { getComments } from './comments'
 export { postComment } from './comments'
-
+export { getDailyChallenges } from './challenge'
 

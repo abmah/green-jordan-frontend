@@ -54,7 +54,7 @@ const SignupScreen = ({ navigation }) => {
     }).start();
   };
 
-  // Function to reset the button position and trigger the login
+
   const handlePressOut = () => {
     Animated.timing(buttonOffset, {
       toValue: 0,

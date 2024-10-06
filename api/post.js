@@ -6,10 +6,11 @@ const apiClient = axios.create({
   timeout: 10000,
 });
 
-export const createPost = async (description, userId, image) => {
+export const createPost = async (description, userId, image, challengeId) => {
   const formData = new FormData();
   formData.append('description', description);
   formData.append('userId', userId);
+  formData.append('challengeId', challengeId);
   if (image) {
     formData.append('img', {
       uri: image.uri,
