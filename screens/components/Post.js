@@ -118,6 +118,8 @@ const styles = StyleSheet.create({
     height: 45,
     borderRadius: 25,
     marginRight: 10,
+
+
   },
   username: {
     color: "#FFF",
@@ -151,7 +153,7 @@ const styles = StyleSheet.create({
   description: {
     position: "absolute",
     bottom: 30,
-    left: 16,
+    paddingHorizontal: 16,
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
@@ -170,6 +172,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#fff",
     marginRight: 10,
+
     fontWeight: "bold",
   },
 
