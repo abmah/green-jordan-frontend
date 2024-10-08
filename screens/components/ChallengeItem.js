@@ -23,7 +23,7 @@ const ChallengeItem = ({ challenge, userId, fetchChallenges }) => {
   const [image, setImage] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [instructionsVisible, setInstructionsVisible] = useState(false); // State for instructions modal
+  const [instructionsVisible, setInstructionsVisible] = useState(false);
 
   const handleCameraPress = async () => {
     if (await requestCameraPermissions()) {
@@ -306,7 +306,6 @@ const styles = StyleSheet.create({
 
   },
   buttonContainer: {
-    // flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
 
@@ -314,7 +313,6 @@ const styles = StyleSheet.create({
   imageOptionButtonContainer: {
     justifyContent: 'space-between',
     flexDirection: 'row',
-    // width: '50%',
     gap: 10,
   },
   modalButton: {

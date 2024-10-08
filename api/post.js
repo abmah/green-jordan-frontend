@@ -42,3 +42,14 @@ export const likeOrUnlikePost = async (postId, userId) => {
     throw error;
   }
 }
+
+export const getUserPosts = async (userId) => {
+  try {
+    const response = await apiClient.get(`/posts/get-user-posts/${userId}`);
+    return response.data; // This will include the message and posts (if any)
+  } catch (error) {
+    console.error('Error fetching user posts:', error.message);
+    return null; // Return null to handle in the component
+  }
+};
+

@@ -47,7 +47,7 @@ const SignupScreen = ({ navigation }) => {
 
   const handlePressIn = () => {
     Animated.timing(buttonOffset, {
-      toValue: 4, // Move down by 4 pixels
+      toValue: 4,
       duration: 0,
       easing: Easing.out(Easing.ease),
       useNativeDriver: true,

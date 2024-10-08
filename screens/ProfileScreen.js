@@ -1,24 +1,73 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, Button, Alert } from 'react-native';
+import { useEffect, useState, useCallback } from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Alert, FlatList, RefreshControl } from 'react-native';
 import useUserStore from '../stores/useUserStore';
 import * as SecureStore from 'expo-secure-store';
-import useFetch from '../hooks/useFetch';
 import { getSelf } from '../api/user';
+import { getUserPosts } from '../api/post';
+import Post from './components/Post';
 
 const ProfileScreen = () => {
-  const { clearuserId } = useUserStore();
-  const { data, loading, error } = useFetch(getSelf, null, { maxRetries: 3, retryDelay: 2000 });
+  const { clearuserId, userId } = useUserStore();
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [userPosts, setUserPosts] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
+  // Fetch user data
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const data = await getSelf();
+        setUserData(data.user);
+        setLoading(false);
+      } catch (err) {
+        setError(err);
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  // Fetch user posts
+  const fetchUserPosts = useCallback(async () => {
+    if (!userId) return;
+
+    setRefreshing(true);
+    try {
+      const response = await getUserPosts(userId);
+      if (response) {
+        if (response.data.length === 0) {
+          // Instead of setting a message, you can handle it directly in the return statement
+          setUserPosts([]);
+        } else {
+          setUserPosts(response.data);
+        }
+      }
+    } catch (postError) {
+      console.error("Error fetching user posts:", postError);
+      setError(postError);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    fetchUserPosts();
+  }, [fetchUserPosts]);
+
+  // Handle loading state
   if (loading) {
-    return <Text>Loading...</Text>;
+    return <Text style={styles.loadingText}>Loading...</Text>;
   }
 
+  // Handle error state
   if (error) {
-    return <Text>Error fetching profile: {error.message}</Text>;
+    return <Text style={styles.errorText}>Error fetching profile: {error.message}</Text>;
   }
 
-  const userData = data.user;
-
+  // Handle user logout
   const handleLogout = async () => {
     Alert.alert("Logout", "Are you sure you want to log out?", [
       { text: "Cancel", style: "cancel" },
@@ -33,74 +82,130 @@ const ProfileScreen = () => {
     ]);
   };
 
+  // Render No Posts Message
+  const renderNoPostsMessage = () => (
+    <Text style={styles.noPostsMessage}>There are no posts yet.</Text>
+  );
+
   return (
     <View style={styles.container}>
-      <Image
-        source={{ uri: userData.coverPicture || 'https://via.placeholder.com/600x200' }}
-        style={styles.coverImage}
-      />
       <View style={styles.profileInfo}>
         <Image
-          source={{ uri: userData.profilePicture || 'https://via.placeholder.com/150' }}
+          source={{ uri: userData?.profilePicture || 'https://via.placeholder.com/150' }}
           style={styles.profilePicture}
         />
-        <Text style={styles.username}>{userData.username}</Text>
-        <Text style={styles.email}>{userData.email}</Text>
-        <View style={styles.statsContainer}>
-          {renderStats(userData)}
+        <View style={styles.userInfo}>
+          <View style={styles.nameContainer}>
+            <Text style={styles.username}>{userData?.username}</Text>
+            <TouchableOpacity onPress={handleLogout}>
+              <Text style={styles.logoutText}>Logout</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.statsContainer}>
+            {userData && renderStats(userData)}
+          </View>
         </View>
-        <Button title="Logout" onPress={handleLogout} color="#FF6347" />
       </View>
+
+      {/* Render User Posts */}
+      {userPosts.length === 0 ? (
+        renderNoPostsMessage()
+      ) : (
+        <FlatList
+          data={userPosts}
+          renderItem={({ item }) => <Post post={item} />}
+          keyExtractor={(item) => item._id}
+          style={styles.postsContainer}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={fetchUserPosts} />
+          }
+        />
+      )}
     </View>
   );
 };
 
+// Safely render user stats
 const renderStats = ({ followers, followings, points }) => (
   <>
-    <Text style={styles.stats}>Followers: {followers.length}</Text>
-    <Text style={styles.stats}>Following: {followings.length}</Text>
-    <Text style={styles.stats}>Points: {points}</Text>
+    <Text style={styles.stats}>Followers: {followers?.length || 0}</Text>
+    <Text style={styles.stats}>Following: {followings?.length || 0}</Text>
+    <Text style={styles.stats}>Points: {points || 0}</Text>
   </>
 );
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9f9f9',
-  },
-  coverImage: {
-    width: '100%',
-    height: 200,
-    resizeMode: 'cover',
+    backgroundColor: '#0F1F26',
+
   },
   profileInfo: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginTop: -80,
+    marginBottom: 20,
+    paddingTop: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: 'gray',
+    padding: 20,
   },
   profilePicture: {
     width: 100,
     height: 100,
     borderRadius: 50,
-    borderWidth: 2,
-    borderColor: 'white',
+  },
+  userInfo: {
+    marginLeft: 16,
+    flex: 1,
+  },
+  nameContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   username: {
     fontSize: 24,
-    fontWeight: 'bold',
-    marginVertical: 10,
+    fontWeight: '700',
+    color: 'white',
+    marginVertical: 5,
   },
   email: {
     fontSize: 16,
-    color: 'gray',
+    color: 'white',
+    marginBottom: 10,
   },
   statsContainer: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 10,
-    width: '80%',
   },
   stats: {
     fontSize: 16,
+    color: 'white',
+    fontWeight: '700',
+  },
+  postsContainer: {
+    marginTop: 20,
+  },
+  noPostsMessage: {
+    fontSize: 16,
+    color: 'gray',
+    textAlign: 'center',
+    marginTop: 20,
+  },
+  logoutText: {
+    color: '#FF6347',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  loadingText: {
+    color: 'white',
+    textAlign: 'center',
+    marginTop: 20,
+  },
+  errorText: {
+    color: 'red',
+    textAlign: 'center',
+    marginTop: 20,
   },
 });
 
