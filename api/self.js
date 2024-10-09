@@ -7,8 +7,13 @@ const apiClient = axios.create({
   timeout: 10000,
 });
 
+export const getSelf = async () => {
+  const { userId } = useUserStore.getState();
+  if (!userId) {
+    throw new Error('User ID is not available');
+  }
 
-export const getUser = async (userId) => {
+
   try {
     const response = await apiClient.get(`users/${userId}`);
     return response.data;
@@ -17,3 +22,4 @@ export const getUser = async (userId) => {
     throw error;
   }
 };
+

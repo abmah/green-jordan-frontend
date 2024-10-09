@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Alert, FlatList, RefreshControl } from 'react-native';
 import useUserStore from '../stores/useUserStore';
 import * as SecureStore from 'expo-secure-store';
-import { getSelf } from '../api/user';
+import { getSelf } from '../api/self';
 import { getUserPosts } from '../api/post';
 import Post from './components/Post';
 
@@ -39,7 +39,7 @@ const ProfileScreen = () => {
       const response = await getUserPosts(userId);
       if (response) {
         if (response.data.length === 0) {
-          // Instead of setting a message, you can handle it directly in the return statement
+
           setUserPosts([]);
         } else {
           setUserPosts(response.data);
@@ -52,6 +52,8 @@ const ProfileScreen = () => {
       setRefreshing(false);
     }
   }, [userId]);
+
+
 
   useEffect(() => {
     fetchUserPosts();
@@ -94,20 +96,20 @@ const ProfileScreen = () => {
           source={{ uri: userData?.profilePicture || 'https://via.placeholder.com/150' }}
           style={styles.profilePicture}
         />
-        <View style={styles.userInfo}>
-          <View style={styles.nameContainer}>
-            <Text style={styles.username}>{userData?.username}</Text>
-            <TouchableOpacity onPress={handleLogout}>
-              <Text style={styles.logoutText}>Logout</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.statsContainer}>
-            {userData && renderStats(userData)}
-          </View>
+        <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+          <Text style={styles.logoutText}>Logout</Text>
+        </TouchableOpacity>
+        <View>
+          <Text style={styles.username}>{userData?.username}</Text>
         </View>
       </View>
 
-      {/* Render User Posts */}
+
+
+      <View style={styles.statsContainer}>
+        {userData && renderStats(userData)}
+      </View>
+
       {userPosts.length === 0 ? (
         renderNoPostsMessage()
       ) : (
@@ -138,63 +140,59 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#0F1F26',
-
   },
   profileInfo: {
-    flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
-    paddingTop: 20,
+    marginTop: 40,
+    paddingBottom: 20,
     borderBottomWidth: 1,
-    borderBottomColor: 'gray',
-    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#1C4B5640',
+    position: 'relative',
   },
   profilePicture: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-  },
-  userInfo: {
-    marginLeft: 16,
-    flex: 1,
-  },
-  nameContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    borderWidth: 3,
+    borderColor: '#00A9C5',
   },
   username: {
     fontSize: 24,
-    fontWeight: '700',
-    color: 'white',
-    marginVertical: 5,
+    fontWeight: 'bold',
+    marginTop: 10,
+    color: '#ffffff',
   },
-  email: {
-    fontSize: 16,
-    color: 'white',
-    marginBottom: 10,
+  logoutButton: {
+    position: 'absolute',
+    right: 20,
+
   },
   statsContainer: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 10,
+    marginTop: 20,
+
+    paddingHorizontal: 30,
+
   },
   stats: {
-    fontSize: 16,
-    color: 'white',
-    fontWeight: '700',
+    fontSize: 18,
+    color: '#ffffff',
+    fontWeight: '600',
   },
   postsContainer: {
     marginTop: 20,
   },
   noPostsMessage: {
-    fontSize: 16,
+    fontSize: 18,
     color: 'gray',
     textAlign: 'center',
     marginTop: 20,
   },
   logoutText: {
-    color: '#FF6347',
-    fontSize: 16,
+    color: '#FF5733',
+    fontSize: 18,
     fontWeight: 'bold',
   },
   loadingText: {

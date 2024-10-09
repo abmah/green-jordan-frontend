@@ -64,8 +64,8 @@ const LoginScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.logosContainer}>
-        <MainLogo width={220} height={220} style={{ marginBottom: 40 }} />
-        <GreenJordan width={230} height={30} style={{ marginBottom: 30 }} />
+        {/* <MainLogo height={'30%'} style={{ marginBottom: 40 }} />
+        <GreenJordan height={'20%'} style={{ marginBottom: 30 }} /> */}
       </View>
       <View style={styles.loginForm}>
         <View style={styles.inputWrapper}>

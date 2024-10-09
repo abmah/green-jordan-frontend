@@ -9,10 +9,12 @@ import {
   StyleSheet,
   Animated,
   Easing,
+  Platform,
 } from "react-native";
 import { Signup } from "../api";
 import * as SecureStore from "expo-secure-store";
 import useUserStore from "../stores/useUserStore";
+import { StatusBar } from "expo-status-bar";
 
 const SignupScreen = ({ navigation }) => {
   const [username, setUsername] = useState("");
@@ -68,9 +70,9 @@ const SignupScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.signUpTitle}>
+      {/* <View style={styles.signUpTitle}>
         <Text style={styles.signUpText}>Sign up</Text>
-      </View>
+      </View> */}
       <View style={styles.signupForm}>
         <View style={styles.inputWrapper}>
           <View style={styles.inputUnderline}></View>
@@ -145,6 +147,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#0F1F26",
+    paddingTop: Platform.OS === "android" ? 60 : 0,
   },
 
   signUpTitle: {

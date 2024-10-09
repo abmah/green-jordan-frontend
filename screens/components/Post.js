@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     fontWeight: "900",
   },
   reportText: {
-    color: "#FFF",
+    color: "#FF6347",
     fontSize: 16,
     fontWeight: "900",
   },
