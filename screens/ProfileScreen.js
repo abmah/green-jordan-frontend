@@ -14,6 +14,7 @@ const ProfileScreen = () => {
   const [userPosts, setUserPosts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
+
   // Fetch user data
   useEffect(() => {
     const fetchUserData = async () => {
