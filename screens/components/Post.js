@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, Pressable, Alert } from 'react-native';
+import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 import { likeOrUnlikePost } from '../../api';
 import useUserStore from '../../stores/useUserStore';
 import CommentsModal from './CommentsModal';
+import UserProfileModal from './UserProfileModal';
 import formatDate from '../../utils/formatDate';
 import { LinearGradient } from "expo-linear-gradient";
+
 const Post = ({ post }) => {
   const { userId } = useUserStore();
   const [isLiked, setIsLiked] = useState(post.likes.includes(userId));
   const [likesCount, setLikesCount] = useState(post.likes.length);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
 
   useEffect(() => {
     setIsLiked(post.likes.includes(userId));
@@ -39,15 +43,22 @@ const Post = ({ post }) => {
   const userProfilePicture = post.userId.profilePicture || 'https://via.placeholder.com/150';
   const username = post.userId.username || 'User';
 
+  const openUserProfile = () => {
+    // Prevent opening the modal if the logged-in user is the author of the post
+    if (post.userId._id !== userId) {
+      setSelectedUserId(post.userId._id);
+      setIsProfileModalVisible(true);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.profileInfo}>
-          <Image
-            source={{ uri: userProfilePicture }}
-            style={styles.profileImage}
-          />
-          <Text style={styles.username}>{username}</Text>
+        <View>
+          <Pressable style={styles.profileInfo} onPress={openUserProfile}>
+            <Image source={{ uri: userProfilePicture }} style={styles.profileImage} />
+            <Text style={styles.username}>{username}</Text>
+          </Pressable>
         </View>
         <Pressable>
           <Text style={styles.reportText}>report</Text>
@@ -94,6 +105,12 @@ const Post = ({ post }) => {
         onClose={() => setIsModalVisible(false)}
         postId={post._id}
       />
+
+      <UserProfileModal
+        userId={selectedUserId}
+        visible={isProfileModalVisible}
+        onClose={() => setIsProfileModalVisible(false)}
+      />
     </View>
   );
 };
@@ -118,8 +135,6 @@ const styles = StyleSheet.create({
     height: 45,
     borderRadius: 25,
     marginRight: 10,
-
-
   },
   username: {
     color: "#FFF",
@@ -172,10 +187,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#fff",
     marginRight: 10,
-
     fontWeight: "bold",
   },
-
   liked: { color: "#0F9AFE" },
   likesCount: { color: "#0F9AFE" },
   comments: {
