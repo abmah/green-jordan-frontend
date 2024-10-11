@@ -16,6 +16,9 @@ export default function App() {
     'Nunito-SemiBold': require('./assets/fonts/Nunito-SemiBold.ttf'),
     'Nunito-ExtraBold': require('./assets/fonts/Nunito-ExtraBold.ttf'),
     'Nunito-Black': require('./assets/fonts/Nunito-Black.ttf'),
+    'Nunito-Light': require('./assets/fonts/Nunito-Light.ttf'),
+    'Nunito-Medium': require('./assets/fonts/Nunito-Medium.ttf'),
+    'Nunito-ExtraLight': require('./assets/fonts/Nunito-ExtraLight.ttf'),
   });
 
   const onLayoutRootView = useCallback(async () => {
