@@ -11,6 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#0F1F26"
     },
+    "assets": [
+      "./assets/fonts/"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -24,7 +27,10 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-secure-store"],
+    "plugins": [
+      "expo-secure-store",
+      "expo-font"
+    ],
     "extra": {
       "eas": {
         "projectId": "944236bb-0cd6-4d9b-9f1d-a0c79561ec07"
