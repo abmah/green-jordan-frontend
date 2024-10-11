@@ -30,6 +30,11 @@ export default function App() {
   }
 
 
+  if (Text.defaultProps == null) Text.defaultProps = {};
+  Text.defaultProps.style = { fontFamily: 'Nunito-Regular' };
+
+  if (TextInput.defaultProps == null) TextInput.defaultProps = {};
+  TextInput.defaultProps.style = { fontFamily: 'Nunito-Regular' };
 
   return (
     <>
