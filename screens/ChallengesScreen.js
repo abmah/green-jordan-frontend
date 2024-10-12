@@ -5,9 +5,9 @@ import {
   StyleSheet,
   FlatList,
   Platform,
-  TouchableOpacity, // Use TouchableOpacity for the icon
+  TouchableOpacity,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from Expo
+import { Ionicons } from '@expo/vector-icons';
 import useUserStore from '../stores/useUserStore';
 import ChallengeItem from './components/ChallengeItem';
 import { getDailyChallenges } from '../api';
@@ -126,24 +126,29 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     padding: 20,
     borderRadius: 8,
+    backgroundColor: '#202F36', // Added background color for better contrast
   },
   streakText: {
     fontSize: 18,
+    fontFamily: 'Nunito-ExtraBold',
     marginBottom: 5,
     color: '#FFD700',
   },
   pointsText: {
     fontSize: 18,
+    fontFamily: 'Nunito-ExtraBold',
     marginBottom: 5,
     color: '#66FF66',
   },
   lastChallengeText: {
     fontSize: 18,
+    fontFamily: 'Nunito-ExtraBold',
     marginBottom: 5,
     color: '#FFFFFF',
   },
   challengesAssignedText: {
     fontSize: 18,
+    fontFamily: 'Nunito-ExtraBold',
     marginBottom: 10,
     color: '#FFFFFF',
   },
@@ -154,7 +159,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#0F1F26',
   },
   loginPrompt: {
-    fontSize: 18,
+    fontSize: 20,
+    fontFamily: 'Nunito-ExtraBold',
     color: '#fff',
     textAlign: 'center',
   },
@@ -167,7 +173,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
   },
-
   iconContainer: {
     position: 'absolute',
     top: 40,
@@ -179,7 +184,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: '#202F36',
   },
-
   iconText: {
     color: 'white',
     fontSize: 16,

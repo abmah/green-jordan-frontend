@@ -156,6 +156,7 @@ const styles = StyleSheet.create({
 
   input: {
     paddingLeft: 20,
+    fontFamily: "Nunito-Regular",
     fontSize: 18,
     width: "100%",
     maxWidth: 320,
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
   loginButtonText: {
     color: "#ffffff",
     fontSize: 24,
-    fontWeight: "900",
+    fontFamily: "Nunito-ExtraBold",
   },
 
   signupContainer: {
@@ -222,6 +223,7 @@ const styles = StyleSheet.create({
   signupText: {
     fontSize: 20,
     color: "#ffffff",
+    fontFamily: "Nunito-Regular",
   },
 
   signupButtonText: {
@@ -229,6 +231,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textDecorationLine: "underline",
     marginLeft: 5,
+    fontFamily: "Nunito-ExtraBold",
   },
 });
 

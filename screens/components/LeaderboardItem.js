@@ -28,24 +28,23 @@ const LeaderboardItem = ({ rank, username, points, profilePicture }) => {
 
 const styles = StyleSheet.create({
   item: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 16,
     marginVertical: 6,
-
   },
   userInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   rankText: {
-    fontSize: 16,
-    fontWeight: '900',
+    fontSize: 18,
+    fontFamily: "Nunito-ExtraBold",
     width: 45,
-    color: '#fff',
+    color: "#fff",
   },
   profileImage: {
     minWidth: 45,
@@ -55,13 +54,13 @@ const styles = StyleSheet.create({
   },
   username: {
     fontSize: 16,
-    fontWeight: '900',
-    color: '#fff',
+    fontFamily: "Nunito-ExtraBold",
+    color: "#fff",
   },
   points: {
     fontSize: 16,
-    fontWeight: '500',
-    color: '#fff',
+    fontFamily: "Nunito-Bold",
+    color: "#fff",
   },
 });
 

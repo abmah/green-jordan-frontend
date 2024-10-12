@@ -14,7 +14,7 @@ import {
 import { Signup } from "../api";
 import * as SecureStore from "expo-secure-store";
 import useUserStore from "../stores/useUserStore";
-import { StatusBar } from "expo-status-bar";
+// import { StatusBar } from "expo-status-bar";
 
 const SignupScreen = ({ navigation }) => {
   const [username, setUsername] = useState("");
@@ -142,7 +142,6 @@ const SignupScreen = ({ navigation }) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -157,10 +156,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  signUpText: {
-    fontSize: 48,
-    color: "#8AC149",
-  },
+  // signUpText: {
+  //   fontSize: 48,
+  //   color: "#8AC149",
+  // },
 
   signupForm: {
     marginBottom: 10,
@@ -183,6 +182,7 @@ const styles = StyleSheet.create({
   input: {
     paddingLeft: 20,
     fontSize: 18,
+    fontFamily: "Nunito-Regular",
     width: "100%",
     maxWidth: 320,
     height: 60,
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
   signUpButtonText: {
     color: "#ffffff",
     fontSize: 24,
-    fontWeight: "900",
+    fontFamily: "Nunito-ExtraBold",
   },
 
   signUpButtonUnderline: {
@@ -235,6 +235,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     textAlign: "center",
     fontSize: 16,
+    fontFamily: "Nunito-Regular",
   },
 
   loginContainer: {
@@ -248,6 +249,7 @@ const styles = StyleSheet.create({
   loginText: {
     fontSize: 20,
     color: "#ffffff",
+    fontFamily: "Nunito-Regular",
   },
 
   loginButtonText: {
@@ -255,7 +257,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textDecorationLine: "underline",
     marginLeft: 5,
+    fontFamily: "Nunito-ExtraBold",
   },
 });
-
 export default SignupScreen;

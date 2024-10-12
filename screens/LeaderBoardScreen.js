@@ -69,8 +69,8 @@ const styles = StyleSheet.create({
   },
 
   leaderboardTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 24,
+    fontFamily: 'Nunito-ExtraBold',
     color: '#fff',
   },
 });

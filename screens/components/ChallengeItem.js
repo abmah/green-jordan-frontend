@@ -88,28 +88,29 @@ const ChallengeItem = ({ challenge, userId, fetchChallenges }) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   challengeContainer: {
     marginBottom: 20,
     padding: 20,
-    backgroundColor: '#131F24',
+    backgroundColor: "#131F24",
     borderRadius: 18,
-    borderColor: '#2F3D45',
+    borderColor: "#2F3D45",
     borderWidth: 1,
     minHeight: 185,
   },
   completedContainer: {
-    backgroundColor: '#2F3D45',
+    backgroundColor: "#2F3D45",
   },
   cardContent: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    alignItems: "flex-start",
   },
   challengeImage: {
-    width: '30%',
+    width: "30%",
     height: 100,
     borderRadius: 12,
-    resizeMode: 'cover',
+    resizeMode: "cover",
     marginRight: 10,
   },
   textContent: {
@@ -117,50 +118,54 @@ const styles = StyleSheet.create({
   },
   challengeTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#fff',
+    fontFamily: "Nunito-ExtraBold",
+    color: "#fff",
   },
   challengePoints: {
     fontSize: 16,
-    color: '#FF9804',
+    color: "#FF9804",
     marginVertical: 8,
-    fontWeight: 'bold',
+    fontFamily: "Nunito-Bold",
   },
   challengeDescription: {
-    fontSize: 14,
-    color: '#fff',
+    fontSize: 16,
+    fontFamily: "Nunito-SemiBold",
+    color: "#fff",
     marginVertical: 5,
   },
   attemptButtonContainer: {
     marginTop: 10,
   },
   attemptButton: {
-    backgroundColor: '#202F36',
+    backgroundColor: "#202F36",
     width: 85,
     height: 25,
     borderRadius: 6,
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
     zIndex: 1,
   },
   attemptButtonUnderline: {
     width: 85,
     height: 25,
     borderRadius: 8,
-    position: 'absolute',
+    position: "absolute",
     top: 4,
-    backgroundColor: '#18252B',
+    backgroundColor: "#18252B",
     zIndex: 0,
   },
   attemptButtonText: {
-    color: '#8ac149',
+    color: "#8ac149",
     fontSize: 12,
-    fontWeight: 'bold',
+    fontFamily: "Nunito-ExtraBold",
   },
   completedText: {
-    color: '#48BDF4',
+    color: "#48BDF4",
+    fontFamily: "Nunito-ExtraBold",
+    fontSize: 12,
   },
 });
+
 
 export default ChallengeItem;

@@ -99,16 +99,12 @@ const styles = StyleSheet.create({
   },
   username: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily: 'Nunito-ExtraBold',
     color: '#ffffff',
     marginBottom: 5,
     marginTop: 10
   },
-  email: {
-    fontSize: 16,
-    color: 'gray',
-    marginBottom: 10,
-  },
+
   statsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -118,7 +114,7 @@ const styles = StyleSheet.create({
   stats: {
     fontSize: 18,
     color: '#ffffff',
-    fontWeight: '600',
+    fontFamily: 'Nunito-ExtraBold',
   },
   postsList: {
     marginTop: 10,

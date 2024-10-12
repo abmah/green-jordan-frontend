@@ -9,6 +9,7 @@ import {
   FlatList,
   RefreshControl,
   ActivityIndicator, // Importing ActivityIndicator for loader
+  Modal, // Importing Modal for custom image picker
 } from 'react-native';
 import useUserStore from '../stores/useUserStore';
 import * as SecureStore from 'expo-secure-store';
@@ -18,6 +19,8 @@ import Post from './components/Post';
 import { updateProfilePicture } from '../api/user';
 import { requestCameraPermissions, pickImage } from './components/ImagePickerHandler';
 import { Ionicons } from '@expo/vector-icons';
+
+// Render stats component
 const renderStats = ({ followers, followings, points }) => (
   <>
     <Text style={styles.stats}>Followers: {followers?.length || 0}</Text>
@@ -26,45 +29,53 @@ const renderStats = ({ followers, followings, points }) => (
   </>
 );
 
+// Render no posts message component
 const renderNoPostsMessage = () => (
   <Text style={styles.noPostsMessage}>There are no posts yet.</Text>
 );
 
+// Custom Image Picker Modal
 const CustomImagePickerModal = ({ visible, onClose, onSubmit, image, handleCameraPress, handleLibraryPress, isUploading }) => {
-  if (!visible) return null; // Prevent rendering if not visible
-
   return (
-    <View style={styles.modalOverlay}>
-      <View style={styles.modalContent}>
-        <Text style={styles.modalTitle}>Select Profile Picture</Text>
-        <TouchableOpacity onPress={handleCameraPress}>
-          <Text style={styles.modalButton}>Take Photo</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleLibraryPress}>
-          <Text style={styles.modalButton}>Choose from Library</Text>
-        </TouchableOpacity>
-        {image && (
-          <Image source={{ uri: image.uri }} style={styles.previewImage} />
-        )}
-        <TouchableOpacity
-          onPress={onSubmit}
-          style={styles.submitButton}
-          disabled={isUploading} // Disable when uploading
-        >
-          {isUploading ? (
-            <ActivityIndicator size="small" color="#ffffff" />
-          ) : (
-            <Text style={styles.submitButtonText}>Upload</Text>
+    <Modal
+      transparent={true}
+      animationType="slide"
+      visible={visible}
+      onRequestClose={onClose}
+    >
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalContent}>
+          <Text style={styles.modalTitle}>Select Profile Picture</Text>
+          <TouchableOpacity onPress={handleCameraPress}>
+            <Text style={styles.modalButton}>Take Photo</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleLibraryPress}>
+            <Text style={styles.modalButton}>Choose from Library</Text>
+          </TouchableOpacity>
+          {image && (
+            <Image source={{ uri: image.uri }} style={styles.previewImage} />
           )}
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onClose}>
-          <Text style={styles.closeButton}>Close</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={onSubmit}
+            style={styles.submitButton}
+            disabled={isUploading}
+          >
+            {isUploading ? (
+              <ActivityIndicator size="small" color="#ffffff" />
+            ) : (
+              <Text style={styles.submitButtonText}>Upload</Text>
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onClose}>
+            <Text style={styles.closeButton}>Close</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </Modal>
   );
 };
 
+// Main ProfileScreen Component
 const ProfileScreen = () => {
   const { clearuserId, userId } = useUserStore();
   const [userData, setUserData] = useState(null);
@@ -222,40 +233,41 @@ const ProfileScreen = () => {
         image={selectedImage}
         handleCameraPress={handleCameraPress}
         handleLibraryPress={handleLibraryPress}
-        isUploading={isUploading} // Pass the uploading state
+        isUploading={isUploading}
       />
     </View>
   );
 };
 
+// Styles for the ProfileScreen component
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F1F26',
+    backgroundColor: "#0F1F26",
   },
   loaderContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#0F1F26',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#0F1F26",
   },
   profileInfo: {
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 40,
     paddingBottom: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#1C4B5640',
-    position: 'relative',
+    borderBottomColor: "#1C4B5640",
+    position: "relative",
   },
   profileImageContainer: {
-    position: 'relative', // Container for the profile picture and icon
+    position: 'relative',
   },
   profilePicture: {
     width: 120,
     height: 120,
     borderRadius: 60,
     borderWidth: 3,
-    borderColor: '#00A9C5',
+    borderColor: "#00A9C5",
   },
   editIconContainer: {
     position: 'absolute',
@@ -267,92 +279,92 @@ const styles = StyleSheet.create({
   },
   username: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily: "Nunito-ExtraBold",
     marginTop: 10,
-    color: '#ffffff',
+    color: "#ffffff",
   },
   logoutButton: {
-    position: 'absolute',
+    position: "absolute",
     right: 20,
+    top: 10,
+    backgroundColor: "red",
+    padding: 8,
+    borderRadius: 5,
   },
   logoutText: {
-    color: '#ff0000',
-    fontWeight: 'bold',
+    color: "#ffffff",
+    fontWeight: "bold",
   },
   statsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-    paddingHorizontal: 30,
+    alignItems: "center",
+    marginVertical: 20,
+    flexDirection: "row",
+    justifyContent: "space-around",
+
   },
   stats: {
-    fontSize: 18,
-    color: '#ffffff',
-    fontWeight: '600',
-  },
-  postsContainer: {
-    marginTop: 20,
+    color: "#ffffff",
+    fontSize: 16,
+    marginVertical: 5,
   },
   noPostsMessage: {
+    color: "#ffffff",
     fontSize: 18,
-    color: 'gray',
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 20,
   },
-  loadingText: {
-    textAlign: 'center',
-    marginTop: 10,
-    color: '#ffffff',
-  },
-  errorText: {
-    textAlign: 'center',
-    marginTop: 20,
-    color: 'red',
+  postsContainer: {
+    marginHorizontal: 10,
   },
   modalOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   modalContent: {
     width: '80%',
-    padding: 20,
-    backgroundColor: '#ffffff',
+    backgroundColor: "white",
     borderRadius: 10,
-    alignItems: 'center',
+    padding: 20,
+    alignItems: "center",
   },
   modalTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   modalButton: {
     fontSize: 16,
+    color: "#00A9C5",
     marginVertical: 10,
-    color: '#00A9C5',
   },
   previewImage: {
     width: 100,
     height: 100,
-    marginVertical: 10,
+    marginVertical: 20,
   },
   submitButton: {
-    backgroundColor: '#00A9C5',
+    backgroundColor: "#00A9C5",
     borderRadius: 5,
     padding: 10,
-    marginVertical: 10,
+    width: '100%',
+    alignItems: "center",
   },
   submitButtonText: {
-    color: '#ffffff',
-    fontWeight: 'bold',
+    color: "white",
+    fontSize: 16,
   },
   closeButton: {
-    color: '#ff0000',
+    color: "#00A9C5",
+    marginTop: 10,
+  },
+  errorText: {
+    color: 'red',
+    textAlign: 'center',
+    marginTop: 20,
+  },
+  loadingText: {
+    color: "#00A9C5",
     marginTop: 10,
   },
 });

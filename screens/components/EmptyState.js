@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18,
     color: '#fff',
+    fontFamily: 'Nunito-Regular',
   },
 });
 

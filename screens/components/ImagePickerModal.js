@@ -43,10 +43,10 @@ const ImagePickerModal = ({
           <View style={styles.buttonContainer}>
             <View style={styles.imageOptionButtonContainer}>
               <Pressable style={styles.modalButton} onPress={handleCameraPress}>
-                <FontAwesome name="camera" size={24} color="#0f1f26" />
+                <FontAwesome name="camera" size={24} color="white" />
               </Pressable>
               <Pressable style={styles.modalButton} onPress={handleLibraryPress}>
-                <MaterialIcons name="photo-library" size={24} color="#0f1f26" />
+                <MaterialIcons name="photo-library" size={24} color="white" />
               </Pressable>
             </View>
             <Pressable style={styles.submitButton} onPress={onSubmit} disabled={isUploading}>
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily: 'Nunito-ExtraBold',
     color: '#fff',
     marginBottom: 10,
   },
@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     width: '100%',
     backgroundColor: '#fff',
+    fontFamily: 'Nunito-Medium',
   },
   buttonContainer: {
     justifyContent: 'space-between',
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     color: '#ffffff',
-    fontWeight: 'bold',
+    fontFamily: 'Nunito-ExtraBold',
     fontSize: 16,
   },
 });

@@ -111,7 +111,6 @@ const CommentsModal = ({ visible, onClose, postId, comments: initialComments }) 
     </Modal>
   );
 };
-
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
@@ -134,7 +133,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 18,
     color: "#fff",
-    fontWeight: "bold",
+    fontFamily: "Nunito-ExtraBold",
   },
   comment: {
     backgroundColor: "#0F2630",
@@ -145,6 +144,7 @@ const styles = StyleSheet.create({
   noCommentsText: {
     color: "#fff",
     fontSize: 16,
+    fontFamily: "Nunito-Bold",
     textAlign: "center",
   },
   commentHeader: {
@@ -170,14 +170,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   username: {
+    fontFamily: "Nunito-ExtraBold",
     fontSize: 18,
-    fontWeight: "900",
     color: "#fff",
     marginBottom: 5,
   },
   commentText: {
     color: "#fff",
     fontSize: 16,
+    fontFamily: "Nunito-SemiBold",
   },
 
   commentInputContainer: {
@@ -194,6 +195,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginRight: 10,
     fontSize: 16,
+    fontFamily: "Nunito-Medium",
   },
   submitButton: {
     backgroundColor: "#8AC149",
@@ -205,8 +207,8 @@ const styles = StyleSheet.create({
 
   errorText: {
     color: "red",
+    fontFamily: "Nunito-Medium",
     marginTop: 5,
   },
 });
-
 export default CommentsModal;

@@ -139,12 +139,12 @@ const styles = StyleSheet.create({
   username: {
     color: "#FFF",
     fontSize: 16,
-    fontWeight: "900",
+    fontFamily: "Nunito-ExtraBold",
   },
   reportText: {
-    color: "#FF6347",
+    color: "#EE5555",
+    fontFamily: "Nunito-Bold",
     fontSize: 16,
-    fontWeight: "900",
   },
   imageContainer: {
     position: "relative",
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     color: "#fff",
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Nunito-Bold",
   },
   footer: {
     flexDirection: "row",
@@ -186,27 +186,30 @@ const styles = StyleSheet.create({
   likes: {
     fontSize: 16,
     color: "#fff",
+    fontFamily: "Nunito-Bold",
     marginRight: 10,
-    fontWeight: "bold",
   },
   liked: { color: "#0F9AFE" },
-  likesCount: { color: "#0F9AFE" },
+  likesCount: { color: "#0F9AFE", fontFamily: "Nunito-Bold" },
   comments: {
     fontSize: 16,
     color: "#fff",
-    fontWeight: "bold",
+    fontFamily: "Nunito-Bold",
   },
   commentsCount: {
     color: "#8AC149",
+    fontFamily: "Nunito-Bold",
   },
   timestamp: {
     fontSize: 16,
     color: "#fff",
-    fontWeight: "bold",
+    fontFamily: "Nunito-Bold",
   },
   disabledText: {
     color: "lightgray",
+    fontFamily: "Nunito-Bold",
   },
 });
+
 
 export default Post;

@@ -34,7 +34,7 @@ const BottomTabNavigator = () => {
         tabBarInactiveTintColor: '#B0BEC5',
         tabBarLabelStyle: {
           fontSize: 12,
-          fontWeight: '900',
+          fontFamily: 'Nunito-ExtraBold',
         },
         tabBarHideOnKeyboard: true,
       }}
