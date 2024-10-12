@@ -17,7 +17,7 @@ import { getUserPosts } from '../api/post';
 import Post from './components/Post';
 import { updateProfilePicture } from '../api/user';
 import { requestCameraPermissions, pickImage } from './components/ImagePickerHandler';
-
+import { Ionicons } from '@expo/vector-icons';
 const renderStats = ({ followers, followings, points }) => (
   <>
     <Text style={styles.stats}>Followers: {followers?.length || 0}</Text>
@@ -180,12 +180,15 @@ const ProfileScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.profileInfo}>
-        <TouchableOpacity onPress={() => setModalVisible(true)}>
+        <View style={styles.profileImageContainer}>
           <Image
             source={{ uri: userData?.profilePicture || 'https://via.placeholder.com/150' }}
             style={styles.profilePicture}
           />
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.editIconContainer} onPress={() => setModalVisible(true)}>
+            <Ionicons name="pencil" size={20} color="white" />
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
           <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>
@@ -244,12 +247,23 @@ const styles = StyleSheet.create({
     borderBottomColor: '#1C4B5640',
     position: 'relative',
   },
+  profileImageContainer: {
+    position: 'relative', // Container for the profile picture and icon
+  },
   profilePicture: {
     width: 120,
     height: 120,
     borderRadius: 60,
     borderWidth: 3,
     borderColor: '#00A9C5',
+  },
+  editIconContainer: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    backgroundColor: '#00A9C5',
+    borderRadius: 45,
+    padding: 4,
   },
   username: {
     fontSize: 24,
@@ -260,6 +274,10 @@ const styles = StyleSheet.create({
   logoutButton: {
     position: 'absolute',
     right: 20,
+  },
+  logoutText: {
+    color: '#ff0000',
+    fontWeight: 'bold',
   },
   statsContainer: {
     flexDirection: 'row',
@@ -280,10 +298,6 @@ const styles = StyleSheet.create({
     color: 'gray',
     textAlign: 'center',
     marginTop: 20,
-  },
-  logoutText: {
-    color: '#ff0000',
-    fontWeight: 'bold',
   },
   loadingText: {
     textAlign: 'center',

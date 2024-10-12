@@ -1,18 +1,20 @@
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   FlatList,
   Platform,
+  TouchableOpacity, // Use TouchableOpacity for the icon
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from Expo
 import useUserStore from '../stores/useUserStore';
 import ChallengeItem from './components/ChallengeItem';
 import { getDailyChallenges } from '../api';
-import { useEffect, useState } from 'react';
 import Loader from './components/Loader';
 import { getSelf } from '../api/self';
 
-const ChallengesScreen = () => {
+const ChallengesScreen = ({ navigation }) => {
   const [dailyChallenges, setDailyChallenges] = useState([]);
   const { userId } = useUserStore();
   const [loading, setLoading] = useState(true);
@@ -64,7 +66,6 @@ const ChallengesScreen = () => {
 
   const renderHeader = () => (
     <>
-
       {userData && (
         <View style={styles.userInfoContainer}>
           <Text style={styles.streakText}>Current Streak: {userData.streak}</Text>
@@ -83,6 +84,7 @@ const ChallengesScreen = () => {
   const renderItem = ({ item }) => (
     <View style={styles.challengeSection}>
       <ChallengeItem
+        navigation={navigation}
         challenge={item}
         userId={userId}
         fetchChallenges={fetchChallenges}
@@ -91,16 +93,25 @@ const ChallengesScreen = () => {
   );
 
   return (
-    <FlatList
-      style={styles.container}
-      data={dailyChallenges}
-      renderItem={renderItem}
-      keyExtractor={(item) => item._id}
-      ListHeaderComponent={renderHeader}
-      ListEmptyComponent={<Text style={styles.noChallengesText}>No daily challenges available.</Text>}
-      stickyHeaderIndices={[0]}
-      contentContainerStyle={{ paddingBottom: 40, }}
-    />
+    <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.iconContainer}
+        onPress={() => navigation.navigate('Teams')}
+      >
+        <Ionicons name="people-outline" size={24} color="white" />
+        <Text style={styles.iconText}>Teams</Text>
+      </TouchableOpacity>
+
+      <FlatList
+        data={dailyChallenges}
+        renderItem={renderItem}
+        keyExtractor={(item) => item._id}
+        ListHeaderComponent={renderHeader}
+        ListEmptyComponent={<Text style={styles.noChallengesText}>No daily challenges available.</Text>}
+        stickyHeaderIndices={[0]}
+        contentContainerStyle={{ paddingBottom: 40 }}
+      />
+    </View>
   );
 };
 
@@ -111,17 +122,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#0F1F26',
     paddingTop: Platform.OS === 'android' ? 50 : 0,
   },
-  title: {
-    fontSize: 24,
-    marginBottom: 10,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
   userInfoContainer: {
     marginBottom: 20,
     padding: 20,
     borderRadius: 8,
-    backgroundColor: '#202F36',
   },
   streakText: {
     fontSize: 18,
@@ -154,12 +158,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     textAlign: 'center',
   },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5F5F5',
-  },
   challengeSection: {
     marginBottom: 20,
   },
@@ -168,6 +166,25 @@ const styles = StyleSheet.create({
     color: '#999',
     textAlign: 'center',
     marginTop: 20,
+  },
+
+  iconContainer: {
+    position: 'absolute',
+    top: 40,
+    right: 20,
+    zIndex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 8,
+    backgroundColor: '#202F36',
+  },
+
+  iconText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 8,
   },
 });
 
