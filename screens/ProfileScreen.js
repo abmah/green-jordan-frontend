@@ -19,6 +19,7 @@ import Post from './components/Post';
 import { updateProfilePicture } from '../api/user';
 import { requestCameraPermissions, pickImage } from './components/ImagePickerHandler';
 import { Ionicons } from '@expo/vector-icons';
+import Loader from './components/Loader';
 
 // Render stats component
 const renderStats = ({ followers, followings, points }) => (
@@ -176,16 +177,20 @@ const ProfileScreen = () => {
   // Handle loading state
   if (loading) {
     return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color="#00A9C5" />
-        <Text style={styles.loadingText}>Loading...</Text>
-      </View>
+      <Loader />
     );
   }
 
   // Handle error state
   if (error) {
-    return <Text style={styles.errorText}>Error fetching profile: {error.message}</Text>;
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Error fetching your profile</Text>
+        <TouchableOpacity onPress={handleLogout} style={styles.errorLogoutButton}>
+          <Text style={styles.logoutText}>Logout</Text>
+        </TouchableOpacity>
+      </View>
+    );
   }
 
   return (
@@ -359,10 +364,23 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   errorText: {
-    color: 'red',
+    color: 'white',
     textAlign: 'center',
     marginTop: 20,
   },
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#0F1F26",
+  },
+  errorLogoutButton: {
+    marginTop: 20,
+    backgroundColor: "red",
+    padding: 10,
+    borderRadius: 5,
+  },
+
   loadingText: {
     color: "#00A9C5",
     marginTop: 10,

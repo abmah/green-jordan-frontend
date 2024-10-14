@@ -4,10 +4,9 @@ import BottomTabNavigator from "./navigation/BottomTabNavigator";
 import { StatusBar, View, Text, TextInput } from "react-native";
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-
-
+import Toast from 'react-native-toast-message';
+import toastConfig from './utils/toastConfig';
 SplashScreen.preventAutoHideAsync();
-
 
 export default function App() {
   // Load custom fonts
@@ -28,11 +27,9 @@ export default function App() {
     }
   }, [fontsLoaded]);
 
-
   if (!fontsLoaded) {
     return null;
   }
-
 
   if (Text.defaultProps == null) Text.defaultProps = {};
   Text.defaultProps.style = { fontFamily: 'Nunito-Regular' };
@@ -52,6 +49,7 @@ export default function App() {
           <BottomTabNavigator />
         </View>
       </NavigationContainer>
+      <Toast visibilityTime={2000} config={toastConfig} />
     </>
   );
 }

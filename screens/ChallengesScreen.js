@@ -103,6 +103,7 @@ const ChallengesScreen = ({ navigation }) => {
       </TouchableOpacity>
 
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={dailyChallenges}
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
@@ -182,7 +183,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     borderRadius: 8,
-    backgroundColor: '#202F36',
+    backgroundColor: '#0F9AFE',
   },
   iconText: {
     color: 'white',

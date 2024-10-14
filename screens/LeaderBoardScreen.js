@@ -1,21 +1,37 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet, Platform, Text } from 'react-native';
-import useFetch from '../hooks/useFetch';
 import { getLeaderboard } from '../api';
 import LeaderboardItem from './components/LeaderboardItem';
 import Loader from './components/Loader';
-import Error from './components/ErrorMessage';
 import EmptyState from './components/EmptyState';
 
-
 const LeaderboardScreen = () => {
-  const { data, loading, error, refetch } = useFetch(getLeaderboard, null, { maxRetries: 3, retryDelay: 2000 });
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
 
+  const fetchLeaderboard = async () => {
+    setLoading(true);
+    setError(null); // Reset error state before fetching
+    try {
+      const result = await getLeaderboard();
+      setData(result.leaderboard || []);
+    } catch (err) {
+      console.error('Error fetching leaderboard:', err);
+      setError('Unable to load leaderboard.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchLeaderboard();
+  }, []);
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await refetch();
+    await fetchLeaderboard();
     setRefreshing(false);
   };
 
@@ -23,31 +39,35 @@ const LeaderboardScreen = () => {
     return <Loader />;
   }
 
-  if (error) {
-    return <Error message={`Error fetching leaderboard: ${error}`} />;
-  }
-
   return (
     <View style={styles.container}>
-      <View style={styles.leaderboardHeader}>
-        <Text style={styles.leaderboardTitle}>Leaderboard</Text>
-      </View>
-      <FlatList
-        style={{ flex: 1, paddingHorizontal: 20 }}
-        data={data?.leaderboard || []}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item, index }) => (
-          <LeaderboardItem
-            rank={index + 1}
-            username={item.username}
-            points={item.allTimePoints}
-            profilePicture={item.profilePicture || null}
+      {error ? (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorMessage}>{error}</Text>
+        </View>
+      ) : (
+        <>
+          <View style={styles.leaderboardHeader}>
+            <Text style={styles.leaderboardTitle}>Leaderboard</Text>
+          </View>
+          <FlatList
+            style={{ flex: 1, paddingHorizontal: 20 }}
+            data={data}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item, index }) => (
+              <LeaderboardItem
+                rank={index + 1}
+                username={item.username}
+                points={item.allTimePoints}
+                profilePicture={item.profilePicture || null}
+              />
+            )}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            ListEmptyComponent={<EmptyState message="No leaderboard data available." />}
           />
-        )}
-        refreshing={refreshing}
-        onRefresh={onRefresh}
-        ListEmptyComponent={<EmptyState message="No leaderboard data available." />}
-      />
+        </>
+      )}
     </View>
   );
 };
@@ -58,7 +78,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#0F1F26',
     paddingTop: Platform.OS === 'android' ? 50 : 0,
   },
-
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#0F1F26',
+  },
+  errorMessage: {
+    color: '#fff', // White text
+    fontSize: 18,
+    textAlign: 'center',
+  },
   leaderboardHeader: {
     height: 40,
     borderBottomWidth: 1,
@@ -67,7 +97,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   leaderboardTitle: {
     fontSize: 24,
     fontFamily: 'Nunito-ExtraBold',
