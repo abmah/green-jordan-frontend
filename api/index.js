@@ -9,5 +9,19 @@ export { getComments } from './comments'
 export { postComment } from './comments'
 export { getDailyChallenges } from './challenge'
 export { getSelf } from './self'
-export { getTeam, getAllTeams, getUserTeam, acceptJoinRequest, createTeam, deleteTeam, getTeamMembers, leaveTeam, rejectJoinRequest, sendJoinRequest, updateTeam } from './teams'
+export {
+  getTeam,
+  getAllTeams,
+  getUserTeam,
+  acceptJoinRequest,
+  createTeam,
+  deleteTeam,
+  getTeamMembers,
+  leaveTeam,
+  rejectJoinRequest,
+  sendJoinRequest,
+  updateTeam,
+  removeMember
+} from './teams'
+
 

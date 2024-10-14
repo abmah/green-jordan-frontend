@@ -45,7 +45,7 @@ const CommentsModal = ({ visible, onClose, postId, comments: initialComments }) 
   const renderComment = ({ item }) => (
     <View style={styles.comment}>
       <View style={styles.commentHeader}>
-        {item.userId.profilePicture ? (
+        {item?.userId?.profilePicture ? (
           <Image
             source={{ uri: item.userId.profilePicture }}
             style={styles.profilePicture}
@@ -55,13 +55,14 @@ const CommentsModal = ({ visible, onClose, postId, comments: initialComments }) 
         )}
         <View style={styles.commentContent}>
           <Text style={styles.username}>
-            {item.userId.username || "Anonymous"}
+            {item?.userId?.username || "Anonymous"}
           </Text>
           <Text style={styles.commentText}>{item.text}</Text>
         </View>
       </View>
     </View>
   );
+
 
   return (
     <Modal

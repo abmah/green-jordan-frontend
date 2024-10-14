@@ -171,6 +171,7 @@ const Teams = () => {
         renderItem={renderTeamItem}
         keyExtractor={(item) => item._id}
         contentContainerStyle={styles.list}
+        ListEmptyComponent={<Text style={{ color: 'white' }}>There are no teams</Text>}
       />
 
       {/* Modal for creating team */}

@@ -96,9 +96,9 @@ export const rejectJoinRequest = async (teamId, userId, adminId) => {
 
 
 // Remove a member from the team (team admin only)
-export const removeMember = async (teamId, userId) => {
+export const removeMember = async (teamId, userId, adminId) => {
   try {
-    const response = await apiClient.put(`/teams/remove-member/${teamId}/${userId}`);
+    const response = await apiClient.put(`/teams/remove-member/${teamId}/${userId}`, { userId: adminId });
     return response.data;
   } catch (error) {
     console.error('Error removing member:', error);

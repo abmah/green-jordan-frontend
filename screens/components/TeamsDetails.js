@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Button, ScrollView, Alert, Image } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import { getAllTeams, sendJoinRequest, getTeamMembers, acceptJoinRequest, rejectJoinRequest } from '../../api';
+import {
+  getAllTeams,
+  sendJoinRequest,
+  getTeamMembers,
+  acceptJoinRequest,
+  rejectJoinRequest,
+  removeMember
+} from '../../api';
 import useUserIdStore from '../../stores/useUserStore';
 
 const TeamDetails = () => {
   const { userId } = useUserIdStore();
   const route = useRoute();
-  const { isAdmin, teamId } = route.params;
+  const { teamId } = route.params;
   const [isInTeam, setIsInTeam] = useState(false);
   const [teamData, setTeamData] = useState({
     name: '',
@@ -16,6 +23,7 @@ const TeamDetails = () => {
     joinRequests: [],
   });
   const [members, setMembers] = useState([]);
+  const [teamAdmin, setTeamAdmin] = useState(false); // State to track if the current user is a team admin
 
   useEffect(() => {
     const fetchTeamData = async () => {
@@ -30,6 +38,7 @@ const TeamDetails = () => {
               setMembers(membersResponse.data);
             }
             setIsInTeam(currentTeam.members.includes(userId));
+            setTeamAdmin(currentTeam.admin === userId); // Check if the current user is the team admin
           }
         }
       } catch (error) {
@@ -43,7 +52,6 @@ const TeamDetails = () => {
   }, [teamId, userId]);
 
   const fetchTeamDataAgain = async () => {
-    // Fetch the latest team data after join request or accept/reject actions
     try {
       const response = await getAllTeams();
       if (response.data) {
@@ -55,6 +63,7 @@ const TeamDetails = () => {
             setMembers(membersResponse.data);
           }
           setIsInTeam(currentTeam.members.includes(userId));
+          setTeamAdmin(currentTeam.admin === userId); // Update team admin status
         }
       }
     } catch (error) {
@@ -71,26 +80,34 @@ const TeamDetails = () => {
     try {
       await sendJoinRequest(teamId, userId);
       Alert.alert('Success', 'Join request sent successfully!');
-      await fetchTeamDataAgain(); // Refresh data after sending join request
+      await fetchTeamDataAgain();
     } catch (error) {
       Alert.alert('Error', 'Failed to send join request. Please try again.');
     }
   };
 
   const handleUpdateJoinRequest = async (action, requestUserId) => {
-    const adminId = userId; // Admin ID is the current user's ID
-
     try {
       if (action === 'Accepted') {
-        await acceptJoinRequest(teamId, requestUserId, adminId);
+        await acceptJoinRequest(teamId, requestUserId, userId);
         Alert.alert('Success', 'Join request accepted successfully!');
       } else if (action === 'Denied') {
-        await rejectJoinRequest(teamId, requestUserId, adminId);
+        await rejectJoinRequest(teamId, requestUserId, userId);
         Alert.alert('Success', 'Join request rejected successfully!');
       }
-      await fetchTeamDataAgain(); // Refresh team data after action
+      await fetchTeamDataAgain();
     } catch (error) {
       Alert.alert('Error', `Failed to ${action.toLowerCase()} join request. Please try again.`);
+    }
+  };
+
+  const handleRemoveMember = async (memberId) => {
+    try {
+      await removeMember(teamId, memberId, userId); // Call removeMember API
+      Alert.alert('Success', 'Member removed successfully!');
+      await fetchTeamDataAgain(); // Refresh member list
+    } catch (error) {
+      Alert.alert('Error', 'Failed to remove member. Please try again.');
     }
   };
 
@@ -102,32 +119,40 @@ const TeamDetails = () => {
       {isInTeam ? (
         <Text style={styles.inTeamText}>You are already in this team.</Text>
       ) : (
-        !isAdmin && (
+        !teamAdmin && (
           <Button title="Send Join Request" onPress={handleJoinRequest} color="#1DB954" />
         )
       )}
 
       <Text style={styles.membersHeader}>Members:</Text>
       {members.length > 0 ? (
-        members.map((member, index) => (
-          <View key={index} style={styles.memberContainer}>
+        members.map((member) => (
+          <View key={member._id} style={styles.memberContainer}>
             <Image
               source={member.profilePicture ? { uri: member.profilePicture } : require('../../assets/default-avatar.png')}
               style={styles.profilePicture}
             />
-            <View>
+            <View style={{ flex: 1 }}>
               <Text style={styles.memberText}>Username: {member.username}</Text>
               <Text style={styles.memberText}>Email: {member.email}</Text>
               <Text style={styles.memberText}>Points: {member.points}</Text>
               <Text style={styles.memberText}>Streak: {member.streak}</Text>
+              {member.teamAdmin && <Text style={styles.adminText}>Team Admin</Text>}
             </View>
+            {teamAdmin && member._id !== teamData.admin && ( // Show Remove button only for team admin
+              <Button
+                title="Remove"
+                onPress={() => handleRemoveMember(member._id)} // Use member._id to identify the member to be removed
+                color="#FF3D00"
+              />
+            )}
           </View>
         ))
       ) : (
         <Text style={styles.noMembers}>No members in this team yet.</Text>
       )}
 
-      {isAdmin && (
+      {teamAdmin && (
         <View style={styles.joinRequestsContainer}>
           <Text style={styles.joinRequestsHeader}>Join Requests:</Text>
           {teamData.joinRequests.length > 0 ? (
@@ -209,6 +234,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#B0B0B0',
     marginBottom: 3,
+  },
+  adminText: {
+    fontSize: 16,
+    color: '#FFD700',
+    fontWeight: 'bold',
   },
   noMembers: {
     fontSize: 16,
