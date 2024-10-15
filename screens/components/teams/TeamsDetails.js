@@ -15,11 +15,11 @@ const TeamDetailsTabs = () => {
   const { userId } = useUserIdStore();
   const route = useRoute();
   const { teamId } = route.params;
-  const { isAdmin } = route.params;
 
   const [teamData, setTeamData] = useState({ name: '', description: '', members: [], joinRequests: [] });
   const [members, setMembers] = useState([]);
   const [isInTeam, setIsInTeam] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false); // State to determine if the user is an admin
 
   useEffect(() => {
     const fetchTeamData = async () => {
@@ -28,6 +28,11 @@ const TeamDetailsTabs = () => {
         if (teamResponse.data) {
           setTeamData(teamResponse.data);
           setIsInTeam(teamResponse.data.members.includes(userId));
+
+          // Check if the user is an admin
+          // Assuming teamResponse.data.adminId contains the ID of the team admin
+          setIsAdmin(teamResponse.data.admin === userId);
+
           const membersResponse = await getTeamMembers(teamId);
           if (membersResponse.data) {
             setMembers(membersResponse.data);
@@ -40,9 +45,6 @@ const TeamDetailsTabs = () => {
 
     fetchTeamData();
   }, [teamId, userId]);
-
-
-
 
   return (
     <View style={{ flex: 1 }}>
@@ -62,7 +64,7 @@ const TeamDetailsTabs = () => {
           {() => <TeamPosts teamId={teamId} />}
         </Tab.Screen>
 
-
+        {/* Conditionally render the ManageTeam tab only if the user is an admin */}
         {isAdmin && (
           <Tab.Screen name="Manage" options={{ tabBarLabel: 'Manage Team' }}>
             {() => (
@@ -86,8 +88,10 @@ const TeamDetailsTabs = () => {
 const styles = StyleSheet.create({
   teamHeader: {
     backgroundColor: '#0F1F26',
-    padding: 16,
     paddingTop: 50,
+    paddingBottom: 0,
+    borderBottomColor: '#1C4B5640',
+    borderBottomWidth: 1,
   },
   teamName: {
     fontSize: 28,

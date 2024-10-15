@@ -10,7 +10,6 @@ const UserTeam = ({ userTeam, navigation }) => (
       onPress={() =>
         navigation.navigate("TeamDetails", {
           teamId: userTeam._id,
-          isAdmin: true,
         })
       }
       style={styles.manageTeamButton}

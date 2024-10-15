@@ -7,7 +7,6 @@ import Loader from '../Loader';
 const Overview = ({ teamData, members }) => {
   const { userId } = useUserIdStore();
 
-
   const [isLoading, setIsLoading] = useState(false);
   const [showNoMembersMessage, setShowNoMembersMessage] = useState(false);
 
@@ -38,8 +37,9 @@ const Overview = ({ teamData, members }) => {
         <View style={styles.memberInfo}>
           <Text style={styles.memberName}>
             {item.username}
-            {isAdmin && <Text style={styles.adminLabel}> (Admin)</Text>}
-            {/* Display points next to the username */}
+            {/* Check if the current member is the admin */}
+            {item._id === teamData.admin && <Text style={styles.adminLabel}> (Admin)</Text>}
+            {item._id === userId && <Text style={styles.youLabel}> - You</Text>}
             <Text style={styles.pointsLabel}> - {item.points} pts</Text>
           </Text>
         </View>
@@ -69,7 +69,7 @@ const Overview = ({ teamData, members }) => {
       <Text style={styles.details}>Description: {teamData.description}</Text>
 
       {showJoinButton && (
-        <Button title="Send Join Request" onPress={handleJoinRequest} />
+        <Button title="Send Join Request" onPress={handleJoinRequest} color="#4CAF50" />
       )}
 
       <Text style={styles.membersTitle}>Team Members</Text>
@@ -92,27 +92,27 @@ const Overview = ({ teamData, members }) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    padding: 20,
     backgroundColor: '#0F1F26',
     flex: 1,
   },
   title: {
-    fontSize: 24,
-    color: 'white',
-    fontWeight: 'bold',
+    fontSize: 26,
+    color: '#F5F5F5',
+    fontWeight: '700',
     marginBottom: 16,
   },
   details: {
-    fontSize: 18,
+    fontSize: 16,
     color: '#B0B0B0',
-    marginBottom: 10,
+    marginBottom: 8,
   },
   membersTitle: {
-    fontSize: 20,
-    color: 'white',
-    fontWeight: 'bold',
+    fontSize: 22,
+    color: '#F5F5F5',
+    fontWeight: '600',
     marginTop: 20,
-    marginBottom: 10,
+    marginBottom: 12,
   },
   membersList: {
     paddingBottom: 16,
@@ -121,36 +121,42 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#1B2B38',
-    padding: 10,
-    marginVertical: 5,
-    borderRadius: 8,
-    borderColor: 'white',
+    padding: 12,
+    marginVertical: 6,
+    borderRadius: 12,
+    borderColor: '#ffffff1a',
     borderWidth: 1,
   },
   profilePicture: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 10,
+    width: 55,
+    height: 55,
+    borderRadius: 27.5,
+    marginRight: 12,
   },
   memberInfo: {
     flex: 1,
   },
   memberName: {
-    color: 'white',
+    color: '#F5F5F5',
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
   adminLabel: {
     color: '#FFD700',
     fontSize: 14,
   },
   pointsLabel: {
-    color: '#B0B0B0', // Color for points
+    color: '#B0B0B0',
     fontSize: 14,
+    marginLeft: 4, // Add a little space between username and points
+  },
+  youLabel: {
+    color: '#1DB954', // Green color for "You"
+    fontSize: 14,
+    fontWeight: '600',
   },
   emptyMessage: {
-    color: 'white',
+    color: '#F5F5F5',
     textAlign: 'center',
     marginTop: 20,
   },

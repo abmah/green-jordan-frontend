@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, Modal, FlatList, ActivityIndicator, Alert, TouchableOpacity } from 'react-native';
 import { getFullUser } from '../../api'; // Import your getUser API function
-// import Post from './Post'; // Import the Post component
+import Post from './Post'; // Import the Post component
 import Icon from 'react-native-vector-icons/Ionicons'; // Import the icon library
 
 const UserProfileView = ({ userId, visible, onClose }) => {
@@ -27,7 +27,7 @@ const UserProfileView = ({ userId, visible, onClose }) => {
     }
   }, [userId, visible]);
 
-  const renderPost = ({ item }) => <View></View>
+  const renderPost = ({ item }) => <View><Post post={item} /></View>
   {/* <Post post={item} />; */ }
   return (
     <Modal visible={visible} animationType="slide">

@@ -53,12 +53,17 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
         teamData.joinRequests.map((request) => (
           <View key={request._id} style={styles.requestContainer}>
             {/* Render profile picture if available */}
-            {request.userId.profilePicture ? (
+            {request.userId.profilePicture && request.userId.profilePicture !== '' ? (
               <Image
                 source={{ uri: request.userId.profilePicture }}
                 style={styles.profilePicture}
               />
-            ) : null}
+            ) : (
+              <Image
+                source={require('../../../assets/default-avatar.png')} // Path to default profile picture
+                style={styles.profilePicture}
+              />
+            )}
             <Text style={styles.requestText}>
               Username: {request.userId.username}
             </Text>
@@ -85,14 +90,27 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
       {members.length > 0 ? (
         members.map((member) => (
           <View key={member._id} style={styles.memberContainer}>
+            {member.profilePicture && member.profilePicture !== '' ? (
+              <Image
+                source={{ uri: member.profilePicture }} // Render member's profile picture
+                style={styles.profilePicture}
+              />
+            ) : (
+              <Image
+                source={require('../../../assets/default-avatar.png')} // Path to default profile picture
+                style={styles.profilePicture}
+              />
+            )}
             <Text style={styles.memberText}>Username: {member.username}</Text>
-            {member._id !== userId && (
+            {member._id !== userId ? (
               <TouchableOpacity
                 style={styles.removeButton}
                 onPress={() => handleRemoveMember(member._id)}
               >
                 <Text style={styles.buttonText}>Remove</Text>
               </TouchableOpacity>
+            ) : (
+              <Text style={styles.selfLabel}>You</Text> // Display "You" next to your own card
             )}
           </View>
         ))
@@ -105,37 +123,40 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    padding: 20,
     backgroundColor: '#0F1F26',
     flex: 1,
   },
   header: {
-    fontSize: 24,
-    color: 'white',
-    fontWeight: 'bold',
+    fontSize: 26,
+    color: '#F5F5F5',
+    fontWeight: '700',
     marginBottom: 16,
   },
   requestContainer: {
-    padding: 10,
+    padding: 12,
     backgroundColor: '#1C2A33',
-    borderRadius: 8,
+    borderRadius: 10,
     marginBottom: 10,
+    flexDirection: 'row', // Align items horizontally
+    alignItems: 'center',
   },
   requestText: {
     color: '#B0B0B0',
+    flex: 1, // Allows text to grow and take available space
+    marginLeft: 10, // Spacing between the image and text
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     marginTop: 5,
   },
   button: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
     borderRadius: 5,
     elevation: 2,
     alignItems: 'center',
-    flex: 1,
     marginHorizontal: 5,
   },
   acceptButton: {
@@ -150,37 +171,50 @@ const styles = StyleSheet.create({
   },
   noRequests: {
     color: '#B0B0B0',
+    textAlign: 'center',
+    marginTop: 10,
   },
   memberContainer: {
-    padding: 10,
+    padding: 12,
     backgroundColor: '#1C2A33',
-    borderRadius: 8,
+    borderRadius: 10,
     marginBottom: 10,
+    flexDirection: 'row', // Align items horizontally
+    justifyContent: 'space-between', // Space between member name and remove button
+    alignItems: 'center',
   },
   membersHeader: {
-    fontSize: 20,
-    color: 'white',
+    fontSize: 22,
+    color: '#F5F5F5',
     marginBottom: 10,
+    marginTop: 20,
   },
   memberText: {
     color: '#B0B0B0',
+    flex: 1, // Allows text to grow and take available space
   },
   removeButton: {
     backgroundColor: '#FF3D00',
-    paddingVertical: 6, // Smaller padding for consistency
+    paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 5,
     alignItems: 'center',
-    marginTop: 5,
   },
   noMembers: {
     color: '#B0B0B0',
+    textAlign: 'center',
+    marginTop: 10,
   },
   profilePicture: {
-    width: 40, // Adjust based on your design
-    height: 40, // Adjust based on your design
-    borderRadius: 20, // To make it a circle
-    marginBottom: 5, // Spacing between the image and text
+    width: 45,
+    height: 45,
+    borderRadius: 22.5,
+    marginRight: 10,
+  },
+  selfLabel: {
+    color: '#1DB954', // Change this color to differentiate "You"
+    fontWeight: 'bold',
+    marginLeft: 10,
   },
 });
 
