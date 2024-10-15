@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert, Image } from 'react-native'; // Import Image for profile pictures
-import { acceptJoinRequest, rejectJoinRequest, removeMember } from '../../api';
-import useUserIdStore from '../../stores/useUserStore';
+import { acceptJoinRequest, rejectJoinRequest, removeMember } from '../../../api';
+import useUserIdStore from '../../../stores/useUserStore';
 
 const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
   const { userId } = useUserIdStore();
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   button: {
-    paddingVertical: 6, // Reduced padding for smaller button
+    paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 5,
     elevation: 2,

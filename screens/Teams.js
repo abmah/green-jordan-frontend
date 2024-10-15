@@ -17,10 +17,10 @@ import useUserStore from "../stores/useUserStore";
 
 // Components
 import Loader from "./components/Loader";
-import UserTeam from "./components/UserTeam";
-import NoTeam from "./components/NoTeam";
-import TeamItem from "./components/TeamItem";
-import CreateTeamModal from "./components/CreateTeamModal";
+import UserTeam from "./components/teams/UserTeam";
+import NoTeam from "./components/teams/NoTeam";
+import TeamItem from "./components/teams/TeamItem";
+import CreateTeamModal from "./components/teams/CreateTeamModal";
 
 const Teams = () => {
   const { userId } = useUserStore();

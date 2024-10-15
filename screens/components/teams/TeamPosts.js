@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet, Text } from 'react-native';
-import { getTeamPosts } from '../../api';
-import Post from './Post';
-import Loader from './Loader';
+import { getTeamPosts } from '../../../api';
+import Post from '../Post';
+import Loader from '../Loader';
 
 const TeamPosts = ({ teamId }) => {
   const [posts, setPosts] = useState([]);

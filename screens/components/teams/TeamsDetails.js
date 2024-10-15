@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useRoute } from '@react-navigation/native';
-import { getTeamMembers, getTeam } from '../../api'; // Ensure the getTeam import is correct
-import useUserIdStore from '../../stores/useUserStore';
+import { getTeamMembers, getTeam } from '../../../api'; // Ensure the getTeam import is correct
+import useUserIdStore from '../../../stores/useUserStore';
 import TeamPosts from './TeamPosts';
 import ManageTeam from './ManageTeam';
 import Overview from './Overview';

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Button, Alert, FlatList, Image } from 'react-native';
-import { sendJoinRequest } from '../../api';
-import useUserIdStore from '../../stores/useUserStore';
-import Loader from './Loader';
+import { sendJoinRequest } from '../../../api';
+import useUserIdStore from '../../../stores/useUserStore';
+import Loader from '../Loader';
 
 const Overview = ({ teamData, members }) => {
   const { userId } = useUserIdStore();
