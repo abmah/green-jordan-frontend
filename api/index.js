@@ -1,14 +1,24 @@
-export { getLeaderboard } from './challenge';
-export { login } from './login'
-export { Signup } from './signup'
-export { getUser, getFullUser } from './user'
-export { getFeed } from './feed'
-export { likeOrUnlikePost } from './post'
-export { createPost } from './post'
-export { getComments } from './comments'
-export { postComment } from './comments'
-export { getDailyChallenges } from './challenge'
-export { getSelf } from './self'
+// Challenge
+export { getLeaderboard, getDailyChallenges } from './challenge';
+
+// Login/Signup
+export { login } from './login';
+export { Signup } from './signup';
+
+// User
+export { getUser, getFullUser } from './user';
+export { getSelf } from './self';
+
+// Feed
+export { getFeed } from './feed';
+
+// Post
+export { likeOrUnlikePost, createPost } from './post';
+
+// Comments
+export { getComments, postComment } from './comments';
+
+// Teams
 export {
   getTeam,
   getAllTeams,
@@ -21,7 +31,6 @@ export {
   rejectJoinRequest,
   sendJoinRequest,
   updateTeam,
-  removeMember
-} from './teams'
-
-
+  removeMember,
+  getTeamPosts
+} from './teams';

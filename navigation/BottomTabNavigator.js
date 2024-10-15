@@ -7,8 +7,8 @@ import { useEffect } from 'react';
 import useUserStore from '../stores/useUserStore';
 import Loader from '../screens/components/Loader';
 import { Ionicons } from '@expo/vector-icons';
-import StackNavigator from './LoginRegisterStackNavigator'
-
+import StackNavigator from './LoginRegisterStackNavigator';
+import TeamsStackNavigator from './TeamsStackNavigator';
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
@@ -59,11 +59,21 @@ const BottomTabNavigator = () => {
       />
       <Tab.Screen
         name="Challenges"
-        component={ChallengesStackNavigator} // Updated to use the Stack Navigator
+        component={ChallengesStackNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="flag" size={size} color={color} />
           ),
+        }}
+      />
+      <Tab.Screen
+        name="TeamsScreen"
+        component={TeamsStackNavigator}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="people" size={size} color={color} />
+          ),
+          tabBarLabel: 'Teams',
         }}
       />
       <Tab.Screen

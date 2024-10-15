@@ -138,3 +138,14 @@ export const getAllTeams = async () => {
     throw error;
   }
 };
+
+
+export const getTeamPosts = async (teamId) => {
+  try {
+    const response = await apiClient.get(`/teams/posts/${teamId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching team posts:', error);
+    throw error;
+  }
+};

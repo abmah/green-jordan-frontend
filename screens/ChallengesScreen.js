@@ -5,9 +5,7 @@ import {
   StyleSheet,
   FlatList,
   Platform,
-  TouchableOpacity,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import useUserStore from '../stores/useUserStore';
 import ChallengeItem from './components/ChallengeItem';
 import { getDailyChallenges } from '../api';
@@ -94,14 +92,6 @@ const ChallengesScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.iconContainer}
-        onPress={() => navigation.navigate('Teams')}
-      >
-        <Ionicons name="people-outline" size={24} color="white" />
-        <Text style={styles.iconText}>Teams</Text>
-      </TouchableOpacity>
-
       <FlatList
         showsVerticalScrollIndicator={false}
         data={dailyChallenges}
@@ -174,23 +164,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
   },
-  iconContainer: {
-    position: 'absolute',
-    top: 40,
-    right: 20,
-    zIndex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    borderRadius: 8,
-    backgroundColor: '#0F9AFE',
-  },
-  iconText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginLeft: 8,
-  },
+
 });
 
 export default ChallengesScreen;
