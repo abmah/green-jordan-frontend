@@ -1,11 +1,13 @@
+// App.js
 import React, { useCallback } from 'react';
 import { NavigationContainer } from "@react-navigation/native";
 import BottomTabNavigator from "./navigation/BottomTabNavigator";
 import { StatusBar, View, Text, TextInput } from "react-native";
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import Toast from 'react-native-toast-message';
+import Toast from 'react-native-toast-message'; // Ensure this is the correct import
 import toastConfig from './utils/toastConfig';
+
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
@@ -31,6 +33,7 @@ export default function App() {
     return null;
   }
 
+  // Set default styles for Text and TextInput
   if (Text.defaultProps == null) Text.defaultProps = {};
   Text.defaultProps.style = { fontFamily: 'Nunito-Regular' };
 
@@ -48,8 +51,8 @@ export default function App() {
         <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
           <BottomTabNavigator />
         </View>
+        <Toast ref={Toast.setRef} config={toastConfig} />
       </NavigationContainer>
-      <Toast visibilityTime={2000} config={toastConfig} />
     </>
   );
 }

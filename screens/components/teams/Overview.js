@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from 'react
 import { sendJoinRequest } from '../../../api';
 import useUserIdStore from '../../../stores/useUserStore';
 import Loader from '../Loader';
-// import Toast from 'react-native-toast-message'; // Ensure you have this imported
+import Toast from 'react-native-toast-message'; // Importing Toast
 
 const Overview = ({ teamData, members }) => {
   const { userId } = useUserIdStore();
@@ -19,19 +19,20 @@ const Overview = ({ teamData, members }) => {
   const handleJoinRequest = async () => {
     try {
       await sendJoinRequest(teamData._id, userId);
-      // Toast.show({
-      //   type: 'success',
-      //   text1: 'Success',
-      //   text2: 'Join request sent successfully!',
-      // });
+      // Display success message using Toast
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: 'Join request sent successfully!',
+      });
     } catch (error) {
       console.error("Error sending join request:", error);
-      // Display the specific error message from the API response as a toast
-      // Toast.show({
-      //   type: 'error',
-      //   text1: 'Error',
-      //   text2: error.message || 'Failed to send join request.', // Here it will show the error from the server
-      // });
+      // Display error message using Toast
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: error.message || 'Failed to send join request.', // Show error message from server
+      });
     }
   };
 
@@ -98,7 +99,6 @@ const Overview = ({ teamData, members }) => {
         />
       )}
 
-      {/* Toast component reference */}
 
     </View>
   );

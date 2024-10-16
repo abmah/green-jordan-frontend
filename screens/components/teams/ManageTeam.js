@@ -1,47 +1,75 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert, Image } from 'react-native'; // Import Image for profile pictures
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'; // Import Image for profile pictures
 import { acceptJoinRequest, rejectJoinRequest, removeMember } from '../../../api';
 import useUserIdStore from '../../../stores/useUserStore';
+import Toast from 'react-native-toast-message'; // Import Toast
 
 const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
   const { userId } = useUserIdStore();
 
   const handleUpdateJoinRequest = async (action, request) => {
     const requestUserId = request.userId;
-    const username = request.userId.username;
-    console.log('bruh' + requestUserId._id)
+    const username = request.userId.username; // Get the actual username from the request
     try {
       if (action === 'Accepted') {
         await acceptJoinRequest(teamId, requestUserId._id, userId);
-        Alert.alert('Success', 'Join request accepted');
 
+        // Show success toast
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'Join request accepted.',
+        });
 
-        const newMember = { _id: requestUserId, username };
+        // Update members state to include the new member with their actual username
+        const newMember = { _id: requestUserId, username }; // Use the actual username
         setMembers((prevMembers) => [...prevMembers, newMember]);
 
+        // Update teamData to remove the accepted request
         const updatedJoinRequests = teamData.joinRequests.filter(req => req._id !== request._id);
         setTeamData({ ...teamData, joinRequests: updatedJoinRequests });
 
       } else if (action === 'Denied') {
         await rejectJoinRequest(teamId, requestUserId._id, userId);
-        Alert.alert('Success', 'Join request denied');
 
+        // Show success toast
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'Join request denied.',
+        });
 
+        // Update teamData to remove the denied request
         const updatedJoinRequests = teamData.joinRequests.filter(req => req._id !== request._id);
         setTeamData({ ...teamData, joinRequests: updatedJoinRequests });
       }
     } catch (error) {
-      Alert.alert('Error', 'Failed to process request.');
+      // Show error toast
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: error.response.data.message,
+      });
     }
   };
 
   const handleRemoveMember = async (memberId) => {
     try {
       await removeMember(teamId, memberId, userId);
-      Alert.alert('Success', 'Member removed successfully!');
-      setMembers(members.filter(member => member._id !== memberId));
+      // Show success toast
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: 'Member removed successfully!',
+      });
+      setMembers(members.filter(member => member._id !== memberId)); // Update local state
     } catch (error) {
-      Alert.alert('Error', 'Failed to remove member. Please try again.');
+      // Show error toast
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Failed to remove member. Please try again.',
+      });
     }
   };
 
@@ -50,10 +78,7 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
       <Text style={styles.header}>Manage Team</Text>
       {teamData.joinRequests.length > 0 ? (
         teamData.joinRequests.map((request) => (
-
           <View key={request._id} style={styles.requestContainer}>
-
-
             {request.userId.profilePicture && request.userId.profilePicture !== '' ? (
               <Image
                 source={{ uri: request.userId.profilePicture }}
@@ -61,7 +86,7 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
               />
             ) : (
               <Image
-                source={require('../../../assets/default-avatar.png')}
+                source={require('../../../assets/default-avatar.png')} // Path to default profile picture
                 style={styles.profilePicture}
               />
             )}
@@ -71,13 +96,13 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={[styles.button, styles.acceptButton]}
-                onPress={() => handleUpdateJoinRequest('Accepted', request)}
+                onPress={() => handleUpdateJoinRequest('Accepted', request)} // Pass the entire request object
               >
                 <Text style={styles.buttonText}>Accept</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.button, styles.denyButton]}
-                onPress={() => handleUpdateJoinRequest('Denied', request)}
+                onPress={() => handleUpdateJoinRequest('Denied', request)} // Pass the entire request object
               >
                 <Text style={styles.buttonText}>Deny</Text>
               </TouchableOpacity>
@@ -93,12 +118,12 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
           <View key={member._id} style={styles.memberContainer}>
             {member.profilePicture && member.profilePicture !== '' ? (
               <Image
-                source={{ uri: member.profilePicture }}
+                source={{ uri: member.profilePicture }} // Render member's profile picture
                 style={styles.profilePicture}
               />
             ) : (
               <Image
-                source={require('../../../assets/default-avatar.png')}
+                source={require('../../../assets/default-avatar.png')} // Path to default profile picture
                 style={styles.profilePicture}
               />
             )}
@@ -111,7 +136,7 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
                 <Text style={styles.buttonText}>Remove</Text>
               </TouchableOpacity>
             ) : (
-              <Text style={styles.selfLabel}>You</Text>
+              <Text style={styles.selfLabel}>You</Text> // Display "You" next to your own card
             )}
           </View>
         ))
@@ -139,13 +164,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#1C2A33',
     borderRadius: 10,
     marginBottom: 10,
-    flexDirection: 'row',
+    flexDirection: 'row', // Align items horizontally
     alignItems: 'center',
   },
   requestText: {
     color: '#B0B0B0',
-    flex: 1,
-    marginLeft: 10,
+    flex: 1, // Allows text to grow and take available space
+    marginLeft: 10, // Spacing between the image and text
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -180,8 +205,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#1C2A33',
     borderRadius: 10,
     marginBottom: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: 'row', // Align items horizontally
+    justifyContent: 'space-between', // Space between member name and remove button
     alignItems: 'center',
   },
   membersHeader: {
@@ -192,7 +217,7 @@ const styles = StyleSheet.create({
   },
   memberText: {
     color: '#B0B0B0',
-    flex: 1,
+    flex: 1, // Allows text to grow and take available space
   },
   removeButton: {
     backgroundColor: '#FF3D00',
