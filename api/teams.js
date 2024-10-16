@@ -145,7 +145,25 @@ export const getTeamPosts = async (teamId) => {
     const response = await apiClient.get(`/teams/posts/${teamId}`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching team posts:', error);
-    throw error;
+    // Log the actual error details based on the error type
+    if (error.response) {
+      // The server responded with a status code that is not in the range of 2xx
+      console.error('Error response from server:', {
+        status: error.response.status,
+        data: error.response.data,
+        headers: error.response.headers,
+      });
+    } else if (error.request) {
+      // The request was made but no response was received
+      console.error('No response received:', error.request);
+    } else {
+      // Something happened in setting up the request that triggered an error
+      console.error('Error in request setup:', error.message);
+    }
+
+    // Optionally, log the full error object if you need to see more
+    console.error('Full error object:', error);
+
+    throw error; // Re-throw the error to handle it elsewhere if needed
   }
 };

@@ -7,7 +7,7 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
   const { userId } = useUserIdStore();
 
   const handleUpdateJoinRequest = async (action, request) => {
-    const requestUserId = request.userId._id;
+    const requestUserId = request.userId;
     const username = request.userId.username; // Get the actual username from the request
 
     try {
@@ -51,8 +51,10 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
       <Text style={styles.header}>Manage Team</Text>
       {teamData.joinRequests.length > 0 ? (
         teamData.joinRequests.map((request) => (
+
           <View key={request._id} style={styles.requestContainer}>
-            {/* Render profile picture if available */}
+
+
             {request.userId.profilePicture && request.userId.profilePicture !== '' ? (
               <Image
                 source={{ uri: request.userId.profilePicture }}
