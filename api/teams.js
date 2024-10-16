@@ -6,14 +6,21 @@ const apiClient = axios.create({
   timeout: 10000,
 });
 
+const extractErrorMessage = (error) => {
+  if (error.response && error.response.data && error.response.data.error) {
+    return error.response.data.error;
+  }
+  return 'An unknown error occurred.';
+};
+
 // Create a new team (only accessible by users not in a team)
 export const createTeam = async (userId, teamData) => {
   try {
     const response = await apiClient.post('/teams', { userId, ...teamData });
     return response.data;
   } catch (error) {
-    console.error('Error creating team:', error);
-    throw error;
+    // console.error('Error creating team:', error);
+    throw new Error(extractErrorMessage(error));
   }
 };
 
@@ -23,8 +30,8 @@ export const updateTeam = async (teamId, teamData) => {
     const response = await apiClient.put(`/teams/${teamId}`, teamData);
     return response.data;
   } catch (error) {
-    console.error('Error updating team:', error);
-    throw error;
+    // console.error('Error updating team:', error);
+    throw new Error(extractErrorMessage(error));
   }
 };
 
@@ -34,8 +41,8 @@ export const deleteTeam = async (teamId) => {
     const response = await apiClient.delete(`/teams/${teamId}`);
     return response.data;
   } catch (error) {
-    console.error('Error deleting team:', error);
-    throw error;
+    // console.error('Error deleting team:', error);
+    throw new Error(extractErrorMessage(error));
   }
 };
 
@@ -45,19 +52,19 @@ export const getTeam = async (teamId) => {
     const response = await apiClient.get(`/teams/${teamId}`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching team details:', error);
-    throw error;
+    // console.error('Error fetching team details:', error);
+    throw new Error(extractErrorMessage(error));
   }
 };
 
-// get user team
+// Get user team
 export const getUserTeam = async (userId) => {
   try {
     const response = await apiClient.get(`/teams/get-user-team/${userId}`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching user team:', error);
-    throw error;
+    // console.error('Error fetching user team:', error);
+    throw new Error(extractErrorMessage(error));
   }
 };
 
@@ -67,19 +74,19 @@ export const sendJoinRequest = async (teamId, userId) => {
     const response = await apiClient.post(`/teams/request-join/${teamId}`, { userId });
     return response.data;
   } catch (error) {
-    console.error('Error sending join request:', error);
-    throw error;
+    // console.error('Error sending join request:', error);
+    throw new Error(extractErrorMessage(error));
   }
 };
 
 // Accept a user's join request (team admin only)
 export const acceptJoinRequest = async (teamId, userId, adminId) => {
   try {
-    const response = await apiClient.put(`/teams/accept-request/${teamId}/${userId}`, { userId: adminId })
+    const response = await apiClient.put(`/teams/accept-request/${teamId}/${userId}`, { userId: adminId });
     return response.data;
   } catch (error) {
-    console.error('Error accepting join request:', error);
-    throw error;
+    // console.error('Error accepting join request:', error);
+    throw new Error(extractErrorMessage(error));
   }
 };
 
@@ -89,11 +96,10 @@ export const rejectJoinRequest = async (teamId, userId, adminId) => {
     const response = await apiClient.put(`/teams/reject-request/${teamId}/${userId}`, { userId: adminId });
     return response.data;
   } catch (error) {
-    console.error('Error rejecting join request:', error);
-    throw error;
+    // console.error('Error rejecting join request:', error);
+    throw new Error(extractErrorMessage(error));
   }
 };
-
 
 // Remove a member from the team (team admin only)
 export const removeMember = async (teamId, userId, adminId) => {
@@ -101,8 +107,8 @@ export const removeMember = async (teamId, userId, adminId) => {
     const response = await apiClient.put(`/teams/remove-member/${teamId}/${userId}`, { userId: adminId });
     return response.data;
   } catch (error) {
-    console.error('Error removing member:', error);
-    throw error;
+    // console.error('Error removing member:', error);
+    throw new Error(extractErrorMessage(error));
   }
 };
 
@@ -112,8 +118,8 @@ export const leaveTeam = async (teamId, userId) => {
     const response = await apiClient.put(`/teams/leave-team/${teamId}`, { userId });
     return response.data;
   } catch (error) {
-    console.error('Error leaving team:', error);
-    throw error;
+    // console.error('Error leaving team:', error);
+    throw new Error(extractErrorMessage(error));
   }
 };
 
@@ -123,8 +129,8 @@ export const getTeamMembers = async (teamId) => {
     const response = await apiClient.get(`/teams/members/${teamId}`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching team members:', error);
-    throw error;
+    // console.error('Error fetching team members:', error);
+    throw new Error(extractErrorMessage(error));
   }
 };
 
@@ -134,18 +140,18 @@ export const getAllTeams = async () => {
     const response = await apiClient.get('/teams');
     return response.data;
   } catch (error) {
-    console.error('Error fetching teams:', error);
-    throw error;
+    // console.error('Error fetching teams:', error);
+    throw new Error(extractErrorMessage(error));
   }
 };
 
-
+// Get team posts
 export const getTeamPosts = async (teamId) => {
   try {
     const response = await apiClient.get(`/teams/posts/${teamId}`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching team posts:', error);
-    throw error;
+    // console.error('Error fetching team posts:', error);
+    throw new Error(extractErrorMessage(error));
   }
 };
