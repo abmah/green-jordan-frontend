@@ -49,8 +49,8 @@ const TeamDetailsTabs = () => {
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.teamHeader}>
-        <Text style={styles.teamName}>{teamData.name}</Text>
-        <Text style={styles.teamDescription}>{teamData.description}</Text>
+        {/* <Text style={styles.teamName}>{teamData.name}</Text>
+        <Text style={styles.teamDescription}>{teamData.description}</Text> */}
       </View>
       <Tab.Navigator
         screenOptions={{ headerShown: false, tabBarStyle: { display: 'none' } }}

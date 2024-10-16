@@ -5,7 +5,7 @@ import Post from '../Post';
 import Loader from '../Loader';
 
 const TeamPosts = ({ teamId }) => {
-  console.log('Team ID:', teamId);
+  // console.log('Team ID:', teamId);
   const [posts, setPosts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true); // State to manage loading

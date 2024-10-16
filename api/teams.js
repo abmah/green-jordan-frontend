@@ -12,8 +12,7 @@ export const createTeam = async (userId, teamData) => {
     const response = await apiClient.post('/teams', { userId, ...teamData });
     return response.data;
   } catch (error) {
-    console.error('Error creating team:', error);
-    throw error;
+    handleError(error);
   }
 };
 
@@ -23,8 +22,7 @@ export const updateTeam = async (teamId, teamData) => {
     const response = await apiClient.put(`/teams/${teamId}`, teamData);
     return response.data;
   } catch (error) {
-    console.error('Error updating team:', error);
-    throw error;
+    handleError(error);
   }
 };
 
@@ -34,8 +32,7 @@ export const deleteTeam = async (teamId) => {
     const response = await apiClient.delete(`/teams/${teamId}`);
     return response.data;
   } catch (error) {
-    console.error('Error deleting team:', error);
-    throw error;
+    handleError(error);
   }
 };
 
@@ -45,19 +42,17 @@ export const getTeam = async (teamId) => {
     const response = await apiClient.get(`/teams/${teamId}`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching team details:', error);
-    throw error;
+    handleError(error);
   }
 };
 
-// get user team
+// Get user team
 export const getUserTeam = async (userId) => {
   try {
     const response = await apiClient.get(`/teams/get-user-team/${userId}`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching user team:', error);
-    throw error;
+    handleError(error);
   }
 };
 
@@ -67,19 +62,17 @@ export const sendJoinRequest = async (teamId, userId) => {
     const response = await apiClient.post(`/teams/request-join/${teamId}`, { userId });
     return response.data;
   } catch (error) {
-    console.error('Error sending join request:', error);
-    throw error;
+    handleError(error);
   }
 };
 
 // Accept a user's join request (team admin only)
 export const acceptJoinRequest = async (teamId, userId, adminId) => {
   try {
-    const response = await apiClient.put(`/teams/accept-request/${teamId}/${userId}`, { userId: adminId })
+    const response = await apiClient.put(`/teams/accept-request/${teamId}/${userId}`, { userId: adminId });
     return response.data;
   } catch (error) {
-    console.error('Error accepting join request:', error);
-    throw error;
+    handleError(error);
   }
 };
 
@@ -89,11 +82,9 @@ export const rejectJoinRequest = async (teamId, userId, adminId) => {
     const response = await apiClient.put(`/teams/reject-request/${teamId}/${userId}`, { userId: adminId });
     return response.data;
   } catch (error) {
-    console.error('Error rejecting join request:', error);
-    throw error;
+    handleError(error);
   }
 };
-
 
 // Remove a member from the team (team admin only)
 export const removeMember = async (teamId, userId, adminId) => {
@@ -101,8 +92,7 @@ export const removeMember = async (teamId, userId, adminId) => {
     const response = await apiClient.put(`/teams/remove-member/${teamId}/${userId}`, { userId: adminId });
     return response.data;
   } catch (error) {
-    console.error('Error removing member:', error);
-    throw error;
+    handleError(error);
   }
 };
 
@@ -112,8 +102,7 @@ export const leaveTeam = async (teamId, userId) => {
     const response = await apiClient.put(`/teams/leave-team/${teamId}`, { userId });
     return response.data;
   } catch (error) {
-    console.error('Error leaving team:', error);
-    throw error;
+    handleError(error);
   }
 };
 
@@ -123,8 +112,7 @@ export const getTeamMembers = async (teamId) => {
     const response = await apiClient.get(`/teams/members/${teamId}`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching team members:', error);
-    throw error;
+    handleError(error);
   }
 };
 
@@ -134,36 +122,27 @@ export const getAllTeams = async () => {
     const response = await apiClient.get('/teams');
     return response.data;
   } catch (error) {
-    console.error('Error fetching teams:', error);
-    throw error;
+    handleError(error);
   }
 };
 
-
+// Get team posts
 export const getTeamPosts = async (teamId) => {
   try {
     const response = await apiClient.get(`/teams/posts/${teamId}`);
     return response.data;
   } catch (error) {
-    // Log the actual error details based on the error type
-    if (error.response) {
-      // The server responded with a status code that is not in the range of 2xx
-      console.error('Error response from server:', {
-        status: error.response.status,
-        data: error.response.data,
-        headers: error.response.headers,
-      });
-    } else if (error.request) {
-      // The request was made but no response was received
-      console.error('No response received:', error.request);
-    } else {
-      // Something happened in setting up the request that triggered an error
-      console.error('Error in request setup:', error.message);
-    }
-
-    // Optionally, log the full error object if you need to see more
-    console.error('Full error object:', error);
-
-    throw error; // Re-throw the error to handle it elsewhere if needed
+    handleError(error);
   }
+};
+
+// General error handling function
+const handleError = (error) => {
+  // Check if error response exists and has a message
+  const errorMessage = error.response && error.response.data && error.response.data.message
+    ? error.response.data.message
+    : 'An unexpected error occurred. Please try again later.';
+
+  console.error(errorMessage);
+  throw new Error(errorMessage);
 };

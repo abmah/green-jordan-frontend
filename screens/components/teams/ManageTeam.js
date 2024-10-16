@@ -8,26 +8,25 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
 
   const handleUpdateJoinRequest = async (action, request) => {
     const requestUserId = request.userId;
-    const username = request.userId.username; // Get the actual username from the request
-
+    const username = request.userId.username;
+    console.log('bruh' + requestUserId._id)
     try {
       if (action === 'Accepted') {
-        await acceptJoinRequest(teamId, requestUserId, userId);
+        await acceptJoinRequest(teamId, requestUserId._id, userId);
         Alert.alert('Success', 'Join request accepted');
 
-        // Update members state to include the new member with their actual username
-        const newMember = { _id: requestUserId, username }; // Use the actual username
+
+        const newMember = { _id: requestUserId, username };
         setMembers((prevMembers) => [...prevMembers, newMember]);
 
-        // Update teamData to remove the accepted request
         const updatedJoinRequests = teamData.joinRequests.filter(req => req._id !== request._id);
         setTeamData({ ...teamData, joinRequests: updatedJoinRequests });
 
       } else if (action === 'Denied') {
-        await rejectJoinRequest(teamId, requestUserId, userId);
+        await rejectJoinRequest(teamId, requestUserId._id, userId);
         Alert.alert('Success', 'Join request denied');
 
-        // Update teamData to remove the denied request
+
         const updatedJoinRequests = teamData.joinRequests.filter(req => req._id !== request._id);
         setTeamData({ ...teamData, joinRequests: updatedJoinRequests });
       }
@@ -40,7 +39,7 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
     try {
       await removeMember(teamId, memberId, userId);
       Alert.alert('Success', 'Member removed successfully!');
-      setMembers(members.filter(member => member._id !== memberId)); // Update local state
+      setMembers(members.filter(member => member._id !== memberId));
     } catch (error) {
       Alert.alert('Error', 'Failed to remove member. Please try again.');
     }
@@ -62,7 +61,7 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
               />
             ) : (
               <Image
-                source={require('../../../assets/default-avatar.png')} // Path to default profile picture
+                source={require('../../../assets/default-avatar.png')}
                 style={styles.profilePicture}
               />
             )}
@@ -72,13 +71,13 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={[styles.button, styles.acceptButton]}
-                onPress={() => handleUpdateJoinRequest('Accepted', request)} // Pass the entire request object
+                onPress={() => handleUpdateJoinRequest('Accepted', request)}
               >
                 <Text style={styles.buttonText}>Accept</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.button, styles.denyButton]}
-                onPress={() => handleUpdateJoinRequest('Denied', request)} // Pass the entire request object
+                onPress={() => handleUpdateJoinRequest('Denied', request)}
               >
                 <Text style={styles.buttonText}>Deny</Text>
               </TouchableOpacity>
@@ -94,12 +93,12 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
           <View key={member._id} style={styles.memberContainer}>
             {member.profilePicture && member.profilePicture !== '' ? (
               <Image
-                source={{ uri: member.profilePicture }} // Render member's profile picture
+                source={{ uri: member.profilePicture }}
                 style={styles.profilePicture}
               />
             ) : (
               <Image
-                source={require('../../../assets/default-avatar.png')} // Path to default profile picture
+                source={require('../../../assets/default-avatar.png')}
                 style={styles.profilePicture}
               />
             )}
@@ -112,7 +111,7 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
                 <Text style={styles.buttonText}>Remove</Text>
               </TouchableOpacity>
             ) : (
-              <Text style={styles.selfLabel}>You</Text> // Display "You" next to your own card
+              <Text style={styles.selfLabel}>You</Text>
             )}
           </View>
         ))
@@ -140,13 +139,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#1C2A33',
     borderRadius: 10,
     marginBottom: 10,
-    flexDirection: 'row', // Align items horizontally
+    flexDirection: 'row',
     alignItems: 'center',
   },
   requestText: {
     color: '#B0B0B0',
-    flex: 1, // Allows text to grow and take available space
-    marginLeft: 10, // Spacing between the image and text
+    flex: 1,
+    marginLeft: 10,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -181,8 +180,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#1C2A33',
     borderRadius: 10,
     marginBottom: 10,
-    flexDirection: 'row', // Align items horizontally
-    justifyContent: 'space-between', // Space between member name and remove button
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   membersHeader: {
@@ -193,7 +192,7 @@ const styles = StyleSheet.create({
   },
   memberText: {
     color: '#B0B0B0',
-    flex: 1, // Allows text to grow and take available space
+    flex: 1,
   },
   removeButton: {
     backgroundColor: '#FF3D00',
@@ -214,7 +213,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   selfLabel: {
-    color: '#1DB954', // Change this color to differentiate "You"
+    color: '#1DB954',
     fontWeight: 'bold',
     marginLeft: 10,
   },

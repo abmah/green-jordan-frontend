@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
-  FlatList,
+  ScrollView, // ScrollView to allow page refresh
   StyleSheet,
   TouchableOpacity,
+  RefreshControl, // RefreshControl for pull-to-refresh
 } from "react-native";
 import Toast from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
@@ -28,40 +29,50 @@ const Teams = () => {
   const [userTeam, setUserTeam] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false); // New state for refresh control
   const navigation = useNavigation();
 
+  const fetchTeams = async () => {
+    try {
+      const response = await getAllTeams();
+      if (response.data) {
+        setTeams(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching teams:", error);
+    }
+  };
+
+  const fetchUserTeam = async () => {
+    if (!userId) return setLoading(false); // Early return if userId is not available
+
+    try {
+      const response = await getUserTeam(userId);
+      if (response.data && response.data.message !== "No team found for this user.") {
+        setUserTeam(response.data);
+      } else {
+        setUserTeam(null);
+      }
+    } catch (error) {
+      console.error("Error fetching user team:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch teams and user team on component mount
   useEffect(() => {
-    const fetchTeams = async () => {
-      try {
-        const response = await getAllTeams();
-        if (response.data) {
-          setTeams(response.data);
-        }
-      } catch (error) {
-        console.error("Error fetching teams:", error);
-      }
-    };
-
-    const fetchUserTeam = async () => {
-      if (!userId) return setLoading(false); // Early return if userId is not available
-
-      try {
-        const response = await getUserTeam(userId);
-        if (response.data && response.data.message !== "No team found for this user.") {
-          setUserTeam(response.data);
-        } else {
-          setUserTeam(null);
-        }
-      } catch (error) {
-        console.error("Error fetching user team:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchTeams();
     fetchUserTeam();
   }, [userId]);
+
+  // Handle pull-to-refresh logic
+  const onRefresh = async () => {
+    setIsRefreshing(true); // Show the refresh spinner
+    await fetchTeams();
+    await fetchUserTeam(); // Refetch user team
+    setIsRefreshing(false); // Hide the refresh spinner
+  };
 
   const handleCreateTeam = async (teamData) => {
     try {
@@ -85,7 +96,7 @@ const Teams = () => {
     ? teams.filter((team) => team._id !== userTeam._id)
     : teams;
 
-  const renderTeamItem = ({ item }) => (
+  const renderTeamItem = (item) => (
     <TeamItem item={item} userId={userId} navigation={navigation} />
   );
 
@@ -102,50 +113,64 @@ const Teams = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Teams</Text>
-      {loading ? (
-        <Loader />
-      ) : (
-        <>
-          {userId ? (
-            <>
-              {userTeam ? (
-                <UserTeam userTeam={userTeam} navigation={navigation} />
-              ) : (
-                <NoTeam setModalVisible={setModalVisible} />
-              )}
-              <Text style={styles.otherTeamsHeader}>Other Teams</Text>
-              <FlatList
-                data={filteredTeams}
-                renderItem={renderTeamItem}
-                keyExtractor={(item) => item._id}
-                contentContainerStyle={styles.list}
-                ListEmptyComponent={<Text style={{ color: 'white' }}>There are no teams</Text>}
-              />
-            </>
-          ) : (
-            renderLoginPrompt()
-          )}
-        </>
-      )}
-      <CreateTeamModal
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        handleCreateTeam={handleCreateTeam}
-      />
-    </View>
+    <ScrollView
+      contentContainerStyle={styles.scrollContainer}
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefreshing} // Show the refresh spinner
+          onRefresh={onRefresh} // Trigger refresh logic on pull-down
+          tintColor="white" // Customize the spinner color
+        />
+      }
+    >
+      <View style={styles.container}>
+        <Text style={styles.header}>Teams</Text>
+        {loading ? (
+          <Loader />
+        ) : (
+          <>
+            {userId ? (
+              <>
+                {userTeam ? (
+                  <UserTeam userTeam={userTeam} navigation={navigation} />
+                ) : (
+                  <NoTeam setModalVisible={setModalVisible} />
+                )}
+                <Text style={styles.otherTeamsHeader}>Other Teams</Text>
+                {filteredTeams.length > 0 ? (
+                  filteredTeams.map((team) => (
+                    <TeamItem key={team._id} item={team} userId={userId} navigation={navigation} />
+                  ))
+                ) : (
+                  <Text style={{ color: "white" }}>There are no teams</Text>
+                )}
+              </>
+            ) : (
+              renderLoginPrompt()
+            )}
+          </>
+        )}
+        <CreateTeamModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          handleCreateTeam={handleCreateTeam}
+        />
+      </View>
+    </ScrollView>
   );
 };
 
 // Styles
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  scrollContainer: {
+    flexGrow: 1,
     justifyContent: "flex-start",
     backgroundColor: "#0F1F26",
     padding: 16,
     paddingBottom: 0,
+  },
+  container: {
+    flex: 1,
   },
   header: {
     fontSize: 24,
@@ -176,9 +201,6 @@ const styles = StyleSheet.create({
   },
   loginButtonText: {
     color: "white",
-  },
-  list: {
-    paddingBottom: 20,
   },
 });
 

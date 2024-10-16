@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Button, Alert, FlatList, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from 'react-native';
 import { sendJoinRequest } from '../../../api';
 import useUserIdStore from '../../../stores/useUserStore';
 import Loader from '../Loader';
+// import Toast from 'react-native-toast-message'; // Ensure you have this imported
 
 const Overview = ({ teamData, members }) => {
   const { userId } = useUserIdStore();
@@ -18,10 +19,19 @@ const Overview = ({ teamData, members }) => {
   const handleJoinRequest = async () => {
     try {
       await sendJoinRequest(teamData._id, userId);
-      Alert.alert("Success", "Join request sent successfully!");
+      // Toast.show({
+      //   type: 'success',
+      //   text1: 'Success',
+      //   text2: 'Join request sent successfully!',
+      // });
     } catch (error) {
       console.error("Error sending join request:", error);
-      Alert.alert("Error", "Failed to send join request.");
+      // Display the specific error message from the API response as a toast
+      // Toast.show({
+      //   type: 'error',
+      //   text1: 'Error',
+      //   text2: error.message || 'Failed to send join request.', // Here it will show the error from the server
+      // });
     }
   };
 
@@ -37,7 +47,6 @@ const Overview = ({ teamData, members }) => {
         <View style={styles.memberInfo}>
           <Text style={styles.memberName}>
             {item.username}
-            {/* Check if the current member is the admin */}
             {item._id === teamData.admin && <Text style={styles.adminLabel}> (Admin)</Text>}
             {item._id === userId && <Text style={styles.youLabel}> - You</Text>}
             <Text style={styles.pointsLabel}> - {item.points} pts</Text>
@@ -69,7 +78,9 @@ const Overview = ({ teamData, members }) => {
       <Text style={styles.details}>Description: {teamData.description}</Text>
 
       {showJoinButton && (
-        <Button title="Send Join Request" onPress={handleJoinRequest} color="#4CAF50" />
+        <TouchableOpacity style={styles.joinButton} onPress={handleJoinRequest}>
+          <Text style={styles.joinButtonText}>Send Join Request</Text>
+        </TouchableOpacity>
       )}
 
       <Text style={styles.membersTitle}>Team Members</Text>
@@ -86,6 +97,9 @@ const Overview = ({ teamData, members }) => {
           contentContainerStyle={styles.membersList}
         />
       )}
+
+      {/* Toast component reference */}
+
     </View>
   );
 };
@@ -99,18 +113,19 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     color: '#F5F5F5',
-    fontWeight: '700',
+    fontFamily: 'Nunito-Bold',
     marginBottom: 16,
   },
   details: {
     fontSize: 16,
-    color: '#B0B0B0',
+    color: 'white',
+    fontFamily: 'Nunito-Bold',
     marginBottom: 8,
   },
   membersTitle: {
     fontSize: 22,
     color: '#F5F5F5',
-    fontWeight: '600',
+    fontFamily: 'Nunito-ExtraBold',
     marginTop: 20,
     marginBottom: 12,
   },
@@ -123,7 +138,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1B2B38',
     padding: 12,
     marginVertical: 6,
-    borderRadius: 12,
+    borderRadius: 8,
     borderColor: '#ffffff1a',
     borderWidth: 1,
   },
@@ -139,26 +154,40 @@ const styles = StyleSheet.create({
   memberName: {
     color: '#F5F5F5',
     fontSize: 18,
-    fontWeight: '600',
+    fontFamily: 'Nunito-SemiBold',
   },
   adminLabel: {
     color: '#FFD700',
     fontSize: 14,
+    fontFamily: 'Nunito-Bold',
   },
   pointsLabel: {
-    color: '#B0B0B0',
+    color: 'white',
     fontSize: 14,
-    marginLeft: 4, // Add a little space between username and points
+    fontFamily: 'Nunito-Bold',
+    marginLeft: 4,
   },
   youLabel: {
-    color: '#1DB954', // Green color for "You"
+    color: '#1DB954',
     fontSize: 14,
-    fontWeight: '600',
+    fontFamily: 'Nunito-ExtraBold',
   },
   emptyMessage: {
     color: '#F5F5F5',
     textAlign: 'center',
     marginTop: 20,
+  },
+  joinButton: {
+    backgroundColor: '#8AC149',
+    padding: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  joinButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontFamily: 'Nunito-ExtraBold',
   },
 });
 

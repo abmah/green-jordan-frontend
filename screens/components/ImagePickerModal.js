@@ -1,5 +1,3 @@
-// ImagePickerModal.js
-
 import React from 'react';
 import { Modal, View, Pressable, Text, Image, ActivityIndicator, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
@@ -24,7 +22,7 @@ const ImagePickerModal = ({
         <View style={styles.modalContent}>
           <View style={styles.modalHeader}>
             <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-              <Ionicons name="close" size={24} color="#fff" />
+              <Ionicons name="close" size={24} color="#F5F5F5" />
             </TouchableOpacity>
           </View>
 
@@ -34,7 +32,7 @@ const ImagePickerModal = ({
 
           <TextInput
             placeholder="Write a caption"
-            placeholderTextColor="#000"
+            placeholderTextColor="#B0B0B0" // Placeholder color
             value={description}
             onChangeText={setDescription}
             style={styles.input}
@@ -43,10 +41,10 @@ const ImagePickerModal = ({
           <View style={styles.buttonContainer}>
             <View style={styles.imageOptionButtonContainer}>
               <Pressable style={styles.modalButton} onPress={handleCameraPress}>
-                <FontAwesome name="camera" size={24} color="white" />
+                <FontAwesome name="camera" size={24} color="#fff" />
               </Pressable>
               <Pressable style={styles.modalButton} onPress={handleLibraryPress}>
-                <MaterialIcons name="photo-library" size={24} color="white" />
+                <MaterialIcons name="photo-library" size={24} color="#fff" />
               </Pressable>
             </View>
             <Pressable style={styles.submitButton} onPress={onSubmit} disabled={isUploading}>
@@ -64,17 +62,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(15, 31, 38, 0.8)', // Dimmed background
   },
   modalContent: {
-    width: '80%',
-    minHeight: 270,
-    backgroundColor: '#37464F',
+    width: '90%', // Increased width for better layout
+    minHeight: 320, // Increased minimum height
+    backgroundColor: '#2C3E50', // Darker background for the modal
     borderRadius: 15,
-    padding: 16,
+    padding: 20,
     alignItems: 'center',
     elevation: 10,
     shadowColor: '#000',
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.25,
     shadowRadius: 10,
   },
   modalHeader: {
@@ -86,9 +85,9 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   modalTitle: {
-    fontSize: 20,
-    fontFamily: 'Nunito-ExtraBold',
-    color: '#fff',
+    fontSize: 22,
+    fontFamily: 'Nunito-ExtraBold', // Font consistency
+    color: '#F5F5F5',
     marginBottom: 10,
   },
   imagePreview: {
@@ -99,7 +98,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   input: {
-    padding: 10,
+    padding: 12,
     marginBottom: 20,
     borderRadius: 30,
     color: '#000',
@@ -115,32 +114,32 @@ const styles = StyleSheet.create({
   imageOptionButtonContainer: {
     justifyContent: 'space-between',
     flexDirection: 'row',
-    gap: 10,
+    marginBottom: 10,
   },
   modalButton: {
-    backgroundColor: '#1E90FF',
+    backgroundColor: '#1E90FF', // Consistent button color
     alignItems: 'center',
     justifyContent: 'center',
     height: 45,
     borderRadius: 8,
-    width: 130,
+    width: '45%', // Responsive button width
+    marginHorizontal: 5, // Spacing between buttons
   },
   submitButton: {
-    width: 130,
-    backgroundColor: '#8AC149',
+    width: '100%', // Full width for the submit button
+    backgroundColor: '#8AC149', // Consistent submit button color
     height: 45,
     alignSelf: 'flex-end',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 8,
     paddingVertical: 10,
-    paddingHorizontal: 20,
     elevation: 2,
     marginTop: 10,
   },
   submitButtonText: {
     color: '#ffffff',
-    fontFamily: 'Nunito-ExtraBold',
+    fontFamily: 'Nunito-ExtraBold', // Font consistency
     fontSize: 16,
   },
 });

@@ -1,4 +1,3 @@
-// CreateTeamModal.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 
@@ -25,33 +24,40 @@ const CreateTeamModal = ({ modalVisible, setModalVisible, handleCreateTeam }) =>
     >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <Text style={styles.modalHeader}>Create New Team</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Team Name"
-            value={newTeamName}
-            onChangeText={setNewTeamName}
-            placeholderTextColor="white"
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Team Description"
-            value={newTeamDescription}
-            onChangeText={setNewTeamDescription}
-            placeholderTextColor="white"
-          />
-          <TouchableOpacity
-            onPress={onCreateTeam}
-            style={styles.createTeamButton}
-          >
-            <Text style={styles.createTeamButtonText}>Create Team</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setModalVisible(false)}
-            style={styles.closeButton}
-          >
-            <Text style={styles.closeButtonText}>Close</Text>
-          </TouchableOpacity>
+          {/* Top Section: Header */}
+          <View style={styles.topSection}>
+            <Text style={styles.modalHeader}>Create New Team</Text>
+          </View>
+
+          {/* Bottom Section: Form and Buttons */}
+          <View style={styles.bottomSection}>
+            <TextInput
+              style={styles.input}
+              placeholder="Team Name"
+              value={newTeamName}
+              onChangeText={setNewTeamName}
+              placeholderTextColor="white"
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Team Description"
+              value={newTeamDescription}
+              onChangeText={setNewTeamDescription}
+              placeholderTextColor="white"
+            />
+            <TouchableOpacity
+              onPress={onCreateTeam}
+              style={styles.createTeamButton}
+            >
+              <Text style={styles.createTeamButtonText}>Create Team</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setModalVisible(false)}
+              style={styles.closeButton}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </Modal>
@@ -63,7 +69,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
   },
   modalContent: {
     backgroundColor: "#1B2B38",
@@ -71,10 +76,19 @@ const styles = StyleSheet.create({
     padding: 20,
     width: "80%",
     alignItems: "center",
+    justifyContent: "space-between",
+  },
+  topSection: {
+
+  },
+  bottomSection: {
+    width: '100%',
+    alignItems: 'center',
   },
   modalHeader: {
-    fontSize: 20,
-    color: "white",
+    fontSize: 24,
+    fontFamily: 'Nunito-Bold',
+    color: "#8AC149",
     marginBottom: 15,
   },
   input: {
@@ -86,15 +100,18 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
     color: "white",
+    fontFamily: 'Nunito-ExtraBold',
   },
   createTeamButton: {
-    backgroundColor: "#007BFF",
+    backgroundColor: "#8AC149",
     padding: 10,
     borderRadius: 8,
     alignItems: "center",
+    width: '100%',
     marginTop: 10,
   },
   createTeamButtonText: {
+    fontFamily: 'Nunito-ExtraBold',
     color: "white",
     fontSize: 16,
   },
@@ -103,9 +120,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#FF5733",
     padding: 10,
     borderRadius: 8,
+    width: '100%',
+    alignItems: 'center',
   },
   closeButtonText: {
+    fontFamily: 'Nunito-ExtraBold',
     color: "white",
+    fontSize: 16,
   },
 });
 
