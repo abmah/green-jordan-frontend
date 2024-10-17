@@ -1,27 +1,31 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
-const NoTeam = ({ setModalVisible }) => (
-  <View style={styles.noTeamContainer}>
-    {/* Top Section: Informational Text */}
-    <View style={styles.topSection}>
-      <Text style={styles.noTeamText}>
-        You are not in a team. Either create one or join one. Note that
-        if you create a team, you will not be able to join another.
-      </Text>
-    </View>
+const NoTeam = ({ setModalVisible }) => {
+  const { t } = useTranslation(); // Use translation hook
 
-    {/* Bottom Section: Create Team Button */}
-    <View style={styles.bottomSection}>
-      <TouchableOpacity
-        onPress={() => setModalVisible(true)}
-        style={styles.createTeamButton}
-      >
-        <Text style={styles.createTeamButtonText}>Create Team</Text>
-      </TouchableOpacity>
+  return (
+    <View style={styles.noTeamContainer}>
+      {/* Top Section: Informational Text */}
+      <View style={styles.topSection}>
+        <Text style={styles.noTeamText}>{t("noTeam.info")}</Text>
+      </View>
+
+      {/* Bottom Section: Create Team Button */}
+      <View style={styles.bottomSection}>
+        <TouchableOpacity
+          onPress={() => setModalVisible(true)}
+          style={styles.createTeamButton}
+        >
+          <Text style={styles.createTeamButtonText}>
+            {t("noTeam.createButton")}
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
-  </View>
-);
+  );
+};
 
 const styles = StyleSheet.create({
   noTeamContainer: {
@@ -40,20 +44,20 @@ const styles = StyleSheet.create({
     alignItems: "center", // Center the button
   },
   noTeamText: {
-    fontFamily: 'Nunito-ExtraBold',
+    fontFamily: "Nunito-ExtraBold",
     color: "white",
     fontSize: 16,
     textAlign: "center",
   },
   createTeamButton: {
-    backgroundColor: "#38667A", // Green button background
+    backgroundColor: "#38667A", // Button background color
     padding: 10,
     borderRadius: 30,
     alignItems: "center",
-    width: '100%', // Full width button for better usability
+    width: "100%", // Full width button for better usability
   },
   createTeamButtonText: {
-    fontFamily: 'Nunito-ExtraBold',
+    fontFamily: "Nunito-ExtraBold",
     color: "white", // White text on the button
     fontSize: 16,
   },

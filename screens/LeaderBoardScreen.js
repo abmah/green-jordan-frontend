@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react';
-import { View, FlatList, StyleSheet, Platform, Text } from 'react-native';
-import { getLeaderboard } from '../api';
-import LeaderboardItem from './components/LeaderboardItem';
-import Loader from './components/Loader';
-import EmptyState from './components/EmptyState';
+import { useState, useEffect } from "react";
+import { View, FlatList, StyleSheet, Platform, Text } from "react-native";
+import { getLeaderboard } from "../api";
+import LeaderboardItem from "./components/LeaderboardItem";
+import Loader from "./components/Loader";
+import EmptyState from "./components/EmptyState";
+import { useTranslation } from "react-i18next"; // Import the useTranslation hook
 
 const LeaderboardScreen = () => {
+  const { t } = useTranslation(); // Initialize the translation hook
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,8 +20,8 @@ const LeaderboardScreen = () => {
       const result = await getLeaderboard();
       setData(result.leaderboard || []);
     } catch (err) {
-      console.error('Error fetching leaderboard:', err);
-      setError('Unable to load leaderboard.');
+      console.error("Error fetching leaderboard:", err);
+      setError(t("leaderboard_screen.error")); // Use translated error message
     } finally {
       setLoading(false);
     }
@@ -48,7 +50,9 @@ const LeaderboardScreen = () => {
       ) : (
         <>
           <View style={styles.leaderboardHeader}>
-            <Text style={styles.leaderboardTitle}>Leaderboard</Text>
+            <Text style={styles.leaderboardTitle}>
+              {t("leaderboard_screen.title")}
+            </Text>
           </View>
           <FlatList
             style={{ flex: 1, paddingHorizontal: 20 }}
@@ -64,7 +68,9 @@ const LeaderboardScreen = () => {
             )}
             refreshing={refreshing}
             onRefresh={onRefresh}
-            ListEmptyComponent={<EmptyState message="No leaderboard data available." />}
+            ListEmptyComponent={
+              <EmptyState message={t("leaderboard_screen.empty_state")} />
+            }
           />
         </>
       )}
@@ -75,32 +81,32 @@ const LeaderboardScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F1F26',
-    paddingTop: Platform.OS === 'android' ? 50 : 0,
+    backgroundColor: "#0F1F26",
+    paddingTop: Platform.OS === "android" ? 50 : 0,
   },
   errorContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#0F1F26',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#0F1F26",
   },
   errorMessage: {
-    color: '#fff', // White text
+    color: "#fff",
     fontSize: 18,
-    textAlign: 'center',
+    textAlign: "center",
   },
   leaderboardHeader: {
     height: 40,
     borderBottomWidth: 1,
-    width: '100%',
-    borderBottomColor: '#37464f',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "100%",
+    borderBottomColor: "#37464f",
+    justifyContent: "center",
+    alignItems: "center",
   },
   leaderboardTitle: {
     fontSize: 24,
-    fontFamily: 'Nunito-ExtraBold',
-    color: '#fff',
+    fontFamily: "Nunito-ExtraBold",
+    color: "#fff",
   },
 });
 

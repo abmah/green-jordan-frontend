@@ -1,13 +1,27 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Modal,
+  StyleSheet,
+  Alert,
+} from "react-native";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
-const CreateTeamModal = ({ modalVisible, setModalVisible, handleCreateTeam }) => {
+const CreateTeamModal = ({
+  modalVisible,
+  setModalVisible,
+  handleCreateTeam,
+}) => {
+  const { t } = useTranslation(); // Use translation hook
   const [newTeamName, setNewTeamName] = useState("");
   const [newTeamDescription, setNewTeamDescription] = useState("");
 
   const onCreateTeam = () => {
     if (!newTeamName || !newTeamDescription) {
-      Alert.alert("Error", "Please provide a team name and description.");
+      Alert.alert(t("createTeam.error"), t("createTeam.missingFields"));
       return;
     }
     handleCreateTeam({ name: newTeamName, description: newTeamDescription });
@@ -26,21 +40,21 @@ const CreateTeamModal = ({ modalVisible, setModalVisible, handleCreateTeam }) =>
         <View style={styles.modalContent}>
           {/* Top Section: Header */}
           <View style={styles.topSection}>
-            <Text style={styles.modalHeader}>Create New Team</Text>
+            <Text style={styles.modalHeader}>{t("createTeam.header")}</Text>
           </View>
 
           {/* Bottom Section: Form and Buttons */}
           <View style={styles.bottomSection}>
             <TextInput
               style={styles.input}
-              placeholder="Team Name"
+              placeholder={t("createTeam.teamName")}
               value={newTeamName}
               onChangeText={setNewTeamName}
               placeholderTextColor="white"
             />
             <TextInput
               style={styles.input}
-              placeholder="Team Description"
+              placeholder={t("createTeam.teamDescription")}
               value={newTeamDescription}
               onChangeText={setNewTeamDescription}
               placeholderTextColor="white"
@@ -49,13 +63,17 @@ const CreateTeamModal = ({ modalVisible, setModalVisible, handleCreateTeam }) =>
               onPress={onCreateTeam}
               style={styles.createTeamButton}
             >
-              <Text style={styles.createTeamButtonText}>Create Team</Text>
+              <Text style={styles.createTeamButtonText}>
+                {t("createTeam.createButton")}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => setModalVisible(false)}
               style={styles.closeButton}
             >
-              <Text style={styles.closeButtonText}>Close</Text>
+              <Text style={styles.closeButtonText}>
+                {t("createTeam.closeButton")}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -79,15 +97,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   topSection: {
-
+    // Optional: Add styles if needed
   },
   bottomSection: {
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center",
   },
   modalHeader: {
     fontSize: 24,
-    fontFamily: 'Nunito-Bold',
+    fontFamily: "Nunito-Bold",
     color: "#8AC149",
     marginBottom: 15,
   },
@@ -100,18 +118,18 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
     color: "white",
-    fontFamily: 'Nunito-ExtraBold',
+    fontFamily: "Nunito-ExtraBold",
   },
   createTeamButton: {
     backgroundColor: "#8AC149",
     padding: 10,
     borderRadius: 8,
     alignItems: "center",
-    width: '100%',
+    width: "100%",
     marginTop: 10,
   },
   createTeamButtonText: {
-    fontFamily: 'Nunito-ExtraBold',
+    fontFamily: "Nunito-ExtraBold",
     color: "white",
     fontSize: 16,
   },
@@ -120,11 +138,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#FF5733",
     padding: 10,
     borderRadius: 8,
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center",
   },
   closeButtonText: {
-    fontFamily: 'Nunito-ExtraBold',
+    fontFamily: "Nunito-ExtraBold",
     color: "white",
     fontSize: 16,
   },

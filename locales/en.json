@@ -31,5 +31,171 @@
     "login_prompt": "Already have an account?",
     "login_button": "Login",
     "signup_error": "*Signup failed. Please try again."
+  },
+
+  "post": {
+    "error_title": "Error",
+    "login_required": "You must be logged in to like a post.",
+    "like_error": "Unable to like or unlike the post. Please try again.",
+    "report": "Report",
+    "like": "Like",
+    "comments": "Comments",
+    "created_at": "Created at"
+  },
+
+  "comments_modal": {
+    "title": "Comments",
+    "no_comments": "No comments yet. Be the first to comment!",
+    "write_comment": "Write a comment...",
+    "submit": "Submit",
+    "error": "Failed to post comment."
+  },
+
+  "leaderboard_screen": {
+    "title": "Leaderboard",
+    "error": "Unable to load leaderboard.",
+    "empty_state": "No leaderboard data available."
+  },
+
+  "leaderboard": {
+    "points": "points"
+  },
+
+  "challenges": {
+    "login_prompt": "Please login first.",
+    "no_challenges": "No daily challenges available.",
+    "current_streak": "Current Streak: {{streak}}",
+    "total_points": "Total Points: {{points}}",
+    "last_challenge_completed": "Last Challenge Completed: {{date}}",
+    "challenges_assigned_today": "Challenges Assigned Today: {{count}}"
+  },
+
+  "challengeItem": {
+    "validation_error": "Validation Error: Please provide a description and select an image.",
+    "done": "DONE",
+    "attempt": "ATTEMPT"
+  },
+
+  "imagePickerModal": {
+    "caption_placeholder": "Write a caption",
+    "submit": "SUBMIT"
+  },
+
+  "profile": {
+    "followers": "Followers: ",
+    "following": "Following: ",
+    "points": "Points: ",
+    "noPostsMessage": "There are no posts yet.",
+    "selectProfilePicture": "Select Profile Picture",
+    "takePhoto": "Take Photo",
+    "chooseFromLibrary": "Choose from Library",
+    "upload": "Upload",
+    "close": "Close",
+    "noImageSelected": "No image selected",
+    "profileUpdated": "Profile updated successfully!",
+    "failedToUpdateProfile": "Failed to update profile picture",
+    "logout": "Logout",
+    "logoutConfirmation": "Are you sure you want to log out?",
+    "loggedOutSuccessfully": "Logged out successfully",
+    "errorFetchingProfile": "Error fetching your profile"
+  },
+
+  "createTeam": {
+    "header": "Create New Team",
+    "teamName": "Team Name",
+    "teamDescription": "Team Description",
+    "createButton": "Create Team",
+    "closeButton": "Close",
+    "error": "Error",
+    "missingFields": "Please provide a team name and description."
+  },
+
+  "noTeam": {
+    "info": "You are not in a team. Either create one or join one. Note that if you create a team, you will not be able to join another.",
+    "createButton": "Create Team"
+  },
+
+  "manage_team": {
+    "header": "Manage Team",
+    "no_requests": "No join requests.",
+    "members_header": "Members:",
+    "no_members": "No members in this team yet.",
+    "success": {
+      "join_request_accepted": "Join request accepted.",
+      "join_request_denied": "Join request denied.",
+      "member_removed": "Member removed successfully!"
+    },
+    "error": {
+      "join_request_error": "Error",
+      "member_removal_error": "Failed to remove member. Please try again."
+    },
+    "accept_button": "Accept",
+    "deny_button": "Deny",
+    "remove_button": "Remove",
+    "self_label": "You",
+    "username": "Username: "
+  },
+
+  "userTeam": {
+    "no_description": "No team description available.",
+    "members": "Members: {{count}}",
+    "total_points": "Total Points: {{points}}",
+    "manage_team": "Manage Team"
+  },
+
+  "teamDetails": {
+    "overview": "Overview",
+    "team_posts": "Team Posts",
+    "manage_team": "Manage Team"
+  },
+
+  "teamPosts": {
+    "no_posts": "No posts in this team yet."
+  },
+
+  "overview": {
+    "team_overview": "Team Overview",
+    "name": "Name: ",
+    "description": "Description: ",
+    "send_join_request": "Send Join Request",
+    "no_members_found": "No team members found.",
+    "admin_label": "Admin",
+    "self_label": "You",
+    "points": "pts",
+    "members": "Team Members: "
+  },
+
+  "team_item": {
+    "manage_team": "Manage Team",
+    "view_team": "View Team",
+    "member_count": "Member Count: ",
+    "total_points": "Total Points: "
+  },
+
+  "settings": {
+    "header": "Settings",
+    "language": "Language",
+    "other_settings": "Other Settings",
+    "notification_preferences": "Notification Preferences",
+    "privacy_settings": "Privacy Settings",
+    "account_management": "Account Management",
+    "language_changed": "Language changed to {{lang}}"
+  },
+
+  "tabs": {
+    "home": "Home",
+    "leaderboard": "Leaderboard",
+    "challenges": "Challenges",
+    "teams": "Teams",
+    "profile": "Profile",
+    "login": "Login",
+    "settings": "Settings"
+  },
+
+  "userProfile": {
+    "points": "Points",
+    "followers": "Followers",
+    "following": "Following",
+    "error_fetch": "Could not load user data."
   }
 }

@@ -1,14 +1,16 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image } from "react-native";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const LeaderboardItem = ({ rank, username, points, profilePicture }) => {
+  const { t } = useTranslation(); // Use the translation function
 
   let backgroundColor;
   if (rank === 1) {
-    backgroundColor = '#FF9804';
+    backgroundColor = "#FF9804";
   } else if (rank === 2) {
-    backgroundColor = '#0F9AFE';
+    backgroundColor = "#0F9AFE";
   } else if (rank === 3) {
-    backgroundColor = '#EE5555';
+    backgroundColor = "#EE5555";
   }
 
   return (
@@ -16,12 +18,18 @@ const LeaderboardItem = ({ rank, username, points, profilePicture }) => {
       <View style={styles.userInfo}>
         <Text style={styles.rankText}>{rank}</Text>
         <Image
-          source={profilePicture ? { uri: profilePicture } : { uri: 'https://via.placeholder.com/150' }}
+          source={
+            profilePicture
+              ? { uri: profilePicture }
+              : { uri: "https://via.placeholder.com/150" }
+          }
           style={styles.profileImage}
         />
         <Text style={styles.username}>{username}</Text>
       </View>
-      <Text style={styles.points}>{points} Points</Text>
+      <Text style={styles.points}>
+        {points} {t("leaderboard.points")}
+      </Text>
     </View>
   );
 };

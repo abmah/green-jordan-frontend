@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
-import { likeOrUnlikePost } from '../../api';
-import useUserStore from '../../stores/useUserStore';
-import CommentsModal from './CommentsModal';
-import UserProfileModal from './UserProfileModal';
-import formatDate from '../../utils/formatDate';
+import React, { useState, useEffect } from "react";
+import { View, Text, Image, StyleSheet, Pressable, Alert } from "react-native";
+import { likeOrUnlikePost } from "../../api";
+import useUserStore from "../../stores/useUserStore";
+import CommentsModal from "./CommentsModal";
+import UserProfileModal from "./UserProfileModal";
+import formatDate from "../../utils/formatDate";
 import { LinearGradient } from "expo-linear-gradient";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const Post = ({ post }) => {
+  const { t } = useTranslation(); // Use the translation function
   const { userId } = useUserStore();
   const [isLiked, setIsLiked] = useState(post.likes.includes(userId));
   const [likesCount, setLikesCount] = useState(post.likes.length);
@@ -21,7 +23,7 @@ const Post = ({ post }) => {
 
   const handleLike = async () => {
     if (!userId) {
-      Alert.alert('Error', 'You must be logged in to like a post.');
+      Alert.alert(t("post.error_title"), t("post.login_required")); // Localized alert messages
       return;
     }
 
@@ -34,17 +36,17 @@ const Post = ({ post }) => {
     try {
       await likeOrUnlikePost(post._id, userId);
     } catch (error) {
-      Alert.alert('Error', 'Unable to like or unlike the post. Please try again.');
+      Alert.alert(t("post.error_title"), t("post.like_error")); // Localized error message
       setIsLiked(wasLiked);
       setLikesCount(wasLiked ? updatedLikesCount + 1 : updatedLikesCount - 1);
     }
   };
 
-  const userProfilePicture = post.userId.profilePicture || 'https://via.placeholder.com/150';
-  const username = post.userId.username || 'User';
+  const userProfilePicture =
+    post.userId.profilePicture || "https://via.placeholder.com/150";
+  const username = post.userId.username || "User";
 
   const openUserProfile = () => {
-    // Prevent opening the modal if the logged-in user is the author of the post
     if (post.userId._id !== userId) {
       setSelectedUserId(post.userId._id);
       setIsProfileModalVisible(true);
@@ -56,12 +58,15 @@ const Post = ({ post }) => {
       <View style={styles.header}>
         <View>
           <Pressable style={styles.profileInfo} onPress={openUserProfile}>
-            <Image source={{ uri: userProfilePicture }} style={styles.profileImage} />
+            <Image
+              source={{ uri: userProfilePicture }}
+              style={styles.profileImage}
+            />
             <Text style={styles.username}>{username}</Text>
           </Pressable>
         </View>
         <Pressable>
-          <Text style={styles.reportText}>report</Text>
+          <Text style={styles.reportText}>{t("post.report")}</Text>
         </Pressable>
       </View>
 
@@ -86,12 +91,13 @@ const Post = ({ post }) => {
                 isLiked && styles.liked,
               ]}
             >
-              Like <Text style={styles.likesCount}>{likesCount}</Text>
+              {t("post.like")}{" "}
+              <Text style={styles.likesCount}>{likesCount}</Text>
             </Text>
           </Pressable>
           <Pressable onPress={() => setIsModalVisible(true)}>
             <Text style={styles.comments}>
-              Comments{" "}
+              {t("post.comments")}{" "}
               <Text style={styles.commentsCount}>{post.comments.length}</Text>
             </Text>
           </Pressable>
@@ -210,6 +216,5 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito-Bold",
   },
 });
-
 
 export default Post;

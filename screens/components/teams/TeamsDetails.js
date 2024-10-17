@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useRoute } from '@react-navigation/native';
-import { getTeamMembers, getTeam } from '../../../api'; // Ensure the getTeam import is correct
-import useUserIdStore from '../../../stores/useUserStore';
-import TeamPosts from './TeamPosts';
-import ManageTeam from './ManageTeam';
-import Overview from './Overview';
-import CustomTabBar from './CustomTabBar';
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useRoute } from "@react-navigation/native";
+import { getTeamMembers, getTeam } from "../../../api"; // Ensure the getTeam import is correct
+import useUserIdStore from "../../../stores/useUserStore";
+import TeamPosts from "./TeamPosts";
+import ManageTeam from "./ManageTeam";
+import Overview from "./Overview";
+import CustomTabBar from "./CustomTabBar";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const Tab = createBottomTabNavigator();
 
@@ -15,8 +16,14 @@ const TeamDetailsTabs = () => {
   const { userId } = useUserIdStore();
   const route = useRoute();
   const { teamId } = route.params;
+  const { t } = useTranslation(); // Use the translation function
 
-  const [teamData, setTeamData] = useState({ name: '', description: '', members: [], joinRequests: [] });
+  const [teamData, setTeamData] = useState({
+    name: "",
+    description: "",
+    members: [],
+    joinRequests: [],
+  });
   const [members, setMembers] = useState([]);
   const [isInTeam, setIsInTeam] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false); // State to determine if the user is an admin
@@ -30,7 +37,6 @@ const TeamDetailsTabs = () => {
           setIsInTeam(teamResponse.data.members.includes(userId));
 
           // Check if the user is an admin
-          // Assuming teamResponse.data.adminId contains the ID of the team admin
           setIsAdmin(teamResponse.data.admin === userId);
 
           const membersResponse = await getTeamMembers(teamId);
@@ -39,7 +45,7 @@ const TeamDetailsTabs = () => {
           }
         }
       } catch (error) {
-        console.error('Failed to fetch team data', error);
+        console.error("Failed to fetch team data", error);
       }
     };
 
@@ -49,24 +55,34 @@ const TeamDetailsTabs = () => {
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.teamHeader}>
+        {/* Team name and description are commented out. Uncomment if needed. */}
         {/* <Text style={styles.teamName}>{teamData.name}</Text>
         <Text style={styles.teamDescription}>{teamData.description}</Text> */}
       </View>
       <Tab.Navigator
-        screenOptions={{ headerShown: false, tabBarStyle: { display: 'none' } }}
+        screenOptions={{ headerShown: false, tabBarStyle: { display: "none" } }}
         tabBar={(props) => <CustomTabBar {...props} />}
       >
-        <Tab.Screen name="Overview" options={{ tabBarLabel: 'Overview' }}>
+        <Tab.Screen
+          name="Overview"
+          options={{ tabBarLabel: t("teamDetails.overview") }}
+        >
           {() => <Overview teamData={teamData} members={members} />}
         </Tab.Screen>
 
-        <Tab.Screen name="Posts" options={{ tabBarLabel: 'Team Posts' }}>
+        <Tab.Screen
+          name="Posts"
+          options={{ tabBarLabel: t("teamDetails.team_posts") }}
+        >
           {() => <TeamPosts teamId={teamId} />}
         </Tab.Screen>
 
         {/* Conditionally render the ManageTeam tab only if the user is an admin */}
         {isAdmin && (
-          <Tab.Screen name="Manage" options={{ tabBarLabel: 'Manage Team' }}>
+          <Tab.Screen
+            name="Manage"
+            options={{ tabBarLabel: t("teamDetails.manage_team") }}
+          >
             {() => (
               <ManageTeam
                 teamData={teamData}
@@ -87,22 +103,22 @@ const TeamDetailsTabs = () => {
 
 const styles = StyleSheet.create({
   teamHeader: {
-    backgroundColor: '#0F1F26',
+    backgroundColor: "#0F1F26",
     paddingTop: 50,
     paddingBottom: 0,
-    borderBottomColor: '#1C4B5640',
+    borderBottomColor: "#1C4B5640",
     borderBottomWidth: 1,
   },
   teamName: {
     fontSize: 28,
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
   },
   teamDescription: {
     fontSize: 16,
-    color: '#B0B0B0',
-    textAlign: 'center',
+    color: "#B0B0B0",
+    textAlign: "center",
     marginBottom: 20,
   },
 });

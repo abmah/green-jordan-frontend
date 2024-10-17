@@ -1,7 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Animated, Dimensions } from 'react-native';
+import React, { useEffect, useRef, useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Animated,
+  Dimensions,
+} from "react-native";
 
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth } = Dimensions.get("window");
 
 const CustomTabBar = ({ state, descriptors, navigation }) => {
   const translateX = useRef(new Animated.Value(0)).current; // Initial translation value
@@ -21,7 +28,7 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
 
   const handlePress = (route, isFocused) => {
     const event = navigation.emit({
-      type: 'tabPress',
+      type: "tabPress",
       target: route.key,
       canPreventDefault: true,
     });
@@ -68,7 +75,12 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
             style={styles.tabButton}
             onLayout={(event) => handleTabLayout(index, event)} // Capture tab layout
           >
-            <Text style={[styles.tabLabel, { color: isFocused ? 'white' : '#B0B0B0' }]}>
+            <Text
+              style={[
+                styles.tabLabel,
+                { color: isFocused ? "white" : "#B0B0B0" },
+              ]}
+            >
               {options.tabBarLabel}
             </Text>
           </TouchableOpacity>
@@ -80,33 +92,32 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
 
 const styles = StyleSheet.create({
   tabBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     paddingVertical: 20,
     paddingHorizontal: 20,
-    backgroundColor: '#0F1F26',
+    backgroundColor: "#0F1F26",
     borderTopWidth: 0.8,
-    borderTopColor: '#ffffff44',
-    position: 'relative',
+    borderTopColor: "#ffffff44",
+    position: "relative",
   },
   tabButton: {
-    alignItems: 'center',
+    alignItems: "center",
     flex: 1,
-    position: 'relative',
+    position: "relative",
   },
   tabLabel: {
-    fontFamily: 'Nunito-Bold',
+    fontFamily: "Nunito-Bold",
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
     zIndex: 1,
-
   },
   activeBackground: {
-    position: 'absolute',
+    position: "absolute",
     top: 15,
     left: 0,
-    height: '100%',
-    backgroundColor: '#38667A',
+    height: "100%",
+    backgroundColor: "#38667A",
     borderRadius: 12,
     paddingVertical: 15,
     zIndex: 0,

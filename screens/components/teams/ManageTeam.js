@@ -1,53 +1,57 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'; // Import Image for profile pictures
-import { acceptJoinRequest, rejectJoinRequest, removeMember } from '../../../api';
-import useUserIdStore from '../../../stores/useUserStore';
-import Toast from 'react-native-toast-message'; // Import Toast
+import React from "react";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import {
+  acceptJoinRequest,
+  rejectJoinRequest,
+  removeMember,
+} from "../../../api";
+import useUserIdStore from "../../../stores/useUserStore";
+import Toast from "react-native-toast-message";
+import { useTranslation } from "react-i18next"; // Import translation function
 
 const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
   const { userId } = useUserIdStore();
+  const { t } = useTranslation(); // Initialize translation function
 
   const handleUpdateJoinRequest = async (action, request) => {
     const requestUserId = request.userId;
-    const username = request.userId.username; // Get the actual username from the request
+    const username = request.userId.username;
     try {
-      if (action === 'Accepted') {
+      if (action === "Accepted") {
         await acceptJoinRequest(teamId, requestUserId._id, userId);
 
         // Show success toast
         Toast.show({
-          type: 'success',
-          text1: 'Success',
-          text2: 'Join request accepted.',
+          type: "success",
+          text1: t("manage_team.success.join_request_accepted"), // Use translation
         });
 
-        // Update members state to include the new member with their actual username
-        const newMember = { _id: requestUserId, username }; // Use the actual username
+        const newMember = { _id: requestUserId, username };
         setMembers((prevMembers) => [...prevMembers, newMember]);
 
-        // Update teamData to remove the accepted request
-        const updatedJoinRequests = teamData.joinRequests.filter(req => req._id !== request._id);
+        const updatedJoinRequests = teamData.joinRequests.filter(
+          (req) => req._id !== request._id
+        );
         setTeamData({ ...teamData, joinRequests: updatedJoinRequests });
-
-      } else if (action === 'Denied') {
+      } else if (action === "Denied") {
         await rejectJoinRequest(teamId, requestUserId._id, userId);
 
         // Show success toast
         Toast.show({
-          type: 'success',
-          text1: 'Success',
-          text2: 'Join request denied.',
+          type: "success",
+          text1: t("manage_team.success.join_request_denied"), // Use translation
         });
 
-        // Update teamData to remove the denied request
-        const updatedJoinRequests = teamData.joinRequests.filter(req => req._id !== request._id);
+        const updatedJoinRequests = teamData.joinRequests.filter(
+          (req) => req._id !== request._id
+        );
         setTeamData({ ...teamData, joinRequests: updatedJoinRequests });
       }
     } catch (error) {
       // Show error toast
       Toast.show({
-        type: 'error',
-        text1: 'Error',
+        type: "error",
+        text1: t("manage_team.error.join_request_error"), // Use translation
         text2: error.response.data.message,
       });
     }
@@ -58,35 +62,35 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
       await removeMember(teamId, memberId, userId);
       // Show success toast
       Toast.show({
-        type: 'success',
-        text1: 'Success',
-        text2: 'Member removed successfully!',
+        type: "success",
+        text1: t("manage_team.success.member_removed"), // Use translation
       });
-      setMembers(members.filter(member => member._id !== memberId)); // Update local state
+      setMembers(members.filter((member) => member._id !== memberId));
     } catch (error) {
       // Show error toast
       Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: 'Failed to remove member. Please try again.',
+        type: "error",
+        text1: t("manage_team.error.member_removal_error"), // Use translation
+        text2: "Failed to remove member. Please try again.", // Optional additional message
       });
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Manage Team</Text>
+      <Text style={styles.header}>{t("manage_team.header")}</Text>
       {teamData.joinRequests.length > 0 ? (
         teamData.joinRequests.map((request) => (
           <View key={request._id} style={styles.requestContainer}>
-            {request.userId.profilePicture && request.userId.profilePicture !== '' ? (
+            {request.userId.profilePicture &&
+            request.userId.profilePicture !== "" ? (
               <Image
                 source={{ uri: request.userId.profilePicture }}
                 style={styles.profilePicture}
               />
             ) : (
               <Image
-                source={require('../../../assets/default-avatar.png')} // Path to default profile picture
+                source={require("../../../assets/default-avatar.png")}
                 style={styles.profilePicture}
               />
             )}
@@ -96,52 +100,65 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={[styles.button, styles.acceptButton]}
-                onPress={() => handleUpdateJoinRequest('Accepted', request)} // Pass the entire request object
+                onPress={() => handleUpdateJoinRequest("Accepted", request)}
               >
-                <Text style={styles.buttonText}>Accept</Text>
+                <Text style={styles.buttonText}>
+                  {t("manage_team.accept_button")}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.button, styles.denyButton]}
-                onPress={() => handleUpdateJoinRequest('Denied', request)} // Pass the entire request object
+                onPress={() => handleUpdateJoinRequest("Denied", request)}
               >
-                <Text style={styles.buttonText}>Deny</Text>
+                <Text style={styles.buttonText}>
+                  {t("manage_team.deny_button")}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
         ))
       ) : (
-        <Text style={styles.noRequests}>No join requests.</Text>
+        <Text style={styles.noRequests}>{t("manage_team.no_requests")}</Text>
       )}
-      <Text style={styles.membersHeader}>Members:</Text>
+      <Text style={styles.membersHeader}>
+        {t("manage_team.members_header")}
+      </Text>
       {members.length > 0 ? (
         members.map((member) => (
           <View key={member._id} style={styles.memberContainer}>
-            {member.profilePicture && member.profilePicture !== '' ? (
+            {member.profilePicture && member.profilePicture !== "" ? (
               <Image
-                source={{ uri: member.profilePicture }} // Render member's profile picture
+                source={{ uri: member.profilePicture }}
                 style={styles.profilePicture}
               />
             ) : (
               <Image
-                source={require('../../../assets/default-avatar.png')} // Path to default profile picture
+                source={require("../../../assets/default-avatar.png")}
                 style={styles.profilePicture}
               />
             )}
-            <Text style={styles.memberText}>Username: {member.username}</Text>
+            <Text style={styles.memberText}>
+              {t("manage_team.username")}
+              {member.username}
+            </Text>
             {member._id !== userId ? (
               <TouchableOpacity
                 style={styles.removeButton}
                 onPress={() => handleRemoveMember(member._id)}
               >
-                <Text style={styles.buttonText}>Remove</Text>
+                <Text style={styles.buttonText}>
+                  {t("manage_team.remove_button")}
+                </Text>
               </TouchableOpacity>
             ) : (
-              <Text style={styles.selfLabel}>You</Text> // Display "You" next to your own card
+              <Text style={styles.selfLabel}>
+                {t("manage_team.self_label")}
+              </Text>
             )}
           </View>
         ))
       ) : (
-        <Text style={styles.noMembers}>No members in this team yet.</Text>
+        <Text style={styles.noMembers}>{t("manage_team.no_members")}</Text>
       )}
     </View>
   );
@@ -150,31 +167,31 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#0F1F26',
+    backgroundColor: "#0F1F26",
     flex: 1,
   },
   header: {
     fontSize: 26,
-    color: '#F5F5F5',
-    fontWeight: '700',
+    color: "#F5F5F5",
+    fontWeight: "700",
     marginBottom: 16,
   },
   requestContainer: {
     padding: 12,
-    backgroundColor: '#1C2A33',
+    backgroundColor: "#1C2A33",
     borderRadius: 10,
     marginBottom: 10,
-    flexDirection: 'row', // Align items horizontally
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   requestText: {
-    color: '#B0B0B0',
-    flex: 1, // Allows text to grow and take available space
-    marginLeft: 10, // Spacing between the image and text
+    color: "#B0B0B0",
+    flex: 1,
+    marginLeft: 10,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    flexDirection: "row",
+    justifyContent: "flex-end",
     marginTop: 5,
   },
   button: {
@@ -182,53 +199,53 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     borderRadius: 5,
     elevation: 2,
-    alignItems: 'center',
+    alignItems: "center",
     marginHorizontal: 5,
   },
   acceptButton: {
-    backgroundColor: '#1DB954',
+    backgroundColor: "#1DB954",
   },
   denyButton: {
-    backgroundColor: '#FF3D00',
+    backgroundColor: "#FF3D00",
   },
   buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
   },
   noRequests: {
-    color: '#B0B0B0',
-    textAlign: 'center',
+    color: "#B0B0B0",
+    textAlign: "center",
     marginTop: 10,
   },
   memberContainer: {
     padding: 12,
-    backgroundColor: '#1C2A33',
+    backgroundColor: "#1C2A33",
     borderRadius: 10,
     marginBottom: 10,
-    flexDirection: 'row', // Align items horizontally
-    justifyContent: 'space-between', // Space between member name and remove button
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   membersHeader: {
     fontSize: 22,
-    color: '#F5F5F5',
+    color: "#F5F5F5",
     marginBottom: 10,
     marginTop: 20,
   },
   memberText: {
-    color: '#B0B0B0',
-    flex: 1, // Allows text to grow and take available space
+    color: "#B0B0B0",
+    flex: 1,
   },
   removeButton: {
-    backgroundColor: '#FF3D00',
+    backgroundColor: "#FF3D00",
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 5,
-    alignItems: 'center',
+    alignItems: "center",
   },
   noMembers: {
-    color: '#B0B0B0',
-    textAlign: 'center',
+    color: "#B0B0B0",
+    textAlign: "center",
     marginTop: 10,
   },
   profilePicture: {
@@ -238,8 +255,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   selfLabel: {
-    color: '#1DB954',
-    fontWeight: 'bold',
+    color: "#1DB954",
+    fontWeight: "bold",
     marginLeft: 10,
   },
 });

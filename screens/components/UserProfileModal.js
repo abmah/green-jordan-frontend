@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, Modal, FlatList, ActivityIndicator, Alert, TouchableOpacity } from 'react-native';
 import { getFullUser } from '../../api'; // Import your getUser API function
-// import Post from './Post'; // Import the Post component
 import Icon from 'react-native-vector-icons/Ionicons'; // Import the icon library
+import { useTranslation } from 'react-i18next'; // Import useTranslation for translations
 
 const UserProfileView = ({ userId, visible, onClose }) => {
+  const { t } = useTranslation(); // Use the translation hook
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -17,7 +18,7 @@ const UserProfileView = ({ userId, visible, onClose }) => {
           setUserData(response.data);
         } catch (error) {
           console.error("Failed to fetch user data", error);
-          Alert.alert("Error", "Could not load user data.");
+          Alert.alert("Error", t("userProfile.error_fetch"));
         } finally {
           setLoading(false);
         }
@@ -27,11 +28,10 @@ const UserProfileView = ({ userId, visible, onClose }) => {
     }
   }, [userId, visible]);
 
-  const renderPost = ({ item }) => <View></View>
-  {/* <Post post={item} />; */ }
+  const renderPost = ({ item }) => <View></View>;
+
   return (
     <Modal visible={visible} animationType="slide">
-
       <View style={styles.container}>
         {loading ? (
           <ActivityIndicator size="large" color="#00A9C5" />
@@ -53,9 +53,9 @@ const UserProfileView = ({ userId, visible, onClose }) => {
               </View>
 
               <View style={styles.statsContainer}>
-                <Text style={styles.stats}>Points: {userData?.points || 0}</Text>
-                <Text style={styles.stats}>Followers: {userData?.followers.length || 0}</Text>
-                <Text style={styles.stats}>Following: {userData?.followings.length || 0}</Text>
+                <Text style={styles.stats}>{t("userProfile.points")}: {userData?.points || 0}</Text>
+                <Text style={styles.stats}>{t("userProfile.followers")}: {userData?.followers.length || 0}</Text>
+                <Text style={styles.stats}>{t("userProfile.following")}: {userData?.followings.length || 0}</Text>
               </View>
             </View>
 
@@ -104,7 +104,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginTop: 10
   },
-
   statsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',

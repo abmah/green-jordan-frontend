@@ -1,13 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Modal, TouchableOpacity, StyleSheet, FlatList, TextInput, Pressable, Image } from 'react-native';
-import { postComment } from '../../api';
-import useUserStore from '../../stores/useUserStore';
-import { Ionicons } from '@expo/vector-icons'
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  Modal,
+  TouchableOpacity,
+  StyleSheet,
+  FlatList,
+  TextInput,
+  Pressable,
+  Image,
+} from "react-native";
+import { postComment } from "../../api";
+import useUserStore from "../../stores/useUserStore";
+import { Ionicons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
-const CommentsModal = ({ visible, onClose, postId, comments: initialComments }) => {
+const CommentsModal = ({
+  visible,
+  onClose,
+  postId,
+  comments: initialComments,
+}) => {
+  const { t } = useTranslation(); // Use the translation function
   const { userId } = useUserStore();
   const [comments, setComments] = useState(initialComments);
-  const [newComment, setNewComment] = useState('');
+  const [newComment, setNewComment] = useState("");
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -15,7 +32,7 @@ const CommentsModal = ({ visible, onClose, postId, comments: initialComments }) 
   }, [initialComments]);
 
   const handleCommentSubmit = async () => {
-    if (newComment.trim() === '') return;
+    if (newComment.trim() === "") return;
 
     const commentToPost = {
       text: newComment,
@@ -30,15 +47,15 @@ const CommentsModal = ({ visible, onClose, postId, comments: initialComments }) 
         text: newComment,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        userId: { _id: userId, username: 'You', profilePicture: '' },
+        userId: { _id: userId, username: "You", profilePicture: "" },
       };
 
-      setComments(prevComments => [...prevComments, newCommentObject]);
-      setNewComment('');
+      setComments((prevComments) => [...prevComments, newCommentObject]);
+      setNewComment("");
       setError(null);
     } catch (error) {
-      setError('Failed to post comment.');
-      console.error('API error:', error);
+      setError(t("comments_modal.error")); // Localized error message
+      console.error("API error:", error);
     }
   };
 
@@ -63,7 +80,6 @@ const CommentsModal = ({ visible, onClose, postId, comments: initialComments }) 
     </View>
   );
 
-
   return (
     <Modal
       visible={visible}
@@ -74,7 +90,7 @@ const CommentsModal = ({ visible, onClose, postId, comments: initialComments }) 
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>Comments</Text>
+            <Text style={styles.modalTitle}>{t("comments_modal.title")}</Text>
             <TouchableOpacity onPress={onClose}>
               <Ionicons name="close" size={24} color="#fff" />
             </TouchableOpacity>
@@ -85,14 +101,16 @@ const CommentsModal = ({ visible, onClose, postId, comments: initialComments }) 
             renderItem={renderComment}
             keyExtractor={(item) => item._id}
             ListEmptyComponent={
-              <Text style={styles.noCommentsText}>No comments yet. Be the first to comment!</Text>
+              <Text style={styles.noCommentsText}>
+                {t("comments_modal.no_comments")}
+              </Text>
             }
           />
 
           <View style={styles.commentInputContainer}>
             <TextInput
               style={styles.input}
-              placeholder="Write a comment..."
+              placeholder={t("comments_modal.write_comment")} // Localized placeholder
               placeholderTextColor="#000000"
               value={newComment}
               onChangeText={setNewComment}
@@ -112,6 +130,7 @@ const CommentsModal = ({ visible, onClose, postId, comments: initialComments }) 
     </Modal>
   );
 };
+
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
@@ -181,7 +200,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "Nunito-SemiBold",
   },
-
   commentInputContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -205,11 +223,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
   errorText: {
     color: "red",
     fontFamily: "Nunito-Medium",
     marginTop: 5,
   },
 });
+
 export default CommentsModal;

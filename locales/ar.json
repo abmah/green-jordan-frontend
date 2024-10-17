@@ -21,14 +21,168 @@
     "signup_button": "سجل!",
     "login_error": "*فشل تسجيل الدخول. يرجى التحقق من بيانات الاعتماد الخاصة بك والمحاولة مرة أخرى."
   },
-  "signup": {
-    "header": "تسجيل حساب جديد",
-    "username_placeholder": "اسم المستخدم",
-    "email_placeholder": "البريد الإلكتروني",
-    "password_placeholder": "كلمة المرور",
-    "signup_button": "سجل الآن",
-    "login_prompt": "هل لديك حساب بالفعل؟",
-    "login_button": "تسجيل الدخول",
-    "signup_error": "*فشل التسجيل. يرجى المحاولة مرة أخرى."
+  "post": {
+    "error_title": "خطأ",
+    "login_required": "يجب عليك تسجيل الدخول لتسجيل الإعجاب بالمنشور.",
+    "like_error": "تعذر تسجيل الإعجاب أو إلغاء الإعجاب. يرجى المحاولة مرة أخرى.",
+    "report": "الإبلاغ",
+    "like": "إعجاب",
+    "comments": "التعليقات",
+    "created_at": "تم إنشاؤه في"
+  },
+
+  "comments_modal": {
+    "title": "التعليقات",
+    "no_comments": "لا توجد تعليقات بعد. كن أول من يعلق!",
+    "write_comment": "اكتب تعليقاً...",
+    "submit": "إرسال",
+    "error": "فشل في نشر التعليق."
+  },
+
+  "leaderboard_screen": {
+    "title": "لوحة الصدارة",
+    "error": "تعذر تحميل لوحة الصدارة.",
+    "empty_state": "لا توجد بيانات متاحة للوحة الصدارة."
+  },
+
+  "leaderboard": {
+    "points": "نقطة"
+  },
+
+  "challenges": {
+    "login_prompt": "يرجى تسجيل الدخول أولاً.",
+    "no_challenges": "لا توجد تحديات يومية متاحة.",
+    "current_streak": "السلسلة الحالية: {{streak}}",
+    "total_points": "إجمالي النقاط: {{points}}",
+    "last_challenge_completed": "آخر تحدٍ مكتمل: {{date}}",
+    "challenges_assigned_today": "التحديات المعينة اليوم: {{count}}"
+  },
+
+  "challengeItem": {
+    "validation_error": "خطأ في التحقق: يرجى تقديم وصف واختيار صورة.",
+    "done": "تم",
+    "attempt": "حاول"
+  },
+
+  "imagePickerModal": {
+    "caption_placeholder": "اكتب وصف",
+    "submit": "إرسال"
+  },
+
+  "profile": {
+    "followers": "المتابعون: ",
+    "following": "المتابعة: ",
+    "points": "النقاط: ",
+    "noPostsMessage": "لا توجد منشورات بعد.",
+    "selectProfilePicture": "اختر صورة الملف الشخصي",
+    "takePhoto": "التقط صورة",
+    "chooseFromLibrary": "اختر من المكتبة",
+    "upload": "تحميل",
+    "close": "إغلاق",
+    "noImageSelected": "لم يتم اختيار أي صورة",
+    "profileUpdated": "تم تحديث الملف الشخصي بنجاح!",
+    "failedToUpdateProfile": "فشل في تحديث صورة الملف الشخصي",
+    "logout": "تسجيل الخروج",
+    "logoutConfirmation": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+    "loggedOutSuccessfully": "تم تسجيل الخروج بنجاح",
+    "errorFetchingProfile": "خطأ في جلب ملف التعريف الخاص بك"
+  },
+
+  "createTeam": {
+    "header": "إنشاء فريق جديد",
+    "teamName": "اسم الفريق",
+    "teamDescription": "وصف الفريق",
+    "createButton": "إنشاء فريق",
+    "closeButton": "إغلاق",
+    "error": "خطأ",
+    "missingFields": "يرجى تقديم اسم الفريق والوصف."
+  },
+
+  "noTeam": {
+    "info": "أنت لست في فريق. يمكنك إما إنشاء واحد أو الانضمام إلى واحد. لاحظ أنه إذا قمت بإنشاء فريق، فلن تتمكن من الانضمام إلى آخر.",
+    "createButton": "إنشاء فريق"
+  },
+
+  "manage_team": {
+    "header": "إدارة الفريق",
+    "no_requests": "لا توجد طلبات انضمام.",
+    "members_header": "الأعضاء:",
+    "no_members": "لا يوجد أعضاء في هذا الفريق بعد.",
+    "success": {
+      "join_request_accepted": "تم قبول طلب الانضمام.",
+      "join_request_denied": "تم رفض طلب الانضمام.",
+      "member_removed": "تمت إزالة العضو بنجاح!"
+    },
+    "error": {
+      "join_request_error": "خطأ",
+      "member_removal_error": "فشل في إزالة العضو. يرجى المحاولة مرة أخرى."
+    },
+    "accept_button": "قبول",
+    "deny_button": "رفض",
+    "remove_button": "إزالة",
+    "self_label": "أنت",
+    "username": "الاسم: "
+  },
+
+  "userTeam": {
+    "no_description": "لا توجد وصف للفريق.",
+    "members": "الأعضاء: {{count}}",
+    "total_points": "إجمالي النقاط: {{points}}",
+    "manage_team": "إدارة الفريق"
+  },
+
+  "teamDetails": {
+    "overview": "نظرة عامة",
+    "team_posts": "منشورات الفريق",
+    "manage_team": "إدارة الفريق"
+  },
+
+  "teamPosts": {
+    "no_posts": "لا توجد منشورات في هذا الفريق بعد."
+  },
+
+  "overview": {
+    "team_overview": "نظرة عامة على الفريق",
+    "name": "الاسم: ",
+    "description": "الوصف: ",
+    "send_join_request": "إرسال طلب الانضمام",
+    "no_members_found": "لا توجد أعضاء في الفريق.",
+    "admin_label": "قائد",
+    "self_label": "أنت",
+    "points": "نقطة",
+    "members": "أعضاء الفريق"
+  },
+
+  "team_item": {
+    "manage_team": "إدارة الفريق",
+    "view_team": "عرض الفريق",
+    "member_count": "عدد الأعضاء: ",
+    "total_points": "إجمالي النقاط: "
+  },
+
+  "settings": {
+    "header": "الإعدادات",
+    "language": "اللغة",
+    "other_settings": "إعدادات أخرى",
+    "notification_preferences": "تفضيلات الإشعارات",
+    "privacy_settings": "إعدادات الخصوصية",
+    "account_management": "إدارة الحساب",
+    "language_changed": "تم تغيير اللغة إلى {{lang}}"
+  },
+
+  "tabs": {
+    "home": "الرئيسية",
+    "leaderboard": "لوحة المتصدرين",
+    "challenges": "التحديات",
+    "teams": "الفرق",
+    "profile": "الملف الشخصي",
+    "login": "تسجيل الدخول",
+    "settings": "الإعدادات"
+  },
+  "userProfile": {
+    "points": "النقاط",
+    "followers": "المتابعين",
+    "following": "المتابَعون",
+    "error_fetch": "تعذر تحميل بيانات المستخدم."
   }
 }

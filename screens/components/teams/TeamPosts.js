@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { View, FlatList, StyleSheet, Text } from 'react-native';
-import { getTeamPosts } from '../../../api';
-import Post from '../Post';
-import Loader from '../Loader';
+import React, { useState, useEffect } from "react";
+import { View, FlatList, StyleSheet, Text } from "react-native";
+import { getTeamPosts } from "../../../api";
+import Post from "../Post";
+import Loader from "../Loader";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const TeamPosts = ({ teamId }) => {
-  // console.log('Team ID:', teamId);
+  const { t } = useTranslation(); // Use the translation function
   const [posts, setPosts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true); // State to manage loading
@@ -22,7 +23,7 @@ const TeamPosts = ({ teamId }) => {
         setPosts(postResponse.data.reverse()); // Latest posts first
       }
     } catch (error) {
-      console.error('Failed to fetch posts', error);
+      console.error("Failed to fetch posts", error);
     } finally {
       setLoading(false); // End loading
     }
@@ -47,7 +48,7 @@ const TeamPosts = ({ teamId }) => {
           onRefresh={onRefresh}
         />
       ) : (
-        <Text style={styles.noPosts}>No posts in this team yet.</Text>
+        <Text style={styles.noPosts}>{t("teamPosts.no_posts")}</Text> // Use translation
       )}
     </View>
   );
@@ -56,11 +57,11 @@ const TeamPosts = ({ teamId }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F1F26',
+    backgroundColor: "#0F1F26",
   },
   noPosts: {
-    color: '#B0B0B0',
-    textAlign: 'center',
+    color: "#B0B0B0",
+    textAlign: "center",
     marginTop: 20,
   },
 });

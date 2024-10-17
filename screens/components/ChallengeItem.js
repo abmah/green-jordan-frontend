@@ -1,50 +1,55 @@
-// ChallengeItem.js
-import { useState } from 'react';
-import { View, Text, Pressable, StyleSheet, Modal, TouchableOpacity, Alert } from 'react-native';
-import { createPost } from '../../api/post';
-import { requestCameraPermissions, pickImage } from './ImagePickerHandler';
-import Foundation from '@expo/vector-icons/Foundation';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import ImagePickerModal from './ImagePickerModal';
+import { useState } from "react";
+import { View, Text, Pressable, StyleSheet, Alert } from "react-native";
+import { createPost } from "../../api/post";
+import { requestCameraPermissions, pickImage } from "./ImagePickerHandler";
+import Foundation from "@expo/vector-icons/Foundation";
+import ImagePickerModal from "./ImagePickerModal";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const ChallengeItem = ({ challenge, userId, fetchChallenges }) => {
-  const [description, setDescription] = useState('');
+  const { t } = useTranslation(); // Use the translation function
+  const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleCameraPress = async () => {
     if (await requestCameraPermissions()) {
-      await pickImage('camera', setImage);
+      await pickImage("camera", setImage);
     }
   };
 
   const handleLibraryPress = async () => {
-    await pickImage('library', setImage);
+    await pickImage("library", setImage);
   };
 
   const handleSubmit = async () => {
     if (!description.trim() || !image) {
-      Alert.alert('Validation Error', 'Please provide a description and select an image.');
+      Alert.alert("Validation Error", t("challengeItem.validation_error")); // Use translation
       return;
     }
 
     setIsUploading(true);
     try {
       await createPost(description, userId, image, challenge._id);
-      setDescription('');
+      setDescription("");
       setImage(null);
       setModalVisible(false);
       fetchChallenges();
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error("Error submitting form:", error);
     } finally {
       setIsUploading(false);
     }
   };
 
   return (
-    <View style={[styles.challengeContainer, challenge.completed && styles.completedContainer]}>
+    <View
+      style={[
+        styles.challengeContainer,
+        challenge.completed && styles.completedContainer,
+      ]}
+    >
       <View style={styles.cardContent}>
         <View style={styles.challengeImage}>
           <Foundation name="trees" size={100} color="#28A745" />
@@ -52,7 +57,9 @@ const ChallengeItem = ({ challenge, userId, fetchChallenges }) => {
         <View style={styles.textContent}>
           <Text style={styles.challengeTitle}>{challenge.title}</Text>
           <Text style={styles.challengePoints}>Points: {challenge.points}</Text>
-          <Text style={styles.challengeDescription}>{challenge.description}</Text>
+          <Text style={styles.challengeDescription}>
+            {challenge.description}
+          </Text>
 
           <View style={styles.attemptButtonContainer}>
             <Pressable
@@ -63,8 +70,15 @@ const ChallengeItem = ({ challenge, userId, fetchChallenges }) => {
               ]}
               onPress={() => setModalVisible(true)}
             >
-              <Text style={[styles.attemptButtonText, challenge.completed && styles.completedText]}>
-                {challenge.completed ? 'DONE' : 'ATTEMPT'}
+              <Text
+                style={[
+                  styles.attemptButtonText,
+                  challenge.completed && styles.completedText,
+                ]}
+              >
+                {challenge.completed
+                  ? t("challengeItem.done")
+                  : t("challengeItem.attempt")}{" "}
               </Text>
             </Pressable>
             <View style={styles.attemptButtonUnderline}></View>
@@ -166,6 +180,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
 });
-
 
 export default ChallengeItem;

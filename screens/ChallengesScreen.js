@@ -1,18 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  Platform,
-} from 'react-native';
-import useUserStore from '../stores/useUserStore';
-import ChallengeItem from './components/ChallengeItem';
-import { getDailyChallenges } from '../api';
-import Loader from './components/Loader';
-import { getSelf } from '../api/self';
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, FlatList, Platform } from "react-native";
+import useUserStore from "../stores/useUserStore";
+import ChallengeItem from "./components/ChallengeItem";
+import { getDailyChallenges } from "../api";
+import Loader from "./components/Loader";
+import { getSelf } from "../api/self";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const ChallengesScreen = ({ navigation }) => {
+  const { t } = useTranslation(); // Use the translation function
   const [dailyChallenges, setDailyChallenges] = useState([]);
   const { userId } = useUserStore();
   const [loading, setLoading] = useState(true);
@@ -24,7 +20,7 @@ const ChallengesScreen = ({ navigation }) => {
       const { dailyChallenges } = await getDailyChallenges(userId);
       setDailyChallenges(dailyChallenges);
     } catch (error) {
-      console.error('Failed to fetch challenges:', error);
+      console.error("Failed to fetch challenges:", error);
       setDailyChallenges([]);
     } finally {
       setLoading(false);
@@ -36,7 +32,7 @@ const ChallengesScreen = ({ navigation }) => {
       const response = await getSelf();
       setUserData(response.user);
     } catch (error) {
-      console.error('Failed to fetch user data:', error);
+      console.error("Failed to fetch user data:", error);
       setUserData(null);
     }
   };
@@ -53,7 +49,7 @@ const ChallengesScreen = ({ navigation }) => {
   if (!userId) {
     return (
       <View style={styles.loginPromptContainer}>
-        <Text style={styles.loginPrompt}>Please login first</Text>
+        <Text style={styles.loginPrompt}>{t("challenges.login_prompt")}</Text>
       </View>
     );
   }
@@ -66,13 +62,23 @@ const ChallengesScreen = ({ navigation }) => {
     <>
       {userData && (
         <View style={styles.userInfoContainer}>
-          <Text style={styles.streakText}>Current Streak: {userData.streak}</Text>
-          <Text style={styles.pointsText}>Total Points: {userData.points}</Text>
+          <Text style={styles.streakText}>
+            {t("challenges.current_streak", { streak: userData.streak })}
+          </Text>
+          <Text style={styles.pointsText}>
+            {t("challenges.total_points", { points: userData.points })}
+          </Text>
           <Text style={styles.lastChallengeText}>
-            Last Challenge Completed: {new Date(userData.lastChallengeCompleted).toLocaleDateString()}
+            {t("challenges.last_challenge_completed", {
+              date: new Date(
+                userData.lastChallengeCompleted
+              ).toLocaleDateString(),
+            })}
           </Text>
           <Text style={styles.challengesAssignedText}>
-            Challenges Assigned Today: {userData.dailyChallengesAssigned.length}
+            {t("challenges.challenges_assigned_today", {
+              count: userData.dailyChallengesAssigned.length,
+            })}
           </Text>
         </View>
       )}
@@ -98,7 +104,11 @@ const ChallengesScreen = ({ navigation }) => {
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
         ListHeaderComponent={renderHeader}
-        ListEmptyComponent={<Text style={styles.noChallengesText}>No daily challenges available.</Text>}
+        ListEmptyComponent={
+          <Text style={styles.noChallengesText}>
+            {t("challenges.no_challenges")}
+          </Text>
+        }
         stickyHeaderIndices={[0]}
         contentContainerStyle={{ paddingBottom: 40 }}
       />
@@ -110,61 +120,60 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#0F1F26',
-    paddingTop: Platform.OS === 'android' ? 50 : 0,
+    backgroundColor: "#0F1F26",
+    paddingTop: Platform.OS === "android" ? 50 : 0,
   },
   userInfoContainer: {
     marginBottom: 20,
     padding: 20,
     borderRadius: 8,
-    backgroundColor: '#202F36', // Added background color for better contrast
+    backgroundColor: "#202F36", // Added background color for better contrast
   },
   streakText: {
     fontSize: 18,
-    fontFamily: 'Nunito-ExtraBold',
+    fontFamily: "Nunito-ExtraBold",
     marginBottom: 5,
-    color: '#FFD700',
+    color: "#FFD700",
   },
   pointsText: {
     fontSize: 18,
-    fontFamily: 'Nunito-ExtraBold',
+    fontFamily: "Nunito-ExtraBold",
     marginBottom: 5,
-    color: '#66FF66',
+    color: "#66FF66",
   },
   lastChallengeText: {
     fontSize: 18,
-    fontFamily: 'Nunito-ExtraBold',
+    fontFamily: "Nunito-ExtraBold",
     marginBottom: 5,
-    color: '#FFFFFF',
+    color: "#FFFFFF",
   },
   challengesAssignedText: {
     fontSize: 18,
-    fontFamily: 'Nunito-ExtraBold',
+    fontFamily: "Nunito-ExtraBold",
     marginBottom: 10,
-    color: '#FFFFFF',
+    color: "#FFFFFF",
   },
   loginPromptContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#0F1F26',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#0F1F26",
   },
   loginPrompt: {
     fontSize: 20,
-    fontFamily: 'Nunito-ExtraBold',
-    color: '#fff',
-    textAlign: 'center',
+    fontFamily: "Nunito-ExtraBold",
+    color: "#fff",
+    textAlign: "center",
   },
   challengeSection: {
     marginBottom: 20,
   },
   noChallengesText: {
     fontSize: 16,
-    color: '#999',
-    textAlign: 'center',
+    color: "#999",
+    textAlign: "center",
     marginTop: 20,
   },
-
 });
 
 export default ChallengesScreen;
