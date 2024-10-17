@@ -1,0 +1,35 @@
+{
+  "teams": {
+    "header": "Teams",
+    "no_teams": "There are no teams",
+    "login_prompt": "Please log in first.",
+    "login_button": "Go to Login",
+    "other_teams": "Other Teams",
+    "success": {
+      "create_team": "Team created successfully!"
+    },
+    "error": {
+      "create_team": "Failed to create team."
+    }
+  },
+
+  "login": {
+    "header": "Login",
+    "email_placeholder": "Email",
+    "password_placeholder": "Password",
+    "login_button": "Login",
+    "signup_prompt": "Don't have an account?",
+    "signup_button": "Sign up!",
+    "login_error": "*Login failed. Please check your credentials and try again."
+  },
+  "signup": {
+    "header": "Sign Up",
+    "username_placeholder": "Username",
+    "email_placeholder": "Email",
+    "password_placeholder": "Password",
+    "signup_button": "Sign Up Now",
+    "login_prompt": "Already have an account?",
+    "login_button": "Login",
+    "signup_error": "*Signup failed. Please try again."
+  }
+}

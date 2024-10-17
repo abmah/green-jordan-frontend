@@ -1,0 +1,34 @@
+{
+  "teams": {
+    "header": "الفرق",
+    "no_teams": "لا توجد فرق",
+    "login_prompt": "يرجى تسجيل الدخول أولاً.",
+    "login_button": "الذهاب إلى تسجيل الدخول",
+    "other_teams": "فرق أخرى",
+    "success": {
+      "create_team": "تم إنشاء الفريق بنجاح!"
+    },
+    "error": {
+      "create_team": "فشل في إنشاء الفريق."
+    }
+  },
+  "login": {
+    "header": "تسجيل الدخول",
+    "email_placeholder": "البريد الإلكتروني",
+    "password_placeholder": "كلمة المرور",
+    "login_button": "تسجيل الدخول",
+    "signup_prompt": "ليس لديك حساب؟",
+    "signup_button": "سجل!",
+    "login_error": "*فشل تسجيل الدخول. يرجى التحقق من بيانات الاعتماد الخاصة بك والمحاولة مرة أخرى."
+  },
+  "signup": {
+    "header": "تسجيل حساب جديد",
+    "username_placeholder": "اسم المستخدم",
+    "email_placeholder": "البريد الإلكتروني",
+    "password_placeholder": "كلمة المرور",
+    "signup_button": "سجل الآن",
+    "login_prompt": "هل لديك حساب بالفعل؟",
+    "login_button": "تسجيل الدخول",
+    "signup_error": "*فشل التسجيل. يرجى المحاولة مرة أخرى."
+  }
+}

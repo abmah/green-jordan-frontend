@@ -3,17 +3,17 @@ import { View, Text, TextInput, ActivityIndicator, Animated, Easing, Pressable, 
 import { login } from '../api';
 import * as SecureStore from 'expo-secure-store';
 import useUserStore from '../stores/useUserStore';
-import GreenJordan from '../assets/green-jordan.svg'
-import MainLogo from '../assets/main-logo.svg'
+import GreenJordan from '../assets/green-jordan.svg';
+import MainLogo from '../assets/main-logo.svg';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const LoginScreen = ({ navigation }) => {
+  const { t } = useTranslation(); // Use the translation function
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { setuserId } = useUserStore();
-
-
 
   const handleLogin = async () => {
     setLoading(true);
@@ -26,8 +26,7 @@ const LoginScreen = ({ navigation }) => {
       navigation.navigate('Profile');
     } catch (error) {
       console.error('API call error:', error);
-      setError('*Login failed. Please check your credentials and try again.');
-
+      setError(t("login.login_error")); // Use translation for login error message
 
       setTimeout(() => {
         setError(null);
@@ -36,8 +35,6 @@ const LoginScreen = ({ navigation }) => {
       setLoading(false);
     }
   };
-
-
 
   const buttonOffset = useState(new Animated.Value(0))[0];
 
@@ -64,6 +61,7 @@ const LoginScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.logosContainer}>
+        {/* Uncomment the lines below to display logos */}
         {/* <MainLogo height={'30%'} style={{ marginBottom: 40 }} />
         <GreenJordan height={'20%'} style={{ marginBottom: 30 }} /> */}
       </View>
@@ -71,7 +69,7 @@ const LoginScreen = ({ navigation }) => {
         <View style={styles.inputWrapper}>
           <View style={styles.inputUnderline}></View>
           <TextInput
-            placeholder="Email"
+            placeholder={t("login.email_placeholder")} // Use translation for email placeholder
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -82,8 +80,7 @@ const LoginScreen = ({ navigation }) => {
         <View style={styles.inputWrapper}>
           <View style={styles.inputUnderline}></View>
           <TextInput
-            placeholder="Password"
-            secureTextEntry
+            placeholder={t("login.password_placeholder")}
             value={password}
             onChangeText={setPassword}
             style={styles.input}
@@ -107,17 +104,17 @@ const LoginScreen = ({ navigation }) => {
               onPressIn={handlePressIn}
               onPressOut={handlePressOut}
             >
-              <Text style={styles.loginButtonText}>Login</Text>
+              <Text style={styles.loginButtonText}>{t("login.login_button")}</Text>
             </Pressable>
           </Animated.View>
         )}
         {error && <Text style={styles.errorText}>{error}</Text>}
       </View>
       <View style={styles.signupContainer}>
-        <Text style={styles.signupText}>Don't have an account? </Text>
+        <Text style={styles.signupText}>{t("login.signup_prompt")} </Text>
         <Pressable onPress={() => navigation.navigate("Signup Screen")}>
           <View>
-            <Text style={styles.signupButtonText}>Sign up!</Text>
+            <Text style={styles.signupButtonText}>{t("login.signup_button")}</Text>
           </View>
         </Pressable>
       </View>
@@ -156,6 +153,7 @@ const styles = StyleSheet.create({
 
   input: {
     paddingLeft: 20,
+    paddingRight: 20,
     fontFamily: "Nunito-Regular",
     fontSize: 18,
     width: "100%",

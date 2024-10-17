@@ -5,10 +5,12 @@ import BottomTabNavigator from "./navigation/BottomTabNavigator";
 import { StatusBar, View, Text, TextInput } from "react-native";
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import Toast from 'react-native-toast-message'; // Ensure this is the correct import
+import Toast from 'react-native-toast-message';
 import toastConfig from './utils/toastConfig';
-
+import i18n from './utils/i18n';
+import { I18nextProvider } from 'react-i18next';
 SplashScreen.preventAutoHideAsync();
+
 
 export default function App() {
   // Load custom fonts
@@ -45,7 +47,7 @@ export default function App() {
   TextInput.defaultProps.style = { fontFamily: 'Nunito-Regular' };
 
   return (
-    <>
+    <I18nextProvider i18n={i18n}>
       <StatusBar
         barStyle="light-content"
         backgroundColor="#0F1F26"
@@ -53,10 +55,11 @@ export default function App() {
       />
       <NavigationContainer>
         <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+
           <BottomTabNavigator />
         </View>
         <Toast ref={Toast.setRef} config={toastConfig} />
       </NavigationContainer>
-    </>
+    </I18nextProvider>
   );
 }

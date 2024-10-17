@@ -9,6 +9,7 @@ import Loader from '../screens/components/Loader';
 import { Ionicons } from '@expo/vector-icons';
 import StackNavigator from './LoginRegisterStackNavigator';
 import TeamsStackNavigator from './TeamsStackNavigator';
+import Settings from '../screens/Settings';
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
@@ -88,6 +89,12 @@ const BottomTabNavigator = () => {
             />
           ),
         }}
+      />
+      <Tab.Screen
+
+        name="Settings"
+        component={Settings}
+
       />
     </Tab.Navigator>
   );

@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   ActivityIndicator,
   Pressable,
   StyleSheet,
@@ -14,9 +13,10 @@ import {
 import { Signup } from "../api";
 import * as SecureStore from "expo-secure-store";
 import useUserStore from "../stores/useUserStore";
-// import { StatusBar } from "expo-status-bar";
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const SignupScreen = ({ navigation }) => {
+  const { t } = useTranslation(); // Use the translation function
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,7 +38,7 @@ const SignupScreen = ({ navigation }) => {
       navigation.navigate("Profile");
     } catch (error) {
       console.error("API call error:", error);
-      setError("Signup failed. Please try again.");
+      setError(t("signup.signup_error")); // Use translation for signup error message
       setTimeout(() => {
         setError(null);
       }, 2000);
@@ -56,7 +56,6 @@ const SignupScreen = ({ navigation }) => {
     }).start();
   };
 
-
   const handlePressOut = () => {
     Animated.timing(buttonOffset, {
       toValue: 0,
@@ -70,14 +69,11 @@ const SignupScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* <View style={styles.signUpTitle}>
-        <Text style={styles.signUpText}>Sign up</Text>
-      </View> */}
       <View style={styles.signupForm}>
         <View style={styles.inputWrapper}>
           <View style={styles.inputUnderline}></View>
           <TextInput
-            placeholder="Username"
+            placeholder={t("signup.username_placeholder")}
             placeholderTextColor={"#000"}
             value={username}
             onChangeText={setUsername}
@@ -87,7 +83,7 @@ const SignupScreen = ({ navigation }) => {
         <View style={styles.inputWrapper}>
           <View style={styles.inputUnderline}></View>
           <TextInput
-            placeholder="Email"
+            placeholder={t("signup.email_placeholder")}
             placeholderTextColor={"#000"}
             value={email}
             onChangeText={setEmail}
@@ -98,11 +94,11 @@ const SignupScreen = ({ navigation }) => {
         <View style={styles.inputWrapper}>
           <View style={styles.inputUnderline}></View>
           <TextInput
-            placeholder="Password"
+            placeholder={t("signup.password_placeholder")}
             placeholderTextColor={"#000"}
             value={password}
             onChangeText={setPassword}
-            secureTextEntry
+
             style={styles.input}
           />
         </View>
@@ -123,7 +119,7 @@ const SignupScreen = ({ navigation }) => {
               onPressIn={handlePressIn}
               onPressOut={handlePressOut}
             >
-              <Text style={styles.signUpButtonText}>Signup</Text>
+              <Text style={styles.signUpButtonText}>{t("signup.signup_button")}</Text>
             </Pressable>
           </Animated.View>
         )}
@@ -131,17 +127,20 @@ const SignupScreen = ({ navigation }) => {
         {error && <Text style={styles.errorText}>{error}</Text>}
       </View>
       <View style={styles.loginContainer}>
-        <Text style={styles.loginText}>Already have an account?</Text>
+        <Text style={styles.loginText}>{t("signup.login_prompt")}</Text>
         <Pressable
           onPress={() => navigation.navigate("Login Screen")}
           style={styles.loginButton}
         >
-          <Text style={styles.loginButtonText}>Login now</Text>
+          <Text style={styles.loginButtonText}>{t("signup.login_button")}</Text>
         </Pressable>
       </View>
     </View>
   );
 };
+
+// Rest of the styles remain unchanged
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
-  ScrollView, // ScrollView to allow page refresh
+  ScrollView,
   StyleSheet,
   TouchableOpacity,
-  RefreshControl, // RefreshControl for pull-to-refresh
+  RefreshControl,
 } from "react-native";
 import Toast from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 // API calls
 import { getAllTeams, createTeam, getUserTeam } from "../api";
@@ -29,8 +30,9 @@ const Teams = () => {
   const [userTeam, setUserTeam] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [isRefreshing, setIsRefreshing] = useState(false); // New state for refresh control
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const navigation = useNavigation();
+  const { t } = useTranslation(); // Use the translation function
 
   const fetchTeams = async () => {
     try {
@@ -44,7 +46,7 @@ const Teams = () => {
   };
 
   const fetchUserTeam = async () => {
-    if (!userId) return setLoading(false); // Early return if userId is not available
+    if (!userId) return setLoading(false);
 
     try {
       const response = await getUserTeam(userId);
@@ -60,18 +62,16 @@ const Teams = () => {
     }
   };
 
-  // Fetch teams and user team on component mount
   useEffect(() => {
     fetchTeams();
     fetchUserTeam();
   }, [userId]);
 
-  // Handle pull-to-refresh logic
   const onRefresh = async () => {
-    setIsRefreshing(true); // Show the refresh spinner
+    setIsRefreshing(true);
     await fetchTeams();
-    await fetchUserTeam(); // Refetch user team
-    setIsRefreshing(false); // Hide the refresh spinner
+    await fetchUserTeam();
+    setIsRefreshing(false);
   };
 
   const handleCreateTeam = async (teamData) => {
@@ -82,12 +82,12 @@ const Teams = () => {
       setModalVisible(false);
       Toast.show({
         type: "success",
-        text1: "Team created successfully!",
+        text1: t("teams.success.create_team"),
       });
     } catch (error) {
       Toast.show({
         type: "error",
-        text1: "Failed to create team.",
+        text1: t("teams.error.create_team"),
       });
     }
   };
@@ -102,12 +102,12 @@ const Teams = () => {
 
   const renderLoginPrompt = () => (
     <View style={styles.loginPromptContainer}>
-      <Text style={styles.loginPromptText}>Please log in first.</Text>
+      <Text style={styles.loginPromptText}>{t("teams.login_prompt")}</Text>
       <TouchableOpacity
         onPress={() => navigation.navigate("Login")}
         style={styles.loginButton}
       >
-        <Text style={styles.loginButtonText}>Go to Login</Text>
+        <Text style={styles.loginButtonText}>{t("teams.login_button")}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -117,14 +117,14 @@ const Teams = () => {
       contentContainerStyle={styles.scrollContainer}
       refreshControl={
         <RefreshControl
-          refreshing={isRefreshing} // Show the refresh spinner
-          onRefresh={onRefresh} // Trigger refresh logic on pull-down
-          tintColor="white" // Customize the spinner color
+          refreshing={isRefreshing}
+          onRefresh={onRefresh}
+          tintColor="white"
         />
       }
     >
       <View style={styles.container}>
-        <Text style={styles.header}>Teams</Text>
+        <Text style={styles.header}>{t("teams.header")}</Text>
         {loading ? (
           <Loader />
         ) : (
@@ -136,13 +136,13 @@ const Teams = () => {
                 ) : (
                   <NoTeam setModalVisible={setModalVisible} />
                 )}
-                <Text style={styles.otherTeamsHeader}>Other Teams</Text>
+                <Text style={styles.otherTeamsHeader}>{t("teams.other_teams")}</Text>
                 {filteredTeams.length > 0 ? (
                   filteredTeams.map((team) => (
                     <TeamItem key={team._id} item={team} userId={userId} navigation={navigation} />
                   ))
                 ) : (
-                  <Text style={{ color: "white" }}>There are no teams</Text>
+                  <Text style={{ color: "white" }}>{t("teams.no_teams")}</Text>
                 )}
               </>
             ) : (
