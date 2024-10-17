@@ -21,6 +21,10 @@ export default function App() {
     'Nunito-Light': require('./assets/fonts/Nunito-Light.ttf'),
     'Nunito-Medium': require('./assets/fonts/Nunito-Medium.ttf'),
     'Nunito-ExtraLight': require('./assets/fonts/Nunito-ExtraLight.ttf'),
+    'NotoSansArabic-Regular': require('./assets/fonts/NotoSansArabic-Regular.ttf'),
+    'NotoSansArabic-Bold': require('./assets/fonts/NotoSansArabic-Bold.ttf'),
+    'NotoSansArabic-SemiBold': require('./assets/fonts/NotoSansArabic-SemiBold.ttf'),
+    'NotoSansArabic-Medium': require('./assets/fonts/NotoSansArabic-Medium.ttf'),
   });
 
   const onLayoutRootView = useCallback(async () => {
