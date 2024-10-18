@@ -1,5 +1,3 @@
-// RedeemScreen.js
-
 import React, { useEffect, useState } from 'react';
 import { View, Text, ActivityIndicator, Alert, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -16,7 +14,7 @@ const Tab = createBottomTabNavigator();
 const RedeemScreen = () => {
   const { userId } = useUserStore.getState();
   const [userPoints, setUserPoints] = useState(0);
-  const [redeemables, setRedeemables] = useState([]);
+  const [redeemables, setRedeemables] = useState([]); // Should hold redeemable items
   const [allRedeemables, setAllRedeemables] = useState([]);
   const [redeemedItems, setRedeemedItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -27,13 +25,14 @@ const RedeemScreen = () => {
       try {
         const availableResponse = await getAllAvailableRedeemables(userId);
         if (availableResponse && availableResponse.data) {
+          // Correctly set redeemables from availableResponse
           setUserPoints(availableResponse.data.points || 0);
+          setRedeemables(availableResponse.data.availableRedeemables || []); // Use this line
         }
 
         const allRedeemablesResponse = await getAllRedeemables();
         const availableRedeemables = allRedeemablesResponse.redeemables || [];
         setAllRedeemables(availableRedeemables);
-        setRedeemables(availableRedeemables);
 
         const basketResponse = await getBasket(userId);
         if (basketResponse && basketResponse.redeemedItems) {
@@ -83,10 +82,19 @@ const RedeemScreen = () => {
     );
   }
 
+  console.log('User Points:', userPoints); // Debugging output
+  console.log('Redeemables:', redeemables); // Debugging output
+
   return (
     <Tab.Navigator tabBar={(props) => <CustomTabBar {...props} />}>
       <Tab.Screen name="Available" options={{ tabBarLabel: 'Available', headerShown: false }}>
-        {() => <AvailableRedeemables redeemables={redeemables} userPoints={userPoints} onRedeem={handleRedeem} />}
+        {() => (
+          <AvailableRedeemables
+            redeemables={redeemables}
+            userPoints={userPoints}
+            onRedeem={handleRedeem}
+          />
+        )}
       </Tab.Screen>
       <Tab.Screen name="All" options={{ tabBarLabel: 'Redeemables', headerShown: false }}>
         {() => <AllRedeemables allRedeemables={allRedeemables} />}
