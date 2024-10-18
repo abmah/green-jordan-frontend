@@ -121,6 +121,10 @@ const Post = ({ post }) => {
   );
 };
 
+
+
+
+
 const styles = StyleSheet.create({
   container: {
     marginBottom: 20,
