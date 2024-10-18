@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useRoute } from "@react-navigation/native";
-import { getTeamMembers, getTeam } from "../../../api"; // Ensure the getTeam import is correct
+import { useRoute, useNavigation } from "@react-navigation/native";
+import { getTeamMembers, getTeam } from "../../../api";
 import useUserIdStore from "../../../stores/useUserStore";
 import TeamPosts from "./TeamPosts";
 import ManageTeam from "./ManageTeam";
 import Overview from "./Overview";
 import CustomTabBar from "./CustomTabBar";
-import { useTranslation } from "react-i18next"; // Import useTranslation
+import { useTranslation } from "react-i18next";
+import { Ionicons } from "@expo/vector-icons"; // Import Ionicons
 
 const Tab = createBottomTabNavigator();
 
 const TeamDetailsTabs = () => {
   const { userId } = useUserIdStore();
   const route = useRoute();
+  const navigation = useNavigation(); // Get the navigation object
   const { teamId } = route.params;
-  const { t } = useTranslation(); // Use the translation function
+  const { t } = useTranslation();
 
   const [teamData, setTeamData] = useState({
     name: "",
@@ -26,7 +28,7 @@ const TeamDetailsTabs = () => {
   });
   const [members, setMembers] = useState([]);
   const [isInTeam, setIsInTeam] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false); // State to determine if the user is an admin
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const fetchTeamData = async () => {
@@ -36,7 +38,6 @@ const TeamDetailsTabs = () => {
           setTeamData(teamResponse.data);
           setIsInTeam(teamResponse.data.members.includes(userId));
 
-          // Check if the user is an admin
           setIsAdmin(teamResponse.data.admin === userId);
 
           const membersResponse = await getTeamMembers(teamId);
@@ -54,11 +55,22 @@ const TeamDetailsTabs = () => {
 
   return (
     <View style={{ flex: 1 }}>
+      {/* Header with Back Button */}
       <View style={styles.teamHeader}>
-        {/* Team name and description are commented out. Uncomment if needed. */}
-        {/* <Text style={styles.teamName}>{teamData.name}</Text>
-        <Text style={styles.teamDescription}>{teamData.description}</Text> */}
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()} // Navigate back to the previous screen
+        >
+          <Ionicons name="arrow-back" size={24} color="#F5F5F5" />
+        </TouchableOpacity>
+
+        {/* Uncomment the following if you want to display the team name and description */}
+        {/* 
+        <Text style={styles.teamName}>{teamData.name}</Text>
+        <Text style={styles.teamDescription}>{teamData.description}</Text>
+        */}
       </View>
+
       <Tab.Navigator
         screenOptions={{ headerShown: false, tabBarStyle: { display: "none" } }}
         tabBar={(props) => <CustomTabBar {...props} />}
@@ -77,7 +89,6 @@ const TeamDetailsTabs = () => {
           {() => <TeamPosts teamId={teamId} />}
         </Tab.Screen>
 
-        {/* Conditionally render the ManageTeam tab only if the user is an admin */}
         {isAdmin && (
           <Tab.Screen
             name="Manage"
@@ -105,10 +116,18 @@ const styles = StyleSheet.create({
   teamHeader: {
     backgroundColor: "#0F1F26",
     paddingTop: 50,
-    paddingBottom: 0,
+    paddingBottom: 10,
     borderBottomColor: "#1C4B5640",
     borderBottomWidth: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 16,
   },
+  backButton: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
   teamName: {
     fontSize: 28,
     color: "white",

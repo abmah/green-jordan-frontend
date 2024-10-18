@@ -1,6 +1,6 @@
-import { createStackNavigator } from '@react-navigation/stack';
-import Teams from '../screens/Teams';
-import TeamsDetails from '../screens/components/teams/TeamsDetails';
+import { createStackNavigator } from "@react-navigation/stack";
+import Teams from "../screens/Teams";
+import TeamsDetails from "../screens/components/teams/TeamsDetails";
 
 const Stack = createStackNavigator();
 

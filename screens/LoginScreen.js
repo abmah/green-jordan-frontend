@@ -1,16 +1,27 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Platform, ActivityIndicator, Animated, TouchableOpacity, Easing, Pressable, StyleSheet } from 'react-native';
-import { login } from '../api';
-import * as SecureStore from 'expo-secure-store';
-import useUserStore from '../stores/useUserStore';
-import GreenJordan from '../assets/green-jordan.svg';
-import MainLogo from '../assets/main-logo.svg';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  Platform,
+  ActivityIndicator,
+  Animated,
+  TouchableOpacity,
+  Easing,
+  Pressable,
+  StyleSheet,
+} from "react-native";
+import { login } from "../api";
+import * as SecureStore from "expo-secure-store";
+import useUserStore from "../stores/useUserStore";
+import GreenJordan from "../assets/green-jordan.svg";
+import MainLogo from "../assets/main-logo.svg";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 import { Ionicons } from "@expo/vector-icons";
 const LoginScreen = ({ navigation }) => {
   const { t } = useTranslation(); // Use the translation function
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { setuserId } = useUserStore();
@@ -21,11 +32,11 @@ const LoginScreen = ({ navigation }) => {
     try {
       const response = await login(email, password);
       const userId = response.data._id;
-      await SecureStore.setItemAsync('userId', userId);
+      await SecureStore.setItemAsync("userId", userId);
       await setuserId(userId);
-      navigation.navigate('Profile');
+      navigation.navigate("Profile");
     } catch (error) {
-      console.error('API call error:', error);
+      console.error("API call error:", error);
       setError(t("login.login_error")); // Use translation for login error message
 
       setTimeout(() => {
@@ -60,9 +71,11 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-
-      <TouchableOpacity onPress={() => navigation.navigate("Settings")} >
-        <Ionicons name="settings" size={24} color="white" />
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Settings")}
+        style={styles.settingsButton}
+      >
+        <Ionicons name="settings-sharp" size={28} color="white" />
       </TouchableOpacity>
 
       <View style={styles.loginForm}>
@@ -104,7 +117,9 @@ const LoginScreen = ({ navigation }) => {
               onPressIn={handlePressIn}
               onPressOut={handlePressOut}
             >
-              <Text style={styles.loginButtonText}>{t("login.login_button")}</Text>
+              <Text style={styles.loginButtonText}>
+                {t("login.login_button")}
+              </Text>
             </Pressable>
           </Animated.View>
         )}
@@ -114,7 +129,9 @@ const LoginScreen = ({ navigation }) => {
         <Text style={styles.signupText}>{t("login.signup_prompt")} </Text>
         <Pressable onPress={() => navigation.navigate("Signup Screen")}>
           <View>
-            <Text style={styles.signupButtonText}>{t("login.signup_button")}</Text>
+            <Text style={styles.signupButtonText}>
+              {t("login.signup_button")}
+            </Text>
           </View>
         </Pressable>
       </View>
@@ -129,14 +146,17 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === "android" ? 50 : 0,
   },
 
-  logosContainer: {
-    alignItems: "center",
-    marginTop: 80,
+  settingsButton: {
+    position: "absolute",
+    right: 20,
+    top: 40,
+    backgroundColor: "#8AC14970",
+    borderRadius: 30,
+    padding: 10,
   },
 
-
-
   loginForm: {
+    marginTop: 80,
     marginBottom: 10,
   },
 

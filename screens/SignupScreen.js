@@ -9,12 +9,12 @@ import {
   Animated,
   Easing,
   Platform,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import { Signup } from "../api";
 import * as SecureStore from "expo-secure-store";
 import useUserStore from "../stores/useUserStore";
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from "react-i18next"; // Import useTranslation
 import { Ionicons } from "@expo/vector-icons";
 const SignupScreen = ({ navigation }) => {
   const { t } = useTranslation(); // Use the translation function
@@ -70,12 +70,13 @@ const SignupScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.navigate("Settings")} >
-        <Ionicons name="settings" size={24} color="white" />
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Settings")}
+        style={styles.settingsButton}
+      >
+        <Ionicons name="settings-sharp" size={28} color="white" />
       </TouchableOpacity>
       <View style={styles.signupForm}>
-
-
         <View style={styles.inputWrapper}>
           <View style={styles.inputUnderline}></View>
           <TextInput
@@ -124,7 +125,9 @@ const SignupScreen = ({ navigation }) => {
               onPressIn={handlePressIn}
               onPressOut={handlePressOut}
             >
-              <Text style={styles.signUpButtonText}>{t("signup.signup_button")}</Text>
+              <Text style={styles.signUpButtonText}>
+                {t("signup.signup_button")}
+              </Text>
               {/* Translated signup button */}
             </Pressable>
           </Animated.View>
@@ -156,14 +159,23 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === "android" ? 50 : 0,
   },
 
+  settingsButton: {
+    position: "absolute",
+    right: 20,
+    top: 40,
+    backgroundColor: "#8AC14970",
+    borderRadius: 30,
+    padding: 10,
+  },
+
   signupForm: {
+    marginTop: 80,
     marginBottom: 10,
   },
 
   inputWrapper: {
     alignItems: "center",
   },
-
 
   inputUnderline: {
     width: "100%",

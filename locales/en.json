@@ -97,7 +97,8 @@
     "logout": "Logout",
     "logoutConfirmation": "Are you sure you want to log out?",
     "loggedOutSuccessfully": "Logged out successfully",
-    "errorFetchingProfile": "Error fetching your profile"
+    "errorFetchingProfile": "Error fetching your profile",
+    "profileEdit": "Edit my profile"
   },
 
   "createTeam": {
@@ -179,7 +180,8 @@
     "notification_preferences": "Notification Preferences",
     "privacy_settings": "Privacy Settings",
     "account_management": "Account Management",
-    "language_changed": "Language changed to {{lang}}"
+    "language_changed": "Language changed to {{lang}}",
+    "logout": "Logout"
   },
 
   "tabs": {

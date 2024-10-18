@@ -41,6 +41,9 @@ const LeaderboardScreen = () => {
     return <Loader />;
   }
 
+  const topThree = data.slice(0, 3); // Top 3 players for the podium
+  const rest = data.slice(3); // Remaining players
+
   return (
     <View style={styles.container}>
       {error ? (
@@ -54,13 +57,37 @@ const LeaderboardScreen = () => {
               {t("leaderboard_screen.title")}
             </Text>
           </View>
+
+          {/* Podium View for top 3 */}
+          <View style={styles.podiumContainer}>
+            <LeaderboardItem
+              rank={2}
+              username={topThree[1]?.username}
+              points={topThree[1]?.allTimePoints}
+              profilePicture={topThree[1]?.profilePicture || null}
+            />
+            <LeaderboardItem
+              rank={1}
+              username={topThree[0]?.username}
+              points={topThree[0]?.allTimePoints}
+              profilePicture={topThree[0]?.profilePicture || null}
+            />
+            <LeaderboardItem
+              rank={3}
+              username={topThree[2]?.username}
+              points={topThree[2]?.allTimePoints}
+              profilePicture={topThree[2]?.profilePicture || null}
+            />
+          </View>
+
+          {/* FlatList for the rest of the leaderboard */}
           <FlatList
             style={{ flex: 1, paddingHorizontal: 20 }}
-            data={data}
+            data={rest}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item, index }) => (
               <LeaderboardItem
-                rank={index + 1}
+                rank={index + 4} // Adjust rank for the remaining players
                 username={item.username}
                 points={item.allTimePoints}
                 profilePicture={item.profilePicture || null}
@@ -107,6 +134,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: "Nunito-ExtraBold",
     color: "#fff",
+  },
+  podiumContainer: {
+    flexDirection: "row",
+    justifyContent: "center", // Spaces evenly between 2nd, 1st, and 3rd
+    paddingHorizontal: 10,
+    marginBottom: 20,
   },
 });
 

@@ -61,5 +61,3 @@ export default function App() {
     </I18nextProvider>
   );
 }
-
-// hello world
