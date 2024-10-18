@@ -11,6 +11,7 @@ import StackNavigator from "./LoginRegisterStackNavigator";
 import TeamsStackNavigator from "./TeamsStackNavigator";
 import Settings from "../screens/Settings";
 import { useTranslation } from "react-i18next"; // Import useTranslation
+import ProfileSettings from './ProfileSettings'
 
 const Tab = createBottomTabNavigator();
 
@@ -85,7 +86,7 @@ const BottomTabNavigator = () => {
       />
       <Tab.Screen
         name={userId ? "Profile" : "Login"}
-        component={userId ? ProfileScreen : StackNavigator}
+        component={userId ? ProfileSettings : StackNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons
@@ -97,7 +98,7 @@ const BottomTabNavigator = () => {
           tabBarLabel: userId ? t("tabs.profile") : t("tabs.login"), // Use translation for tab label
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Settings"
         component={Settings}
         options={{
@@ -106,7 +107,7 @@ const BottomTabNavigator = () => {
           ),
           tabBarLabel: t("tabs.settings"), // Use translation for tab label
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 };

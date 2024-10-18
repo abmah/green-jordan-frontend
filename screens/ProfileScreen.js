@@ -28,12 +28,10 @@ import Loader from "./components/Loader";
 // Render stats component
 const renderStats = ({ followers, followings, points, t }) => (
   <>
-    <Text style={styles.stats}>{`${t("profile.followers")}${
-      followers?.length || 0
-    }`}</Text>
-    <Text style={styles.stats}>{`${t("profile.following")}${
-      followings?.length || 0
-    }`}</Text>
+    <Text style={styles.stats}>{`${t("profile.followers")}${followers?.length || 0
+      }`}</Text>
+    <Text style={styles.stats}>{`${t("profile.following")}${followings?.length || 0
+      }`}</Text>
     <Text style={styles.stats}>{`${t("profile.points")}${points || 0}`}</Text>
   </>
 );
@@ -98,7 +96,7 @@ const CustomImagePickerModal = ({
 };
 
 // Main ProfileScreen Component
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   const { clearuserId, userId } = useUserStore();
   const { t } = useTranslation(); // Use translation hook
   const [userData, setUserData] = useState(null);
@@ -238,9 +236,18 @@ const ProfileScreen = () => {
           >
             <Ionicons name="pencil" size={20} color="white" />
           </TouchableOpacity>
+
         </View>
         <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
           <Text style={styles.logoutText}>{t("profile.logout")}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+
+          onPress={() => navigation.navigate("Settings")}
+        >
+
+          <Ionicons name="settings" size={20} color="white" />
+
         </TouchableOpacity>
         <View>
           <Text style={styles.username}>{userData?.username}</Text>
@@ -356,7 +363,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   postsContainer: {
-    marginHorizontal: 10,
+    // marginHorizontal: 10,
   },
   modalOverlay: {
     flex: 1,

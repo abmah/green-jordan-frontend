@@ -21,6 +21,15 @@
     "signup_button": "سجل!",
     "login_error": "*فشل تسجيل الدخول. يرجى التحقق من بيانات الاعتماد الخاصة بك والمحاولة مرة أخرى."
   },
+  "signup": {
+    "username_placeholder": "اسم المستخدم",
+    "email_placeholder": "البريد الإلكتروني",
+    "password_placeholder": "كلمة المرور",
+    "signup_button": "إنشاء حساب",
+    "signup_error": "حدث خطأ أثناء التسجيل. حاول مرة أخرى.",
+    "login_prompt": "هل لديك حساب بالفعل؟",
+    "login_button": "تسجيل الدخول"
+  },
   "post": {
     "error_title": "خطأ",
     "login_required": "يجب عليك تسجيل الدخول لتسجيل الإعجاب بالمنشور.",
@@ -172,7 +181,7 @@
 
   "tabs": {
     "home": "الرئيسية",
-    "leaderboard": "لوحة المتصدرين",
+    "leaderboard": " المتصدرين",
     "challenges": "التحديات",
     "teams": "الفرق",
     "profile": "الملف الشخصي",

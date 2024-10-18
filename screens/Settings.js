@@ -1,17 +1,22 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useTranslation } from "react-i18next";
+import Toast from 'react-native-toast-message'; // Import Toast
 
 const Settings = () => {
   const { t, i18n } = useTranslation();
 
   const changeLanguage = (lang) => {
     i18n.changeLanguage(lang);
-    Alert.alert(
-      t("settings.language_changed", {
-        lang: lang === "en" ? "English" : "Arabic",
-      })
-    );
+
+    // Display a toast message when the language changes
+    Toast.show({
+      type: 'success',
+      text1: t("settings.language_changed", {
+        lang: lang === "en" ? "English" : "العربية",
+      }),
+      position: 'bottom',
+    });
   };
 
   return (

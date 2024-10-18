@@ -73,7 +73,7 @@ const SignupScreen = ({ navigation }) => {
         <View style={styles.inputWrapper}>
           <View style={styles.inputUnderline}></View>
           <TextInput
-            placeholder={t("signup.username_placeholder")}
+            placeholder={t("signup.username_placeholder")} // Translated username placeholder
             placeholderTextColor={"#000"}
             value={username}
             onChangeText={setUsername}
@@ -83,7 +83,7 @@ const SignupScreen = ({ navigation }) => {
         <View style={styles.inputWrapper}>
           <View style={styles.inputUnderline}></View>
           <TextInput
-            placeholder={t("signup.email_placeholder")}
+            placeholder={t("signup.email_placeholder")} // Translated email placeholder
             placeholderTextColor={"#000"}
             value={email}
             onChangeText={setEmail}
@@ -94,11 +94,10 @@ const SignupScreen = ({ navigation }) => {
         <View style={styles.inputWrapper}>
           <View style={styles.inputUnderline}></View>
           <TextInput
-            placeholder={t("signup.password_placeholder")}
+            placeholder={t("signup.password_placeholder")} // Translated password placeholder
             placeholderTextColor={"#000"}
             value={password}
             onChangeText={setPassword}
-
             style={styles.input}
           />
         </View>
@@ -120,6 +119,7 @@ const SignupScreen = ({ navigation }) => {
               onPressOut={handlePressOut}
             >
               <Text style={styles.signUpButtonText}>{t("signup.signup_button")}</Text>
+              {/* Translated signup button */}
             </Pressable>
           </Animated.View>
         )}
@@ -128,11 +128,13 @@ const SignupScreen = ({ navigation }) => {
       </View>
       <View style={styles.loginContainer}>
         <Text style={styles.loginText}>{t("signup.login_prompt")}</Text>
+        {/* Translated login prompt */}
         <Pressable
           onPress={() => navigation.navigate("Login Screen")}
           style={styles.loginButton}
         >
           <Text style={styles.loginButtonText}>{t("signup.login_button")}</Text>
+          {/* Translated login button */}
         </Pressable>
       </View>
     </View>
@@ -147,18 +149,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#0F1F26",
     paddingTop: Platform.OS === "android" ? 60 : 0,
   },
-
-  signUpTitle: {
-    marginVertical: 80,
-    alignContent: "center",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  // signUpText: {
-  //   fontSize: 48,
-  //   color: "#8AC149",
-  // },
 
   signupForm: {
     marginBottom: 10,
@@ -180,6 +170,7 @@ const styles = StyleSheet.create({
 
   input: {
     paddingLeft: 20,
+    paddingRight: 20,
     fontSize: 18,
     fontFamily: "Nunito-Regular",
     width: "100%",
@@ -259,4 +250,5 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito-ExtraBold",
   },
 });
+
 export default SignupScreen;
