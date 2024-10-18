@@ -1,23 +1,48 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useTranslation } from "react-i18next";
 import Toast from 'react-native-toast-message'; // Import Toast
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
+
+const LANGUAGE_STORAGE_KEY = 'appLanguage'; // Key for storing the language in AsyncStorage
 
 const Settings = () => {
   const { t, i18n } = useTranslation();
 
-  const changeLanguage = (lang) => {
-    i18n.changeLanguage(lang);
+  // Function to change the language and store it in AsyncStorage
+  const changeLanguage = async (lang) => {
+    try {
+      await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, lang); // Save selected language
+      i18n.changeLanguage(lang);
 
-    // Display a toast message when the language changes
-    Toast.show({
-      type: 'success',
-      text1: t("settings.language_changed", {
-        lang: lang === "en" ? "English" : "العربية",
-      }),
-      position: 'bottom',
-    });
+      // Display a toast message when the language changes
+      Toast.show({
+        type: 'success',
+        text1: t("settings.language_changed", {
+          lang: lang === "en" ? "English" : "العربية",
+        }),
+        position: 'bottom',
+      });
+    } catch (error) {
+      console.error('Failed to save language to AsyncStorage:', error);
+    }
   };
+
+  // Load the saved language from AsyncStorage when the component mounts
+  const loadSavedLanguage = async () => {
+    try {
+      const savedLanguage = await AsyncStorage.getItem(LANGUAGE_STORAGE_KEY);
+      if (savedLanguage) {
+        i18n.changeLanguage(savedLanguage); // Apply the saved language
+      }
+    } catch (error) {
+      console.error('Failed to load language from AsyncStorage:', error);
+    }
+  };
+
+  useEffect(() => {
+    loadSavedLanguage(); // Load saved language on component mount
+  }, []);
 
   return (
     <View style={styles.container}>

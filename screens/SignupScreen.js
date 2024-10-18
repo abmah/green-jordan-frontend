@@ -9,12 +9,13 @@ import {
   Animated,
   Easing,
   Platform,
+  TouchableOpacity
 } from "react-native";
 import { Signup } from "../api";
 import * as SecureStore from "expo-secure-store";
 import useUserStore from "../stores/useUserStore";
 import { useTranslation } from 'react-i18next'; // Import useTranslation
-
+import { Ionicons } from "@expo/vector-icons";
 const SignupScreen = ({ navigation }) => {
   const { t } = useTranslation(); // Use the translation function
   const [username, setUsername] = useState("");
@@ -69,7 +70,12 @@ const SignupScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={() => navigation.navigate("Settings")} >
+        <Ionicons name="settings" size={24} color="white" />
+      </TouchableOpacity>
       <View style={styles.signupForm}>
+
+
         <View style={styles.inputWrapper}>
           <View style={styles.inputUnderline}></View>
           <TextInput
@@ -147,7 +153,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#0F1F26",
-    paddingTop: Platform.OS === "android" ? 60 : 0,
+    paddingTop: Platform.OS === "android" ? 50 : 0,
   },
 
   signupForm: {
@@ -157,6 +163,7 @@ const styles = StyleSheet.create({
   inputWrapper: {
     alignItems: "center",
   },
+
 
   inputUnderline: {
     width: "100%",

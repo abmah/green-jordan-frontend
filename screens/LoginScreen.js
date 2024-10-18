@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, ActivityIndicator, Animated, Easing, Pressable, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Platform, ActivityIndicator, Animated, TouchableOpacity, Easing, Pressable, StyleSheet } from 'react-native';
 import { login } from '../api';
 import * as SecureStore from 'expo-secure-store';
 import useUserStore from '../stores/useUserStore';
 import GreenJordan from '../assets/green-jordan.svg';
 import MainLogo from '../assets/main-logo.svg';
 import { useTranslation } from 'react-i18next'; // Import useTranslation
-
+import { Ionicons } from "@expo/vector-icons";
 const LoginScreen = ({ navigation }) => {
   const { t } = useTranslation(); // Use the translation function
   const [email, setEmail] = useState('');
@@ -60,11 +60,11 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.logosContainer}>
-        {/* Uncomment the lines below to display logos */}
-        {/* <MainLogo height={'30%'} style={{ marginBottom: 40 }} />
-        <GreenJordan height={'20%'} style={{ marginBottom: 30 }} /> */}
-      </View>
+
+      <TouchableOpacity onPress={() => navigation.navigate("Settings")} >
+        <Ionicons name="settings" size={24} color="white" />
+      </TouchableOpacity>
+
       <View style={styles.loginForm}>
         <View style={styles.inputWrapper}>
           <View style={styles.inputUnderline}></View>
@@ -126,12 +126,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#0F1F26",
+    paddingTop: Platform.OS === "android" ? 50 : 0,
   },
 
   logosContainer: {
     alignItems: "center",
     marginTop: 80,
   },
+
+
 
   loginForm: {
     marginBottom: 10,

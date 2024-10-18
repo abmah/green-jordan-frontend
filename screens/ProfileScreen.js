@@ -238,17 +238,16 @@ const ProfileScreen = ({ navigation }) => {
           </TouchableOpacity>
 
         </View>
-        <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-          <Text style={styles.logoutText}>{t("profile.logout")}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+        <View style={styles.logoutAndSettings}>
+          <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+            <Text style={styles.logoutText}>{t("profile.logout")}</Text>
+          </TouchableOpacity>
 
-          onPress={() => navigation.navigate("Settings")}
-        >
+          <TouchableOpacity onPress={() => navigation.navigate("Settings")} style={styles.settingsButton}>
+            <Ionicons name="settings" size={20} color="white" />
+          </TouchableOpacity>
+        </View>
 
-          <Ionicons name="settings" size={20} color="white" />
-
-        </TouchableOpacity>
         <View>
           <Text style={styles.username}>{userData?.username}</Text>
         </View>
@@ -341,6 +340,28 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 5,
   },
+  logoutAndSettings: {
+    position: "absolute",
+    right: 20,
+    top: 10,
+    alignItems: "center",
+  },
+  logoutButton: {
+    width: 65,
+    backgroundColor: "red",
+    padding: 8,
+    borderRadius: 5,
+    marginBottom: 10, // Space between logout and settings
+  },
+  settingsButton: {
+    backgroundColor: "#00A9C5",
+    padding: 8,
+    width: 65,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 5,
+  },
+
   logoutText: {
     color: "#ffffff",
     fontWeight: "bold",
