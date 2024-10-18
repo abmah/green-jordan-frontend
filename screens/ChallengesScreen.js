@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     padding: 20,
     borderRadius: 8,
-    backgroundColor: "#202F36", // Added background color for better contrast
+    backgroundColor: "#202F36",
   },
   streakText: {
     fontSize: 18,
