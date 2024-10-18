@@ -18,10 +18,10 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
   useEffect(() => {
     // Update the translation value based on the focused tab index
     if (tabWidths.length > 0 && tabPositions.length > 0) {
-      Animated.timing(translateX, {
+      Animated.spring(translateX, {
         toValue: tabPositions[state.index], // Move to the position of the focused tab
-        duration: 100, // Animation duration
         useNativeDriver: true,
+        bounciness: 10, // You can adjust the bounciness for effect
       }).start();
     }
   }, [state.index, tabWidths, tabPositions]);

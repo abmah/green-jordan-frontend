@@ -34,3 +34,7 @@ export {
   removeMember,
   getTeamPosts
 } from './teams';
+
+
+// Redeemables
+export { getAllAvailableRedeemables, getAllRedeemables, redeemItem, getBasket } from './redeem';

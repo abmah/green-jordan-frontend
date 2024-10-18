@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList, Platform } from "react-native";
+import { View, Text, StyleSheet, FlatList, Platform, TouchableOpacity } from "react-native";
 import useUserStore from "../stores/useUserStore";
 import ChallengeItem from "./components/ChallengeItem";
 import { getDailyChallenges } from "../api";
 import Loader from "./components/Loader";
 import { getSelf } from "../api/self";
 import { useTranslation } from "react-i18next"; // Import useTranslation
-
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 const ChallengesScreen = ({ navigation }) => {
   const { t } = useTranslation(); // Use the translation function
   const [dailyChallenges, setDailyChallenges] = useState([]);
@@ -98,6 +98,20 @@ const ChallengesScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <View>
+        <TouchableOpacity onPress={() => navigation.navigate("RedeemScreen")}
+          // change size directly 
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            padding: 20,
+            zIndex: 1,
+          }}
+        >
+          <MaterialIcons name="redeem" size={34} color="#FFD700" />
+        </TouchableOpacity>
+      </View>
       <FlatList
         showsVerticalScrollIndicator={false}
         data={dailyChallenges}

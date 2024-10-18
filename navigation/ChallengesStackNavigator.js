@@ -1,5 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import ChallengesScreen from '../screens/ChallengesScreen';
+import RedeemScreen from '../screens/RedeemScreen';
 
 
 const Stack = createStackNavigator();
@@ -12,7 +13,7 @@ const ChallengesStackNavigator = () => {
       }}
     >
       <Stack.Screen name="ChallengesScreen" component={ChallengesScreen} />
-
+      <Stack.Screen name="RedeemScreen" component={RedeemScreen} />
     </Stack.Navigator>
   );
 };

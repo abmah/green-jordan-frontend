@@ -28,12 +28,10 @@ import Loader from "./components/Loader";
 // Render stats component
 const renderStats = ({ followers, followings, points, t }) => (
   <>
-    <Text style={styles.stats}>{`${t("profile.followers")}${
-      followers?.length || 0
-    }`}</Text>
-    <Text style={styles.stats}>{`${t("profile.following")}${
-      followings?.length || 0
-    }`}</Text>
+    <Text style={styles.stats}>{`${t("profile.followers")}${followers?.length || 0
+      }`}</Text>
+    <Text style={styles.stats}>{`${t("profile.following")}${followings?.length || 0
+      }`}</Text>
     <Text style={styles.stats}>{`${t("profile.points")}${points || 0}`}</Text>
   </>
 );
@@ -324,16 +322,20 @@ const styles = StyleSheet.create({
   statsContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 20,
+    borderBottomColor: "#1C4B5640",
+    borderBottomWidth: 1,
   },
   stats: {
     marginHorizontal: 10,
+    paddingTop: 10,
     fontSize: 14,
     fontFamily: "Nunito-Bold",
     color: "#ffffff",
+    paddingBottom: 10,
+
   },
   postsContainer: {
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
   },
   noPostsMessage: {
     textAlign: "center",

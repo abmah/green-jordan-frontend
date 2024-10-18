@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: "flex-end",
+
   },
   modalContent: {
     backgroundColor: "#0F1F26",
@@ -143,6 +144,8 @@ const styles = StyleSheet.create({
     padding: 20,
     minHeight: "80%",
     maxHeight: "80%",
+
+
   },
   modalHeader: {
     flexDirection: "row",

@@ -138,8 +138,9 @@ const styles = StyleSheet.create({
   podiumContainer: {
     flexDirection: "row",
     justifyContent: "center", // Spaces evenly between 2nd, 1st, and 3rd
-    paddingHorizontal: 10,
-    marginBottom: 20,
+    paddingBottom: 20,
+    borderBottomColor: "#37464f",
+    borderBottomWidth: 1,
   },
 });
 
