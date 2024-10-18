@@ -28,10 +28,12 @@ import Loader from "./components/Loader";
 // Render stats component
 const renderStats = ({ followers, followings, points, t }) => (
   <>
-    <Text style={styles.stats}>{`${t("profile.followers")}${followers?.length || 0
-      }`}</Text>
-    <Text style={styles.stats}>{`${t("profile.following")}${followings?.length || 0
-      }`}</Text>
+    <Text style={styles.stats}>{`${t("profile.followers")}${
+      followers?.length || 0
+    }`}</Text>
+    <Text style={styles.stats}>{`${t("profile.following")}${
+      followings?.length || 0
+    }`}</Text>
     <Text style={styles.stats}>{`${t("profile.points")}${points || 0}`}</Text>
   </>
 );
@@ -97,7 +99,7 @@ const CustomImagePickerModal = ({
 
 // Main ProfileScreen Component
 const ProfileScreen = ({ navigation }) => {
-  const { clearuserId, userId } = useUserStore();
+  const { userId } = useUserStore();
   const { t } = useTranslation(); // Use translation hook
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -183,20 +185,6 @@ const ProfileScreen = ({ navigation }) => {
     }
   };
 
-  const handleLogout = async () => {
-    Alert.alert(t("profile.logout"), t("profile.logoutConfirmation"), [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "OK",
-        onPress: async () => {
-          await clearuserId();
-          Alert.alert(t("profile.loggedOutSuccessfully"));
-          await SecureStore.deleteItemAsync("userId");
-        },
-      },
-    ]);
-  };
-
   // Handle loading state
   if (loading) {
     return <Loader />;
@@ -209,12 +197,6 @@ const ProfileScreen = ({ navigation }) => {
         <Text style={styles.errorText}>
           {t("profile.errorFetchingProfile")}
         </Text>
-        <TouchableOpacity
-          onPress={handleLogout}
-          style={styles.errorLogoutButton}
-        >
-          <Text style={styles.logoutText}>{t("profile.logout")}</Text>
-        </TouchableOpacity>
       </View>
     );
   }
@@ -236,14 +218,12 @@ const ProfileScreen = ({ navigation }) => {
           >
             <Ionicons name="pencil" size={20} color="white" />
           </TouchableOpacity>
-
         </View>
-        <View style={styles.logoutAndSettings}>
-          <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-            <Text style={styles.logoutText}>{t("profile.logout")}</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => navigation.navigate("Settings")} style={styles.settingsButton}>
+        <View style={styles.settingsButtonContainer}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Settings")}
+            style={styles.settingsButton}
+          >
             <Ionicons name="settings" size={20} color="white" />
           </TouchableOpacity>
         </View>
@@ -332,75 +312,51 @@ const styles = StyleSheet.create({
     marginTop: 10,
     color: "#ffffff",
   },
-  logoutButton: {
+  settingsButtonContainer: {
     position: "absolute",
+    top: 0,
     right: 20,
-    top: 10,
-    backgroundColor: "red",
-    padding: 8,
-    borderRadius: 5,
-  },
-  logoutAndSettings: {
-    position: "absolute",
-    right: 20,
-    top: 10,
-    alignItems: "center",
-  },
-  logoutButton: {
-    width: 65,
-    backgroundColor: "red",
-    padding: 8,
-    borderRadius: 5,
-    marginBottom: 10, // Space between logout and settings
+    flexDirection: "row",
   },
   settingsButton: {
-    backgroundColor: "#00A9C5",
-    padding: 8,
-    width: 65,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 5,
-  },
-
-  logoutText: {
-    color: "#ffffff",
-    fontWeight: "bold",
+    marginLeft: 15,
   },
   statsContainer: {
-    alignItems: "center",
-    marginVertical: 20,
     flexDirection: "row",
-    justifyContent: "space-around",
-  },
-  stats: {
-    color: "#ffffff",
-    fontSize: 16,
-    marginVertical: 5,
-  },
-  noPostsMessage: {
-    color: "#ffffff",
-    fontSize: 18,
-    textAlign: "center",
+    justifyContent: "center",
     marginTop: 20,
   },
+  stats: {
+    marginHorizontal: 10,
+    fontSize: 14,
+    fontFamily: "Nunito-Bold",
+    color: "#ffffff",
+  },
   postsContainer: {
-    // marginHorizontal: 10,
+    paddingHorizontal: 20,
+  },
+  noPostsMessage: {
+    textAlign: "center",
+    marginTop: 50,
+    fontFamily: "Nunito-Bold",
+    color: "#ffffff",
+    fontSize: 16,
   },
   modalOverlay: {
     flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
     justifyContent: "center",
     alignItems: "center",
   },
   modalContent: {
-    width: "80%",
-    backgroundColor: "white",
-    borderRadius: 10,
+    backgroundColor: "#fff",
     padding: 20,
+    borderRadius: 10,
+    width: 300,
     alignItems: "center",
   },
   modalTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 18,
     marginBottom: 20,
   },
   modalButton: {
@@ -411,27 +367,24 @@ const styles = StyleSheet.create({
   previewImage: {
     width: 100,
     height: 100,
-    marginVertical: 20,
+    borderRadius: 10,
+    marginVertical: 10,
   },
   submitButton: {
     backgroundColor: "#00A9C5",
-    borderRadius: 5,
     padding: 10,
-    width: "100%",
+    borderRadius: 10,
+    width: 100,
     alignItems: "center",
   },
   submitButtonText: {
-    color: "white",
+    color: "#fff",
     fontSize: 16,
   },
   closeButton: {
-    color: "#00A9C5",
-    marginTop: 10,
-  },
-  errorText: {
-    color: "white",
-    textAlign: "center",
     marginTop: 20,
+    fontSize: 16,
+    color: "#ff5c5c",
   },
   errorContainer: {
     flex: 1,
@@ -439,16 +392,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#0F1F26",
   },
-  errorLogoutButton: {
-    marginTop: 20,
-    backgroundColor: "red",
-    padding: 10,
-    borderRadius: 5,
-  },
-
-  loadingText: {
-    color: "#00A9C5",
-    marginTop: 10,
+  errorText: {
+    fontSize: 16,
+    color: "#fff",
   },
 });
 

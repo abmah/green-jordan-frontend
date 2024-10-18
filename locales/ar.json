@@ -94,7 +94,8 @@
     "logout": "تسجيل الخروج",
     "logoutConfirmation": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
     "loggedOutSuccessfully": "تم تسجيل الخروج بنجاح",
-    "errorFetchingProfile": "خطأ في جلب ملف التعريف الخاص بك"
+    "errorFetchingProfile": "خطأ في جلب ملف التعريف الخاص بك",
+    "profileEdit": "تعديل حسابي"
   },
 
   "createTeam": {
@@ -176,7 +177,8 @@
     "notification_preferences": "تفضيلات الإشعارات",
     "privacy_settings": "إعدادات الخصوصية",
     "account_management": "إدارة الحساب",
-    "language_changed": "تم تغيير اللغة إلى {{lang}}"
+    "language_changed": "تم تغيير اللغة إلى {{lang}}",
+    "logout": "تسجيل الخروج"
   },
 
   "tabs": {
