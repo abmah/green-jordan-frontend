@@ -128,7 +128,6 @@ const SignupScreen = ({ navigation }) => {
               <Text style={styles.signUpButtonText}>
                 {t("signup.signup_button")}
               </Text>
-              {/* Translated signup button */}
             </Pressable>
           </Animated.View>
         )}
@@ -137,13 +136,12 @@ const SignupScreen = ({ navigation }) => {
       </View>
       <View style={styles.loginContainer}>
         <Text style={styles.loginText}>{t("signup.login_prompt")}</Text>
-        {/* Translated login prompt */}
+
         <Pressable
           onPress={() => navigation.navigate("Login Screen")}
           style={styles.loginButton}
         >
           <Text style={styles.loginButtonText}>{t("signup.login_button")}</Text>
-          {/* Translated login button */}
         </Pressable>
       </View>
     </View>

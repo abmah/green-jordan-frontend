@@ -1,7 +1,7 @@
 // components/Redeem/RedeemedItems.js
 
-import React from 'react';
-import { View, Text, FlatList, Image, StyleSheet } from 'react-native';
+import React from "react";
+import { View, Text, FlatList, Image, StyleSheet } from "react-native";
 
 const RedeemedItems = ({ redeemedItems }) => (
   <View style={styles.tabContainer}>
@@ -14,15 +14,19 @@ const RedeemedItems = ({ redeemedItems }) => (
       <FlatList
         data={redeemedItems}
         keyExtractor={(item) => item?._id || Math.random().toString()}
-        renderItem={({ item }) => (
+        renderItem={({ item }) =>
           item ? (
             <View style={styles.itemContainer}>
-              <Text style={styles.itemName}>{item.name}</Text>
-              <Text style={styles.itemName}>Points Required: {item.cost}</Text>
               <Image source={{ uri: item.image }} style={styles.itemImage} />
+              <View style={styles.itemContent}>
+                <Text style={styles.itemName}>{item.name}</Text>
+                <Text style={styles.itemName}>
+                  Redeemed for: {item.cost} points
+                </Text>
+              </View>
             </View>
           ) : null
-        )}
+        }
       />
     )}
   </View>
@@ -33,42 +37,43 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
     paddingVertical: 30,
-    backgroundColor: '#0F1F26',
-
+    backgroundColor: "#0F1F26",
   },
   subheader: {
-    fontSize: 22,
+    fontSize: 24,
+    fontFamily: "Nunito-ExtraBold",
     marginTop: 25,
     marginBottom: 15,
-    color: '#fff',
+    color: "#fff",
   },
   emptyContainer: {
     padding: 20,
     marginBottom: 15,
     borderRadius: 10,
     backgroundColor: "#213D49",
-    alignItems: 'center',
+    alignItems: "center",
   },
   noItemsText: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
-    textAlign: 'center',
-    color: 'white',
+    textAlign: "center",
+    color: "white",
   },
   itemContainer: {
     padding: 20,
     marginBottom: 15,
-    borderRadius: 10,
+    borderRadius: 18,
     backgroundColor: "#213D49",
-    shadowColor: 'white',
-
+    shadowColor: "white",
+    flexDirection: "row",
+    alignItems: "flex-start",
   },
+  itemContent: { flex: 1, marginLeft: 15 },
   itemName: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: "Nunito-ExtraBold",
     marginBottom: 10,
-    color: 'white',
-
+    color: "white",
   },
   itemImage: {
     width: 120,

@@ -28,10 +28,12 @@ import Loader from "./components/Loader";
 // Render stats component
 const renderStats = ({ followers, followings, points, t }) => (
   <>
-    <Text style={styles.stats}>{`${t("profile.followers")}${followers?.length || 0
-      }`}</Text>
-    <Text style={styles.stats}>{`${t("profile.following")}${followings?.length || 0
-      }`}</Text>
+    <Text style={styles.stats}>{`${t("profile.followers")}${
+      followers?.length || 0
+    }`}</Text>
+    <Text style={styles.stats}>{`${t("profile.following")}${
+      followings?.length || 0
+    }`}</Text>
     <Text style={styles.stats}>{`${t("profile.points")}${points || 0}`}</Text>
   </>
 );
@@ -222,7 +224,7 @@ const ProfileScreen = ({ navigation }) => {
             onPress={() => navigation.navigate("Settings")}
             style={styles.settingsButton}
           >
-            <Ionicons name="settings" size={20} color="white" />
+            <Ionicons name="settings-sharp" size={24} color="white" />
           </TouchableOpacity>
         </View>
 
@@ -332,7 +334,6 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito-Bold",
     color: "#ffffff",
     paddingBottom: 10,
-
   },
   postsContainer: {
     // paddingHorizontal: 20,
