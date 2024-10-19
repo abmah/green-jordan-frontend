@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
   Modal,
 } from "react-native";
-import { useTranslation } from "react-i18next"; // Import useTranslation
+import { useTranslation } from "react-i18next";
 import useUserStore from "../stores/useUserStore";
 import * as SecureStore from "expo-secure-store";
 import { getSelf } from "../api/self";
@@ -28,12 +28,8 @@ import Loader from "./components/Loader";
 // Render stats component
 const renderStats = ({ followers, followings, points, t }) => (
   <>
-    <Text style={styles.stats}>{`${t("profile.followers")}${
-      followers?.length || 0
-    }`}</Text>
-    <Text style={styles.stats}>{`${t("profile.following")}${
-      followings?.length || 0
-    }`}</Text>
+    <Text style={styles.stats}>{`${t("profile.followers")}${followers?.length || 0}`}</Text>
+    <Text style={styles.stats}>{`${t("profile.following")}${followings?.length || 0}`}</Text>
     <Text style={styles.stats}>{`${t("profile.points")}${points || 0}`}</Text>
   </>
 );
@@ -63,20 +59,26 @@ const CustomImagePickerModal = ({
     >
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
+          <View style={styles.modalHeader}>
+            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+              <Ionicons name="close" size={24} color="#fff" />
+            </TouchableOpacity>
+          </View>
           <Text style={styles.modalTitle}>
             {t("profile.selectProfilePicture")}
           </Text>
-          <TouchableOpacity onPress={handleCameraPress}>
-            <Text style={styles.modalButton}>{t("profile.takePhoto")}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleLibraryPress}>
-            <Text style={styles.modalButton}>
-              {t("profile.chooseFromLibrary")}
-            </Text>
-          </TouchableOpacity>
           {image && (
             <Image source={{ uri: image.uri }} style={styles.previewImage} />
           )}
+          <View style={styles.imageOptionButtonContainer}>
+            <TouchableOpacity onPress={handleCameraPress} style={styles.modalButton}>
+              <Text style={styles.buttonText}>{t("profile.takePhoto")}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleLibraryPress} style={styles.modalButton}>
+              <Text style={styles.buttonText}>{t("profile.chooseFromLibrary")}</Text>
+            </TouchableOpacity>
+          </View>
+
           <TouchableOpacity
             onPress={onSubmit}
             style={styles.submitButton}
@@ -88,9 +90,6 @@ const CustomImagePickerModal = ({
               <Text style={styles.submitButtonText}>{t("profile.upload")}</Text>
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={onClose}>
-            <Text style={styles.closeButton}>{t("profile.close")}</Text>
-          </TouchableOpacity>
         </View>
       </View>
     </Modal>
@@ -100,7 +99,7 @@ const CustomImagePickerModal = ({
 // Main ProfileScreen Component
 const ProfileScreen = ({ navigation }) => {
   const { userId } = useUserStore();
-  const { t } = useTranslation(); // Use translation hook
+  const { t } = useTranslation();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -207,8 +206,7 @@ const ProfileScreen = ({ navigation }) => {
         <View style={styles.profileImageContainer}>
           <Image
             source={{
-              uri:
-                userData?.profilePicture || "https://via.placeholder.com/150",
+              uri: userData?.profilePicture || "https://via.placeholder.com/150",
             }}
             style={styles.profilePicture}
           />
@@ -246,10 +244,7 @@ const ProfileScreen = ({ navigation }) => {
           keyExtractor={(item) => item._id}
           style={styles.postsContainer}
           refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={fetchUserPosts}
-            />
+            <RefreshControl refreshing={refreshing} onRefresh={fetchUserPosts} />
           }
         />
       )}
@@ -262,7 +257,7 @@ const ProfileScreen = ({ navigation }) => {
         handleCameraPress={handleCameraPress}
         handleLibraryPress={handleLibraryPress}
         isUploading={isUploading}
-        t={t} // Pass translation function
+        t={t}
       />
     </View>
   );
@@ -272,12 +267,6 @@ const ProfileScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0F1F26",
-  },
-  loaderContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
     backgroundColor: "#0F1F26",
   },
   profileInfo: {
@@ -310,94 +299,110 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: "Nunito-ExtraBold",
     marginTop: 10,
-    color: "#ffffff",
-  },
-  settingsButtonContainer: {
-    position: "absolute",
-    top: 0,
-    right: 20,
-    flexDirection: "row",
-  },
-  settingsButton: {
-    marginLeft: 15,
+    color: "white",
   },
   statsContainer: {
     flexDirection: "row",
-    justifyContent: "center",
-    borderBottomColor: "#1C4B5640",
-    borderBottomWidth: 1,
+    justifyContent: "space-around",
+    marginVertical: 20,
   },
   stats: {
-    marginHorizontal: 10,
-    paddingTop: 10,
-    fontSize: 14,
-    fontFamily: "Nunito-Bold",
-    color: "#ffffff",
-    paddingBottom: 10,
+    fontSize: 16,
+    fontFamily: "Nunito-SemiBold",
+    color: "white",
   },
   postsContainer: {
-    // paddingHorizontal: 20,
+    marginBottom: 20,
   },
   noPostsMessage: {
     textAlign: "center",
-    marginTop: 50,
-    fontFamily: "Nunito-Bold",
-    color: "#ffffff",
     fontSize: 16,
+    color: "#FFFFFF",
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
+
     justifyContent: "center",
     alignItems: "center",
   },
   modalContent: {
-    backgroundColor: "#fff",
-    padding: 20,
+    backgroundColor: "#1B2B38",
     borderRadius: 10,
-    width: 300,
-    alignItems: "center",
+    padding: 20,
+    width: "90%",
+  },
+  modalHeader: {
+    alignItems: "flex-end",
+  },
+  closeButton: {
+    padding: 10,
   },
   modalTitle: {
-    fontSize: 18,
-    marginBottom: 20,
+    fontSize: 24,
+    color: "white",
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  imageOptionButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 10,
+    gap: 10,
   },
   modalButton: {
-    fontSize: 16,
-    color: "#00A9C5",
-    marginVertical: 10,
+    backgroundColor: "#121c23",
+    alignItems: "center",
+    justifyContent: "center",
+    height: 45,
+    borderRadius: 8,
+    width: "45%",
+  },
+  buttonText: {
+    color: "#ffffff",
+    fontSize: 14,
+    fontWeight: "bold",
   },
   previewImage: {
     width: 100,
     height: 100,
-    borderRadius: 10,
-    marginVertical: 10,
+    alignSelf: "center",
+    marginBottom: 10,
   },
   submitButton: {
-    backgroundColor: "#00A9C5",
-    padding: 10,
-    borderRadius: 10,
-    width: 100,
+    width: "100%",
+
+    backgroundColor: "#8AC149",
+    height: 45,
+    alignSelf: "flex-end",
     alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 8,
+    paddingVertical: 10,
+    elevation: 2,
+    marginTop: 10,
   },
   submitButtonText: {
-    color: "#fff",
+    color: "#ffffff",
+    fontFamily: "Nunito-ExtraBold",
     fontSize: 16,
-  },
-  closeButton: {
-    marginTop: 20,
-    fontSize: 16,
-    color: "#ff5c5c",
   },
   errorContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#0F1F26",
   },
   errorText: {
-    fontSize: 16,
-    color: "#fff",
+    color: "red",
+    fontSize: 18,
+  },
+  settingsButtonContainer: {
+    position: "absolute",
+    top: 15,
+    right: 15,
+  },
+  settingsButton: {
+
+
   },
 });
 

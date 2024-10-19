@@ -13,7 +13,7 @@ import {
 import { FontAwesome } from "@expo/vector-icons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useTranslation } from "react-i18next"; // Import useTranslation
+import { useTranslation } from "react-i18next";
 
 const ImagePickerModal = ({
   visible,
@@ -25,12 +25,13 @@ const ImagePickerModal = ({
   isUploading,
   handleCameraPress,
   handleLibraryPress,
-  challengeTitle,
+  challengeTitle, // New prop for challenge title
+  showDescription, // Indicates whether to show the description input
 }) => {
-  const { t } = useTranslation(); // Use the translation function
+  const { t } = useTranslation();
 
   return (
-    <Modal transparent={true} visible={visible} onRequestClose={onClose}>
+    <Modal animationType="slide" transparent={true} visible={visible} onRequestClose={onClose}>
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <View style={styles.modalHeader}>
@@ -39,29 +40,30 @@ const ImagePickerModal = ({
             </TouchableOpacity>
           </View>
 
+          {/* Challenge Title */}
           <Text style={styles.modalTitle}>{challengeTitle}</Text>
 
-          {image && (
-            <Image source={{ uri: image.uri }} style={styles.imagePreview} />
+          {/* Image Preview */}
+          {image && <Image source={{ uri: image.uri }} style={styles.imagePreview} />}
+
+          {/* Description Input */}
+          {showDescription && (
+            <TextInput
+              placeholder={t("imagePickerModal.caption_placeholder")}
+              placeholderTextColor="#B0B0B0"
+              value={description}
+              onChangeText={setDescription}
+              style={styles.input}
+            />
           )}
 
-          <TextInput
-            placeholder={t("imagePickerModal.caption_placeholder")}
-            placeholderTextColor="#B0B0B0"
-            value={description}
-            onChangeText={setDescription}
-            style={styles.input}
-          />
-
+          {/* Buttons */}
           <View style={styles.buttonContainer}>
             <View style={styles.imageOptionButtonContainer}>
               <Pressable style={styles.modalButton} onPress={handleCameraPress}>
                 <FontAwesome name="camera" size={24} color="#fff" />
               </Pressable>
-              <Pressable
-                style={styles.modalButton}
-                onPress={handleLibraryPress}
-              >
+              <Pressable style={styles.modalButton} onPress={handleLibraryPress}>
                 <MaterialIcons name="photo-library" size={24} color="#fff" />
               </Pressable>
             </View>
@@ -90,13 +92,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(15, 31, 38, 0.8)", // Dimmed background
+
   },
   modalContent: {
-    width: "90%", // Increased width for better layout
-    minHeight: 320, // Increased minimum height
-    backgroundColor: "#2C3E50", // Darker background for the modal
-    borderRadius: 15,
+    width: "80%",
+    backgroundColor: "#1B2B38",
+    borderRadius: 8,
     padding: 20,
     alignItems: "center",
     elevation: 10,
@@ -108,15 +109,21 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
+    alignItems: "center",
+    marginBottom: 15,
   },
   closeButton: {
     alignSelf: "flex-end",
+    position: "absolute",
+    right: 0,
+    top: 0,
   },
   modalTitle: {
-    fontSize: 22,
-    fontFamily: "Nunito-ExtraBold", // Font consistency
-    color: "#F5F5F5",
-    marginBottom: 10,
+    fontSize: 24,
+    marginBottom: 20,
+    marginTop: 20,
+    fontFamily: "Nunito-Bold",
+    color: "#8AC149",
   },
   imagePreview: {
     width: "100%",
@@ -128,34 +135,37 @@ const styles = StyleSheet.create({
   input: {
     padding: 12,
     marginBottom: 20,
-    borderRadius: 30,
-    color: "#000",
+    borderRadius: 8,
+    color: "#F5F5F5",
     fontSize: 16,
     width: "100%",
-    backgroundColor: "#fff",
+    backgroundColor: "#2C3E50",
     fontFamily: "Nunito-Medium",
   },
   buttonContainer: {
     justifyContent: "space-between",
     width: "100%",
+
   },
   imageOptionButtonContainer: {
     justifyContent: "space-between",
     flexDirection: "row",
-    marginBottom: 10,
+    width: "100%",
+
+
   },
   modalButton: {
-    backgroundColor: "#1E90FF", // Consistent button color
+    backgroundColor: "#121c23",
     alignItems: "center",
     justifyContent: "center",
     height: 45,
     borderRadius: 8,
-    width: "45%", // Responsive button width
-    marginHorizontal: 5, // Spacing between buttons
+    width: "45%",
+
   },
   submitButton: {
-    width: "100%", // Full width for the submit button
-    backgroundColor: "#8AC149", // Consistent submit button color
+    width: "100%",
+    backgroundColor: "#8AC149",
     height: 45,
     alignSelf: "flex-end",
     alignItems: "center",
@@ -167,7 +177,7 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     color: "#ffffff",
-    fontFamily: "Nunito-ExtraBold", // Font consistency
+    fontFamily: "Nunito-ExtraBold",
     fontSize: 16,
   },
 });

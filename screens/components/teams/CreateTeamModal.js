@@ -9,6 +9,7 @@ import {
   Alert,
 } from "react-native";
 import { useTranslation } from "react-i18next"; // Import useTranslation
+import { Ionicons } from "@expo/vector-icons"; // Added for close button icon
 
 const CreateTeamModal = ({
   modalVisible,
@@ -39,8 +40,11 @@ const CreateTeamModal = ({
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           {/* Top Section: Header */}
-          <View style={styles.topSection}>
-            <Text style={styles.modalHeader}>{t("createTeam.header")}</Text>
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>{t("createTeam.header")}</Text>
+            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
+              <Ionicons name="close" size={24} color="#F5F5F5" />
+            </TouchableOpacity>
           </View>
 
           {/* Bottom Section: Form and Buttons */}
@@ -50,14 +54,14 @@ const CreateTeamModal = ({
               placeholder={t("createTeam.teamName")}
               value={newTeamName}
               onChangeText={setNewTeamName}
-              placeholderTextColor="white"
+              placeholderTextColor="#B0B0B0"
             />
             <TextInput
               style={styles.input}
               placeholder={t("createTeam.teamDescription")}
               value={newTeamDescription}
               onChangeText={setNewTeamDescription}
-              placeholderTextColor="white"
+              placeholderTextColor="#B0B0B0"
             />
             <TouchableOpacity
               onPress={onCreateTeam}
@@ -67,14 +71,7 @@ const CreateTeamModal = ({
                 {t("createTeam.createButton")}
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setModalVisible(false)}
-              style={styles.closeButton}
-            >
-              <Text style={styles.closeButtonText}>
-                {t("createTeam.closeButton")}
-              </Text>
-            </TouchableOpacity>
+
           </View>
         </View>
       </View>
@@ -89,57 +86,71 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalContent: {
+    width: "80%",
     backgroundColor: "#1B2B38",
     borderRadius: 8,
     padding: 20,
-    width: "80%",
     alignItems: "center",
-    justifyContent: "space-between",
+    elevation: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
   },
-  topSection: {
-    // Optional: Add styles if needed
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    alignItems: "center",
+
+  },
+  closeButton: {
+    alignSelf: "flex-end",
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontFamily: "Nunito-Bold",
+    color: "#8AC149",
+    marginBottom: 10,
+    marginTop: 30,
+
+    width: "100%",
+    textAlign: "center",
   },
   bottomSection: {
     width: "100%",
     alignItems: "center",
   },
-  modalHeader: {
-    fontSize: 24,
-    fontFamily: "Nunito-Bold",
-    color: "#8AC149",
-    marginBottom: 15,
-  },
   input: {
-    height: 40,
-    borderColor: "white",
-    borderWidth: 1,
+    padding: 12,
+    marginBottom: 20,
     borderRadius: 8,
+    color: "#F5F5F5",
+    fontSize: 16,
     width: "100%",
-    padding: 10,
-    marginBottom: 10,
-    color: "white",
-    fontFamily: "Nunito-ExtraBold",
+    backgroundColor: "#2C3E50",
+    fontFamily: "Nunito-Medium",
   },
   createTeamButton: {
-    backgroundColor: "#8AC149",
-    padding: 10,
-    borderRadius: 8,
-    alignItems: "center",
     width: "100%",
+    backgroundColor: "#8AC149",
+    height: 45,
+    alignSelf: "flex-end",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 8,
+    paddingVertical: 10,
+    elevation: 2,
     marginTop: 10,
   },
   createTeamButtonText: {
+    color: "#ffffff",
     fontFamily: "Nunito-ExtraBold",
-    color: "white",
     fontSize: 16,
   },
   closeButton: {
-    marginTop: 10,
-    backgroundColor: "#FF5733",
-    padding: 10,
-    borderRadius: 8,
-    width: "100%",
-    alignItems: "center",
+    position: "absolute",
+    right: 0,
+    top: 0,
   },
   closeButtonText: {
     fontFamily: "Nunito-ExtraBold",

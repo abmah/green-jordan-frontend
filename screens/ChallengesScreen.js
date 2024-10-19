@@ -14,6 +14,7 @@ import Loader from "./components/Loader";
 import { getSelf } from "../api/self";
 import { useTranslation } from "react-i18next"; // Import useTranslation
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+
 const ChallengesScreen = ({ navigation }) => {
   const { t } = useTranslation(); // Use the translation function
   const [dailyChallenges, setDailyChallenges] = useState([]);
@@ -77,9 +78,9 @@ const ChallengesScreen = ({ navigation }) => {
           </Text>
           <Text style={styles.lastChallengeText}>
             {t("challenges.last_challenge_completed", {
-              date: new Date(
-                userData.lastChallengeCompleted
-              ).toLocaleDateString(),
+              date: userData.lastChallengeCompleted
+                ? new Date(userData.lastChallengeCompleted).toLocaleDateString()
+                : t("challenges.never"),
             })}
           </Text>
           <Text style={styles.challengesAssignedText}>
@@ -87,6 +88,13 @@ const ChallengesScreen = ({ navigation }) => {
               count: userData.dailyChallengesAssigned.length,
             })}
           </Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("RedeemScreen")}
+            style={styles.redeemButton}
+          >
+            <MaterialIcons name="redeem" size={24} color="#FF9804" />
+            <Text style={styles.redeemText}>Redeem</Text>
+          </TouchableOpacity>
         </View>
       )}
     </>
@@ -105,22 +113,8 @@ const ChallengesScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("RedeemScreen")}
-          style={{
-            position: "absolute",
-            top: -14,
-            right: -10,
-            padding: 20,
-            zIndex: 1,
-            alignItems: "center",
-          }}
-        >
-          <MaterialIcons name="redeem" size={34} color="#FFD700" />
-          <Text style={styles.redeemText}>Redeem</Text>
-        </TouchableOpacity>
-      </View>
+
+
       <FlatList
         showsVerticalScrollIndicator={false}
         data={dailyChallenges}
@@ -142,67 +136,81 @@ const ChallengesScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: "#0F1F26",
-    paddingTop: Platform.OS === "android" ? 50 : 0,
+    backgroundColor: "#001c2c",
+
   },
   userInfoContainer: {
+    paddingTop: Platform.OS === "android" ? 50 : 0,
     marginBottom: 20,
     padding: 20,
-    borderRadius: 8,
-    backgroundColor: "#202F36",
+    paddingBottom: 0,
+    backgroundColor: "#1E2D3A",
+    borderBottomStartRadius: 20,
+    borderBottomEndRadius: 20,
   },
-
+  redeemButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+    backgroundColor: "#131F24",
+    borderRadius: 8,
+    marginVertical: 20,
+    marginHorizontal: 20,
+  },
   redeemText: {
-    color: "#FFD700",
+    color: "#FF9804",
     fontSize: 16,
     fontFamily: "Nunito-ExtraBold",
+    textTransform: "uppercase",
+    marginLeft: 8, // Spacing between icon and text
   },
-
   streakText: {
-    fontSize: 18,
-    fontFamily: "Nunito-ExtraBold",
-    marginBottom: 5,
-    color: "#FFD700",
+    fontSize: 28, // Increased font size for emphasis
+    fontFamily: "Nunito-Black",
+    color: "#FF9804",
+    marginBottom: 8,
   },
   pointsText: {
     fontSize: 18,
     fontFamily: "Nunito-ExtraBold",
-    marginBottom: 5,
-    color: "#66FF66",
+    color: "#FF9804",
+    marginBottom: 8,
   },
   lastChallengeText: {
-    fontSize: 18,
-    fontFamily: "Nunito-ExtraBold",
-    marginBottom: 5,
+    fontSize: 16,
+    fontFamily: "Nunito-SemiBold",
     color: "#FFFFFF",
+    marginBottom: 8,
   },
   challengesAssignedText: {
-    fontSize: 18,
-    fontFamily: "Nunito-ExtraBold",
-    marginBottom: 10,
+    fontSize: 16,
+    fontFamily: "Nunito-SemiBold",
     color: "#FFFFFF",
+    marginBottom: 10,
   },
   loginPromptContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#0F1F26",
+    backgroundColor: "#0E1725",
   },
   loginPrompt: {
     fontSize: 20,
     fontFamily: "Nunito-ExtraBold",
     color: "#fff",
     textAlign: "center",
+    marginHorizontal: 20,
   },
   challengeSection: {
-    marginBottom: 20,
+    paddingHorizontal: 20,
   },
   noChallengesText: {
     fontSize: 16,
+    fontFamily: "Nunito-SemiBold",
     color: "#999",
     textAlign: "center",
-    marginTop: 20,
+    marginTop: 30,
   },
 });
 

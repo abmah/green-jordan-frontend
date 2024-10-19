@@ -6,10 +6,13 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  Modal,
 } from "react-native";
 
 const AvailableRedeemables = ({ redeemables, userPoints = 0, onRedeem }) => {
   const [loading, setLoading] = useState({});
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [isModalVisible, setModalVisible] = useState(false);
 
   const handleRedeem = async (item) => {
     if (loading[item._id]) return; // Prevent multiple requests for the same item
@@ -21,18 +24,28 @@ const AvailableRedeemables = ({ redeemables, userPoints = 0, onRedeem }) => {
       console.error("Error redeeming item:", error);
     } finally {
       setLoading((prev) => ({ ...prev, [item._id]: false }));
+      setModalVisible(false); // Close the modal
     }
+  };
+
+  const openConfirmationModal = (item) => {
+    setSelectedItem(item);
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setSelectedItem(null);
+    setModalVisible(false);
   };
 
   return (
     <View style={styles.tabContainer}>
       <Text style={styles.points}>Points: {userPoints}</Text>
-      <Text style={styles.subheader}>Available</Text>
+      <Text style={styles.subheader}>Available Redeemables</Text>
+
       {redeemables.length === 0 ? (
         <View style={styles.emptyContainer}>
-          <Text style={styles.noItemsText}>
-            No items available for redemption.
-          </Text>
+          <Text style={styles.noItemsText}>No items available for redemption.</Text>
         </View>
       ) : (
         <FlatList
@@ -63,13 +76,13 @@ const AvailableRedeemables = ({ redeemables, userPoints = 0, onRedeem }) => {
                             : "#8AC149",
                       },
                     ]}
-                    onPress={() => handleRedeem(item)}
+                    onPress={() => openConfirmationModal(item)}
                     disabled={userPoints < item.cost || loading[item._id]}
                   >
                     <Text style={styles.redeemButtonText}>
                       {loading[item._id]
                         ? "Processing..."
-                        : `GET FOR ${item.cost}`}
+                        : `Get for ${item.cost}`}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -78,6 +91,39 @@ const AvailableRedeemables = ({ redeemables, userPoints = 0, onRedeem }) => {
           }
         />
       )}
+
+      {/* Modal for Confirmation */}
+      <Modal
+        transparent={true}
+        animationType="slide"
+        visible={isModalVisible}
+        onRequestClose={closeModal}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Confirm Redemption</Text>
+            <Text style={styles.modalMessage}>
+              Are you sure you want to redeem{" "}
+              <Text style={styles.itemName}>{selectedItem?.name}</Text> for{" "}
+              {selectedItem?.cost} points?
+            </Text>
+            <View style={styles.modalActions}>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={closeModal}
+              >
+                <Text style={styles.modalButtonText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => handleRedeem(selectedItem)}
+              >
+                <Text style={styles.modalButtonText}>Confirm</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -90,19 +136,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#0F1F26",
   },
   points: {
-    paddingVertical: 10,
     fontSize: 24,
-    fontFamily: "Nunito-Regular",
+    fontFamily: "Nunito-Bold",
     marginBottom: 25,
     color: "#fff",
     textAlign: "left",
   },
   subheader: {
-    fontSize: 30,
+    fontSize: 26,
     fontFamily: "Nunito-ExtraBold",
-    marginTop: 25,
     marginBottom: 15,
-    color: "white",
+    color: "#fff",
     textAlign: "center",
   },
   emptyContainer: {
@@ -111,12 +155,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#213D49",
     alignItems: "center",
-    borderRadius: 18,
   },
   noItemsText: {
-    color: "white",
-    fontFamily: "Nunito-Medium",
     fontSize: 16,
+    fontFamily: "Nunito-Medium",
+    color: "#fff",
     textAlign: "center",
   },
   itemContainer: {
@@ -145,12 +188,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "Nunito-ExtraBold",
     marginBottom: 5,
-    color: "white",
+    color: "#fff",
   },
   itemCost: {
     fontSize: 16,
     fontFamily: "Nunito-Bold",
-    color: "white",
+    color: "#fff",
   },
   itemImage: {
     width: 120,
@@ -158,7 +201,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     resizeMode: "cover",
   },
-  redeemButtonContainer: { alignItems: "flex-end" },
+  redeemButtonContainer: {
+    alignItems: "flex-end",
+  },
   redeemButton: {
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -169,9 +214,52 @@ const styles = StyleSheet.create({
     maxWidth: 160,
   },
   redeemButtonText: {
-    color: "white",
-    fontSize: 18,
+    color: "#fff",
+    fontSize: 16,
     fontFamily: "Nunito-ExtraBold",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+
+  },
+  modalContent: {
+    width: 300,
+    padding: 20,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontFamily: "Nunito-ExtraBold",
+    marginBottom: 10,
+  },
+  modalMessage: {
+    fontSize: 16,
+    fontFamily: "Nunito-Regular",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  modalActions: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    alignItems: "center",
+    backgroundColor: "#8AC149",
+    marginHorizontal: 5,
+  },
+  modalButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontFamily: "Nunito-Bold",
   },
 });
 

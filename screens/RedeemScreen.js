@@ -88,12 +88,10 @@ const RedeemScreen = () => {
 
   if (loading) {
     return (
-      <Loader /> // Use the custom Loader component here
+      <Loader />
     );
   }
 
-  console.log("User Points:", userPoints); // Debugging output
-  console.log("Redeemables:", redeemables); // Debugging output
 
   return (
     <Tab.Navigator tabBar={(props) => <CustomTabBar {...props} />}>

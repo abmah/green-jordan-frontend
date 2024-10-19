@@ -48,7 +48,8 @@
     "no_comments": "No comments yet. Be the first to comment!",
     "write_comment": "Write a comment...",
     "submit": "Submit",
-    "error": "Failed to post comment."
+    "error": "Failed to post comment.",
+    "login_prompt": "Please log in first to comment."
   },
 
   "leaderboard_screen": {
@@ -67,7 +68,8 @@
     "current_streak": "Current Streak: {{streak}}",
     "total_points": "Total Points: {{points}}",
     "last_challenge_completed": "Last Challenge Completed: {{date}}",
-    "challenges_assigned_today": "Challenges Assigned Today: {{count}}"
+    "challenges_assigned_today": "Challenges Assigned Today: {{count}}",
+    "never": "Never"
   },
 
   "challengeItem": {
@@ -98,7 +100,12 @@
     "logoutConfirmation": "Are you sure you want to log out?",
     "loggedOutSuccessfully": "Logged out successfully",
     "errorFetchingProfile": "Error fetching your profile",
-    "profileEdit": "Edit my profile"
+    "profileEdit": "Edit my profile",
+    "selectImage": "Select Image",
+    "fromLibrary": "Choose from Library",
+    "fromCamera": "Take Photo",
+    "update": "Upload",
+    "cancel": "Cancel"
   },
 
   "createTeam": {

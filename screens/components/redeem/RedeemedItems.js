@@ -1,5 +1,3 @@
-// components/Redeem/RedeemedItems.js
-
 import React from "react";
 import { View, Text, FlatList, Image, StyleSheet } from "react-native";
 
@@ -11,23 +9,30 @@ const RedeemedItems = ({ redeemedItems }) => (
         <Text style={styles.noItemsText}>No items redeemed yet.</Text>
       </View>
     ) : (
-      <FlatList
-        data={redeemedItems}
-        keyExtractor={(item) => item?._id || Math.random().toString()}
-        renderItem={({ item }) =>
-          item ? (
-            <View style={styles.itemContainer}>
-              <Image source={{ uri: item.image }} style={styles.itemImage} />
-              <View style={styles.itemContent}>
-                <Text style={styles.itemName}>{item.name}</Text>
-                <Text style={styles.itemName}>
-                  Redeemed for: {item.cost} points
-                </Text>
+      <>
+        <FlatList
+          data={redeemedItems}
+          keyExtractor={(item) => item?._id || Math.random().toString()}
+          renderItem={({ item }) =>
+            item ? (
+              <View style={styles.itemContainer}>
+                <Image source={{ uri: item.image }} style={styles.itemImage} />
+                <View style={styles.itemContent}>
+                  <Text style={styles.itemName}>{item.name}</Text>
+                  <Text style={styles.itemDescription}>
+                    Redeemed for: {item.cost} points
+                  </Text>
+                </View>
               </View>
-            </View>
-          ) : null
-        }
-      />
+            ) : null
+          }
+        />
+        <View style={styles.processingContainer}>
+          <Text style={styles.processingText}>
+            Your redeemed items are being processed and will be sent to you as soon as possible. You will receive a notification once they are on their way.
+          </Text>
+        </View>
+      </>
     )}
   </View>
 );
@@ -40,11 +45,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#0F1F26",
   },
   subheader: {
-    fontSize: 24,
+    fontSize: 22,
     fontFamily: "Nunito-ExtraBold",
-    marginTop: 25,
-    marginBottom: 15,
-    color: "#fff",
+    marginBottom: 20,
+    color: "#FFFFFF",
   },
   emptyContainer: {
     padding: 20,
@@ -54,32 +58,51 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   noItemsText: {
-    color: "white",
     fontSize: 16,
+    fontFamily: "Nunito-Regular",
     textAlign: "center",
     color: "white",
   },
   itemContainer: {
+    flexDirection: "row",
+    alignItems: "flex-start",
     padding: 20,
     marginBottom: 15,
     borderRadius: 18,
     backgroundColor: "#213D49",
-    shadowColor: "white",
-    flexDirection: "row",
-    alignItems: "flex-start",
   },
-  itemContent: { flex: 1, marginLeft: 15 },
+  itemContent: {
+    flex: 1,
+    marginLeft: 15,
+  },
   itemName: {
     fontSize: 18,
     fontFamily: "Nunito-ExtraBold",
-    marginBottom: 10,
+    marginBottom: 5,
     color: "white",
   },
+  itemDescription: {
+    fontSize: 16,
+    fontFamily: "Nunito-Regular",
+    color: "#FFFFFF",
+  },
   itemImage: {
-    width: 120,
-    height: 120,
+    width: 100,
+    height: 100,
     marginBottom: 10,
     borderRadius: 10,
+  },
+  processingContainer: {
+    padding: 20,
+    backgroundColor: "#213D49",
+    borderRadius: 10,
+    marginTop: 15,
+  },
+  processingText: {
+    fontSize: 16,
+    fontFamily: "Nunito-Regular",
+    textAlign: "center",
+    color: "#FFFFFF",
   },
 });
 

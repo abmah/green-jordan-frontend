@@ -1,5 +1,3 @@
-// components/Redeem/AllRedeemables.js
-
 import React from "react";
 import { View, Text, FlatList, Image, StyleSheet } from "react-native";
 
@@ -20,7 +18,7 @@ const AllRedeemables = ({ allRedeemables }) => (
               <Image source={{ uri: item.image }} style={styles.itemImage} />
               <View style={styles.itemContent}>
                 <Text style={styles.itemName}>{item.name}</Text>
-                <Text style={styles.itemName}>
+                <Text style={styles.itemDescription}>
                   Points Required: {item.cost}
                 </Text>
               </View>
@@ -40,22 +38,23 @@ const styles = StyleSheet.create({
     backgroundColor: "#0F1F26",
   },
   subheader: {
-    fontSize: 24,
-    marginTop: 25,
-    marginBottom: 15,
-    color: "#fff",
+    fontSize: 22,
+    fontFamily: "Nunito-ExtraBold",
+    marginBottom: 20,
+    color: "#FFFFFF",
   },
   emptyContainer: {
     padding: 20,
     marginBottom: 15,
     borderRadius: 10,
     alignItems: "center",
+    backgroundColor: "#213D49",
   },
   noItemsText: {
     fontSize: 16,
-    fontFamily: "Nunito-Medium",
+    fontFamily: "Nunito-Regular",
     textAlign: "center",
-    color: "white",
+    color: "#FFFFFF",
   },
   itemContainer: {
     flexDirection: "row",
@@ -65,19 +64,26 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     backgroundColor: "#213D49",
   },
-  itemContent: { marginLeft: 15, flex: 1 },
+  itemContent: {
+    flex: 1,
+    marginLeft: 15,
+  },
   itemName: {
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: "Nunito-ExtraBold",
-    marginBottom: 10,
-    color: "white",
+    marginBottom: 5,
+    color: "#FFFFFF",
+  },
+  itemDescription: {
+    fontSize: 16,
+    fontFamily: "Nunito-Regular",
+    color: "#FFFFFF",
   },
   itemImage: {
-    width: 120,
-    height: 120,
+    width: 100,
+    height: 100,
     marginBottom: 10,
     borderRadius: 10,
-    backgroundColor: "#213D49",
   },
 });
 

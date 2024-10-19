@@ -98,6 +98,7 @@ const ChallengeItem = ({ challenge, userId, fetchChallenges }) => {
         handleCameraPress={handleCameraPress}
         handleLibraryPress={handleLibraryPress}
         challengeTitle={challenge.title}
+        showDescription={true}
       />
     </View>
   );

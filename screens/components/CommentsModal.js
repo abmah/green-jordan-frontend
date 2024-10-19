@@ -107,22 +107,28 @@ const CommentsModal = ({
             }
           />
 
-          <View style={styles.commentInputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder={t("comments_modal.write_comment")} // Localized placeholder
-              placeholderTextColor="#000000"
-              value={newComment}
-              onChangeText={setNewComment}
-            />
+          {userId ? (
+            <View style={styles.commentInputContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder={t("comments_modal.write_comment")} // Localized placeholder
+                placeholderTextColor="#000000"
+                value={newComment}
+                onChangeText={setNewComment}
+              />
 
-            <Pressable
-              style={styles.submitButton}
-              onPress={handleCommentSubmit}
-            >
-              <Ionicons name="send" size={24} color="white" />
-            </Pressable>
-          </View>
+              <Pressable
+                style={styles.submitButton}
+                onPress={handleCommentSubmit}
+              >
+                <Ionicons name="send" size={24} color="white" />
+              </Pressable>
+            </View>
+          ) : (
+            <Text style={styles.loginPrompt}>
+              {t("comments_modal.login_prompt")} {/* Localized "Please login first" */}
+            </Text>
+          )}
 
           {error && <Text style={styles.errorText}>{error}</Text>}
         </View>
@@ -135,7 +141,6 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: "flex-end",
-
   },
   modalContent: {
     backgroundColor: "#0F1F26",
@@ -144,8 +149,6 @@ const styles = StyleSheet.create({
     padding: 20,
     minHeight: "80%",
     maxHeight: "80%",
-
-
   },
   modalHeader: {
     flexDirection: "row",
@@ -230,6 +233,13 @@ const styles = StyleSheet.create({
     color: "red",
     fontFamily: "Nunito-Medium",
     marginTop: 5,
+  },
+  loginPrompt: {
+    color: "#fff",
+    textAlign: "center",
+    fontSize: 16,
+    marginTop: 10,
+    fontFamily: "Nunito-SemiBold",
   },
 });
 

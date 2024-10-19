@@ -45,7 +45,8 @@
     "no_comments": "لا توجد تعليقات بعد. كن أول من يعلق!",
     "write_comment": "اكتب تعليقاً...",
     "submit": "إرسال",
-    "error": "فشل في نشر التعليق."
+    "error": "فشل في نشر التعليق.",
+    "login_prompt": "يرجى تسجيل الدخول أولاً"
   },
 
   "leaderboard_screen": {
@@ -64,7 +65,8 @@
     "current_streak": "السلسلة الحالية: {{streak}}",
     "total_points": "إجمالي النقاط: {{points}}",
     "last_challenge_completed": "آخر تحدٍ مكتمل: {{date}}",
-    "challenges_assigned_today": "التحديات المعينة اليوم: {{count}}"
+    "challenges_assigned_today": "التحديات المعينة اليوم: {{count}}",
+    "never": "لم تعمل اي تحدي بعد"
   },
 
   "challengeItem": {
@@ -95,7 +97,12 @@
     "logoutConfirmation": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
     "loggedOutSuccessfully": "تم تسجيل الخروج بنجاح",
     "errorFetchingProfile": "خطأ في جلب ملف التعريف الخاص بك",
-    "profileEdit": "تعديل حسابي"
+    "profileEdit": "تعديل حسابي",
+    "selectImage": "اختر صورة",
+    "fromLibrary": "اختر من المكتبة",
+    "fromCamera": "التقاط صورة",
+    "update": "تحميل",
+    "cancel": "إلغاء"
   },
 
   "createTeam": {
