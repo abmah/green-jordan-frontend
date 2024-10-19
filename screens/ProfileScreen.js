@@ -24,6 +24,8 @@ import {
 } from "./components/ImagePickerHandler";
 import { Ionicons } from "@expo/vector-icons";
 import Loader from "./components/Loader";
+import { FontAwesome } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 
 // Render stats component
 const renderStats = ({ followers, followings, points, t }) => (
@@ -72,11 +74,12 @@ const CustomImagePickerModal = ({
           )}
           <View style={styles.imageOptionButtonContainer}>
             <TouchableOpacity onPress={handleCameraPress} style={styles.modalButton}>
-              <Text style={styles.buttonText}>{t("profile.takePhoto")}</Text>
+              <FontAwesome name="camera" size={24} color="#fff" />
             </TouchableOpacity>
             <TouchableOpacity onPress={handleLibraryPress} style={styles.modalButton}>
-              <Text style={styles.buttonText}>{t("profile.chooseFromLibrary")}</Text>
+              <MaterialIcons name="photo-library" size={24} color="#fff" />
             </TouchableOpacity>
+
           </View>
 
           <TouchableOpacity
@@ -329,7 +332,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#1B2B38",
     borderRadius: 10,
     padding: 20,
-    width: "90%",
+    width: "80%",
   },
   modalHeader: {
     alignItems: "flex-end",
