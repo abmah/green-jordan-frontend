@@ -27,7 +27,7 @@
     "username_placeholder": "Username",
     "email_placeholder": "Email",
     "password_placeholder": "Password",
-    "signup_button": "Sign Up Now",
+    "signup_button": "Sign Up",
     "login_prompt": "Already have an account?",
     "login_button": "Login",
     "signup_error": "*Signup failed. Please try again."
@@ -196,6 +196,8 @@
 
   "userProfile": {
     "points": "Points",
+    "follow": "Follow",
+    "unfollow": "Unfollow",
     "followers": "Followers",
     "following": "Following",
     "error_fetch": "Could not load user data."

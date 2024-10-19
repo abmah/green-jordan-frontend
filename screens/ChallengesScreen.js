@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList, Platform, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Platform,
+  TouchableOpacity,
+} from "react-native";
 import useUserStore from "../stores/useUserStore";
 import ChallengeItem from "./components/ChallengeItem";
 import { getDailyChallenges } from "../api";
 import Loader from "./components/Loader";
 import { getSelf } from "../api/self";
 import { useTranslation } from "react-i18next"; // Import useTranslation
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 const ChallengesScreen = ({ navigation }) => {
   const { t } = useTranslation(); // Use the translation function
   const [dailyChallenges, setDailyChallenges] = useState([]);
@@ -99,17 +106,19 @@ const ChallengesScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View>
-        <TouchableOpacity onPress={() => navigation.navigate("RedeemScreen")}
-          // change size directly 
+        <TouchableOpacity
+          onPress={() => navigation.navigate("RedeemScreen")}
           style={{
             position: "absolute",
-            top: 0,
-            right: 0,
+            top: -14,
+            right: -10,
             padding: 20,
             zIndex: 1,
+            alignItems: "center",
           }}
         >
           <MaterialIcons name="redeem" size={34} color="#FFD700" />
+          <Text style={styles.redeemText}>Redeem</Text>
         </TouchableOpacity>
       </View>
       <FlatList
@@ -143,6 +152,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: "#202F36",
   },
+
+  redeemText: {
+    color: "#FFD700",
+    fontSize: 16,
+    fontFamily: "Nunito-ExtraBold",
+  },
+
   streakText: {
     fontSize: 18,
     fontFamily: "Nunito-ExtraBold",

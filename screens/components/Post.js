@@ -121,10 +121,6 @@ const Post = ({ post }) => {
   );
 };
 
-
-
-
-
 const styles = StyleSheet.create({
   container: {
     marginBottom: 20,
@@ -152,7 +148,7 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito-ExtraBold",
   },
   reportText: {
-    color: "#EE5555",
+    color: "#fff",
     fontFamily: "Nunito-Bold",
     fontSize: 16,
   },
