@@ -271,6 +271,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#0F1F26",
+    paddingVertical: 0,
   },
   profileInfo: {
     alignItems: "center",
@@ -313,9 +314,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "Nunito-SemiBold",
     color: "white",
-  },
-  postsContainer: {
-    marginBottom: 20,
   },
   noPostsMessage: {
     textAlign: "center",
