@@ -7,7 +7,6 @@ const apiClient = axios.create({
   timeout: 10000,
 });
 
-
 export const getUser = async (userId) => {
   try {
     const response = await apiClient.get(`users/${userId}`);
@@ -18,6 +17,25 @@ export const getUser = async (userId) => {
   }
 };
 
+export const followUser = async (targetId, userId) => {
+  try {
+    const response = await apiClient.put(`users/follow/${targetId}`, { userId });
+    return response.data;
+  } catch (error) {
+    console.error('API call error:', error);
+    throw error;
+  }
+};
+
+export const unfollowUser = async (targetId, userId) => {
+  try {
+    const response = await apiClient.put(`users/unfollow/${targetId}`, { userId });
+    return response.data;
+  } catch (error) {
+    console.error('API call error:', error);
+    throw error;
+  }
+};
 
 export const updateProfilePicture = async (image, userId) => {
   const formData = new FormData();
@@ -40,8 +58,6 @@ export const updateProfilePicture = async (image, userId) => {
     throw error;
   }
 };
-
-
 
 export const getFullUser = async (userId) => {
   try {

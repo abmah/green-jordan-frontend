@@ -6,11 +6,11 @@ export { login } from './login';
 export { Signup } from './signup';
 
 // User
-export { getUser, getFullUser } from './user';
+export { getUser, getFullUser, followUser, unfollowUser } from './user';
 export { getSelf } from './self';
 
 // Feed
-export { getFeed } from './feed';
+export { getFeed, getPersonalFeed } from './feed';
 
 // Post
 export { likeOrUnlikePost, createPost } from './post';
@@ -34,7 +34,6 @@ export {
   removeMember,
   getTeamPosts
 } from './teams';
-
 
 // Redeemables
 export { getAllAvailableRedeemables, getAllRedeemables, redeemItem, getBasket } from './redeem';
