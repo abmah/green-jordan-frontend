@@ -4,7 +4,6 @@ import { likeOrUnlikePost } from "../../api";
 import useUserStore from "../../stores/useUserStore";
 import CommentsModal from "./CommentsModal";
 import UserProfileModal from "./UserProfileModal";
-import ReportModal from "./ReportModal"; // Import ReportModal
 import formatDate from "../../utils/formatDate";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next"; // Import useTranslation
@@ -16,7 +15,6 @@ const Post = ({ post }) => {
   const [likesCount, setLikesCount] = useState(post.likes.length);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
-  const [isReportModalVisible, setIsReportModalVisible] = useState(false); // State for report modal
   const [selectedUserId, setSelectedUserId] = useState(null);
 
   useEffect(() => {
@@ -55,11 +53,6 @@ const Post = ({ post }) => {
     }
   };
 
-  const handleReport = (reason) => {
-    Alert.alert("Report Submitted", `You reported for: ${reason}`);
-    // Here you would typically handle the report logic (e.g., send it to the backend)
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -72,7 +65,7 @@ const Post = ({ post }) => {
             <Text style={styles.username}>{username}</Text>
           </Pressable>
         </View>
-        <Pressable onPress={() => setIsReportModalVisible(true)}>
+        <Pressable>
           <Text style={styles.reportText}>{t("post.report")}</Text>
         </Pressable>
       </View>
@@ -123,12 +116,6 @@ const Post = ({ post }) => {
         userId={selectedUserId}
         visible={isProfileModalVisible}
         onClose={() => setIsProfileModalVisible(false)}
-      />
-
-      <ReportModal
-        visible={isReportModalVisible}
-        onClose={() => setIsReportModalVisible(false)}
-        onReport={handleReport} // Pass the report handler
       />
     </View>
   );
