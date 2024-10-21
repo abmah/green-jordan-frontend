@@ -88,13 +88,23 @@ const ChallengesScreen = ({ navigation }) => {
               count: userData.dailyChallengesAssigned.length,
             })}
           </Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("RedeemScreen")}
-            style={styles.redeemButton}
-          >
-            <MaterialIcons name="redeem" size={24} color="#FF9804" />
-            <Text style={styles.redeemText}>Redeem</Text>
-          </TouchableOpacity>
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("RedeemScreen")}
+              style={styles.redeemButton}
+            >
+              <MaterialIcons name="redeem" size={24} color="#FF9804" />
+              <Text style={styles.redeemText}>Redeem</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => navigation.navigate("EventsScreen")}
+              style={styles.eventsButton}
+            >
+              <MaterialIcons name="event" size={24} color="#FF9804" />
+              <Text style={styles.redeemText}>Events</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       )}
     </>
@@ -113,8 +123,6 @@ const ChallengesScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-
-
       <FlatList
         showsVerticalScrollIndicator={false}
         data={dailyChallenges}
@@ -137,16 +145,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#001c2c",
-
   },
   userInfoContainer: {
-    paddingTop: Platform.OS === "android" ? 50 : 0,
+    paddingTop: Platform.OS === "android" ? 60 : 0,
     marginBottom: 20,
     padding: 20,
     paddingBottom: 0,
     backgroundColor: "#1E2D3A",
     borderBottomStartRadius: 20,
     borderBottomEndRadius: 20,
+  },
+  buttonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   redeemButton: {
     flexDirection: "row",
@@ -156,7 +167,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#131F24",
     borderRadius: 8,
     marginVertical: 20,
-    marginHorizontal: 20,
+    marginHorizontal: 10,
+  },
+  eventsButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+    backgroundColor: "#131F24",
+    borderRadius: 8,
+    marginVertical: 20,
+    marginHorizontal: 10,
   },
   redeemText: {
     color: "#FF9804",
@@ -165,6 +186,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     marginLeft: 8, // Spacing between icon and text
   },
+
   streakText: {
     fontSize: 28, // Increased font size for emphasis
     fontFamily: "Nunito-Black",

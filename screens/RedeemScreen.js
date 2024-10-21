@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Alert, StyleSheet } from "react-native";
+import { View, Text, Alert, StyleSheet, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import {
@@ -14,10 +14,12 @@ import AvailableRedeemables from "./components/redeem/AvailableRedeemables";
 import AllRedeemables from "./components/redeem/AllRedeemables";
 import RedeemedItems from "./components/redeem/RedeemedItems";
 import Loader from "./components/Loader"; // Import your custom Loader component
+import MaterialIcons from "@expo/vector-icons/MaterialIcons"; // Import Material Icons
 
 const Tab = createBottomTabNavigator();
 
-const RedeemScreen = () => {
+const RedeemScreen = ({ navigation }) => {
+  // Accept navigation prop
   const { userId } = useUserStore.getState();
   const [userPoints, setUserPoints] = useState(0);
   const [redeemables, setRedeemables] = useState([]); // Should hold redeemable items
@@ -87,40 +89,69 @@ const RedeemScreen = () => {
   };
 
   if (loading) {
-    return (
-      <Loader />
-    );
+    return <Loader />;
   }
 
-
   return (
-    <Tab.Navigator tabBar={(props) => <CustomTabBar {...props} />}>
-      <Tab.Screen
-        name="Available"
-        options={{ tabBarLabel: "Available", headerShown: false }}
-      >
-        {() => (
-          <AvailableRedeemables
-            redeemables={redeemables}
-            userPoints={userPoints}
-            onRedeem={handleRedeem}
-          />
-        )}
-      </Tab.Screen>
-      <Tab.Screen
-        name="All"
-        options={{ tabBarLabel: "Redeemables", headerShown: false }}
-      >
-        {() => <AllRedeemables allRedeemables={allRedeemables} />}
-      </Tab.Screen>
-      <Tab.Screen
-        name="Redeemed"
-        options={{ tabBarLabel: "Redeemed", headerShown: false }}
-      >
-        {() => <RedeemedItems redeemedItems={redeemedItems} />}
-      </Tab.Screen>
-    </Tab.Navigator>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}
+        >
+          <MaterialIcons name="arrow-back" size={24} color="#FFF" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Redeem Items</Text>
+      </View>
+      <Tab.Navigator tabBar={(props) => <CustomTabBar {...props} />}>
+        <Tab.Screen
+          name="Available"
+          options={{ tabBarLabel: "Available", headerShown: false }}
+        >
+          {() => (
+            <AvailableRedeemables
+              redeemables={redeemables}
+              userPoints={userPoints}
+              onRedeem={handleRedeem}
+            />
+          )}
+        </Tab.Screen>
+        <Tab.Screen
+          name="All"
+          options={{ tabBarLabel: "Redeemables", headerShown: false }}
+        >
+          {() => <AllRedeemables allRedeemables={allRedeemables} />}
+        </Tab.Screen>
+        <Tab.Screen
+          name="Redeemed"
+          options={{ tabBarLabel: "Redeemed", headerShown: false }}
+        >
+          {() => <RedeemedItems redeemedItems={redeemedItems} />}
+        </Tab.Screen>
+      </Tab.Navigator>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#001c2c",
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 20,
+    paddingTop: 40,
+  },
+  backButton: {
+    marginRight: 10,
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontFamily: "Nunito-ExtraBold",
+    color: "#FFF",
+  },
+});
 
 export default RedeemScreen;
