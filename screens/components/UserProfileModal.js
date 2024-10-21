@@ -32,7 +32,7 @@ const UserProfileView = ({ selectedUserId, visible, onClose }) => {
         try {
           const response = await getFullUser(selectedUserId);
           setUserData(response.data);
-          setFollowing(response.data.followings.includes(userId)); // Check if the current user is in the followings
+          setFollowing(response.data.followers.includes(userId));
         } catch (error) {
           console.error("Failed to fetch user data", error);
           Alert.alert("Error", t("userProfile.error_fetch"));
@@ -46,7 +46,7 @@ const UserProfileView = ({ selectedUserId, visible, onClose }) => {
   }, [selectedUserId, visible, userId, t]);
 
   const handleFollowUnfollow = useCallback(async () => {
-    if (!userData) return; // Exit if userData is not loaded
+    if (!userData) return;
 
     setFollowLoading(true);
     try {
