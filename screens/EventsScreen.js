@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useTranslation } from "react-i18next";
 const eventsData = [
   {
     id: "1",
@@ -41,25 +42,31 @@ const eventsData = [
     points: 20,
   },
 ];
+
 const EventsScreen = ({ navigation }) => {
+  const { t } = useTranslation();
   const [attendingEvents, setAttendingEvents] = useState({});
   const [buttonAnimations, setButtonAnimations] = useState({});
   const handleAttend = (eventId) => {
-    Alert.alert("Confirm Attendance", "Are you willing to participate?", [
-      {
-        text: "Cancel",
-        style: "cancel",
-      },
-      {
-        text: "Yes",
-        onPress: () => {
-          setAttendingEvents((prevState) => ({
-            ...prevState,
-            [eventId]: true,
-          }));
+    Alert.alert(
+      t("eventScreen.confirmAttendance"),
+      t("eventScreen.areYouWilling"),
+      [
+        {
+          text: t("eventScreen.cancel"),
+          style: "cancel",
         },
-      },
-    ]);
+        {
+          text: t("eventScreen.yes"),
+          onPress: () => {
+            setAttendingEvents((prevState) => ({
+              ...prevState,
+              [eventId]: true,
+            }));
+          },
+        },
+      ]
+    );
   };
   const handlePressIn = (eventId) => {
     if (!buttonAnimations[eventId]) {
@@ -114,7 +121,9 @@ const EventsScreen = ({ navigation }) => {
               disabled={attendingEvents[item.id]}
             >
               <Text style={styles.attendText}>
-                {attendingEvents[item.id] ? "ATTENDING" : "Attend"}
+                {attendingEvents[item.id]
+                  ? t("eventScreen.attending")
+                  : t("eventScreen.attend")}
               </Text>
             </Pressable>
           </Animated.View>
@@ -131,7 +140,7 @@ const EventsScreen = ({ navigation }) => {
         >
           <MaterialIcons name="arrow-back" size={24} color="#FFF" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Events</Text>
+        <Text style={styles.headerTitle}>{t("eventScreen.header")}</Text>
       </View>
       <FlatList
         data={eventsData}

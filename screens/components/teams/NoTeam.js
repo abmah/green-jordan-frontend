@@ -7,12 +7,12 @@ const NoTeam = ({ setModalVisible }) => {
 
   return (
     <View style={styles.noTeamContainer}>
-      {/* Top Section: Informational Text */}
       <View style={styles.topSection}>
         <Text style={styles.noTeamText}>{t("noTeam.info")}</Text>
+        <Text>{""}</Text>
+        <Text style={styles.noTeamText}>{t("noTeam.info2")}</Text>
       </View>
 
-      {/* Bottom Section: Create Team Button */}
       <View style={styles.bottomSection}>
         <TouchableOpacity
           onPress={() => setModalVisible(true)}
@@ -29,12 +29,12 @@ const NoTeam = ({ setModalVisible }) => {
 
 const styles = StyleSheet.create({
   noTeamContainer: {
-    backgroundColor: "#213D49", // Dark background for the container
+    backgroundColor: "#213D49",
     borderRadius: 8,
     borderColor: "white",
     padding: 16,
-    justifyContent: "space-between", // Space between the top and bottom sections
-    marginBottom: 10, // Add spacing between multiple components
+    justifyContent: "space-between",
+    marginBottom: 10,
     minHeight: 190,
   },
   topSection: {
