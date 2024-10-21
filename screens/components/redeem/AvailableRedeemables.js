@@ -20,6 +20,7 @@ const AvailableRedeemables = ({ redeemables, userPoints = 0, onRedeem }) => {
 
     try {
       await onRedeem(item); // Call the redeem function
+
     } catch (error) {
       console.error("Error redeeming item:", error);
     } finally {
@@ -143,11 +144,11 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   subheader: {
-    fontSize: 26,
+    fontSize: 22,
     fontFamily: "Nunito-ExtraBold",
     marginBottom: 15,
     color: "#fff",
-    textAlign: "center",
+    // textAlign: "center",
   },
   emptyContainer: {
     padding: 20,

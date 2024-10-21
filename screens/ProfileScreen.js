@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import useUserStore from "../stores/useUserStore";
-import * as SecureStore from "expo-secure-store";
+
 import { getSelf } from "../api/self";
 import { getUserPosts } from "../api/post";
 import Post from "./components/Post";
@@ -26,7 +26,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Loader from "./components/Loader";
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
-
+import { useQuery } from '@tanstack/react-query';
 // Render stats component
 const renderStats = ({ followers, followings, points, t }) => (
   <>
@@ -112,20 +112,20 @@ const ProfileScreen = ({ navigation }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
 
+
+  const fetchUserData = async () => {
+    try {
+      const data = await getSelf();
+      setUserData(data.user);
+      setLoading(false);
+    } catch (err) {
+      setError(err);
+      setLoading(false);
+    }
+  };
+
   // Fetch user data
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const data = await getSelf();
-        setUserData(data.user);
-        setLoading(false);
-      } catch (err) {
-        setError(err);
-        setLoading(false);
-      }
-    };
-    fetchUserData();
-  }, []);
+
 
   // Fetch user posts
   const fetchUserPosts = useCallback(async () => {
@@ -146,7 +146,23 @@ const ProfileScreen = ({ navigation }) => {
 
   useEffect(() => {
     fetchUserPosts();
-  }, [fetchUserPosts]);
+    fetchUserData();
+  }, []);
+
+  const fetchAll = async () => {
+    await Promise.all([fetchUserPosts(), fetchUserData()]);
+    return true; // this is spagetti code i know but if i dont have this it will throw an error and i dont want to have to deal with remaking our functions
+  };
+
+
+
+  useQuery({
+    queryKey: ['profile'],
+    queryFn: fetchAll,
+    staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
+    refetchOnWindowFocus: false, // Only refetch when manually triggered
+  });
+
 
   // Handle image selection from the library
   const handleLibraryPress = async () => {

@@ -16,6 +16,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useTranslation } from "react-i18next";
 import useUserIdStore from "../../stores/useUserStore";
 import Loader from "./Loader";
+import Post from "./Post";
 
 const UserProfileView = ({ selectedUserId, visible, onClose }) => {
   const { t } = useTranslation();
@@ -79,7 +80,7 @@ const UserProfileView = ({ selectedUserId, visible, onClose }) => {
     }
   }, [following, selectedUserId, userId, userData, t]);
 
-  const renderPost = ({ item }) => <View></View>;
+  const renderPost = ({ item }) => <Post post={item} userData={userData} />;
 
   return (
     <Modal visible={visible} animationType="slide">
@@ -94,9 +95,9 @@ const UserProfileView = ({ selectedUserId, visible, onClose }) => {
                   <Icon name="arrow-back" size={30} color="#fff" />
                 </TouchableOpacity>
 
-                <Pressable>
+                {/* <Pressable>
                   <Text style={styles.profileReport}>{t("post.report")}</Text>
-                </Pressable>
+                </Pressable> */}
               </View>
 
               <View style={styles.profileHeader}>
@@ -128,7 +129,7 @@ const UserProfileView = ({ selectedUserId, visible, onClose }) => {
 
               <View style={styles.statsContainer}>
                 <Text style={styles.stats}>
-                  {t("userProfile.points")}: {userData?.points || 0}
+                  {t("userProfile.points")}: {userData?.allTimePoints || 0}
                 </Text>
                 <Text style={styles.stats}>
                   {t("userProfile.followers")}: {userData?.followers.length || 0}

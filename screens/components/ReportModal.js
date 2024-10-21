@@ -7,19 +7,17 @@ import {
   Pressable,
   TouchableOpacity,
 } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons"; // Ensure you have this installed
+import { Ionicons } from "@expo/vector-icons"; // For the close button icon
+
 const ReportModal = ({ visible, onClose, onReport }) => {
-  const reasons = [
-    "Spam or misleading",
-    "Hateful content",
-    "Graphics content",
-    "Other",
-  ];
+  const reasons = ["Spam", "Hateful", "Graphic Content", "Other"];
+
   const [selectedReason, setSelectedReason] = useState(null);
+
   const handleReasonSelect = (reason) => {
     setSelectedReason(reason);
-
   };
+
   const handleConfirmReport = () => {
     if (selectedReason) {
       onReport(selectedReason);
@@ -27,81 +25,95 @@ const ReportModal = ({ visible, onClose, onReport }) => {
       onClose(); // Close the modal
     }
   };
+
   return (
     <Modal transparent={true} visible={visible} animationType="slide">
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <View style={styles.headerContainer}>
-            <Text style={styles.header}>Report User</Text>
-            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-              <MaterialIcons name="close" size={24} color="#fff" />
+          {/* Top Section: Header */}
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>Report</Text>
+            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+              <Ionicons name="close" size={24} color="#F5F5F5" />
             </TouchableOpacity>
           </View>
+
+          {/* Bottom Section: Reasons */}
           <View style={styles.reasonsContainer}>
             {reasons.map((reason, index) => (
-              <View key={index} style={styles.reasonContainer}>
-                <TouchableOpacity
-                  style={styles.reasonButton}
-                  onPress={() => handleReasonSelect(reason)}
-                >
+              <TouchableOpacity
+                key={index}
+                style={styles.reasonContainer}
+                onPress={() => handleReasonSelect(reason)}
+              >
+                <View style={styles.radioButtonContainer}>
+                  <View
+                    style={[
+                      styles.radioButton,
+                      selectedReason === reason && styles.radioButtonSelected,
+                    ]}
+                  />
                   <Text style={styles.reasonText}>{reason}</Text>
-                </TouchableOpacity>
-                {index < reasons.length - 1 && (
-                  <View style={styles.separator} />
-                )}
-              </View>
+                </View>
+              </TouchableOpacity>
             ))}
           </View>
-          {selectedReason && (
-            <View style={styles.confirmationContainer}>
-              <Text style={styles.confirmationText}>
-                You are reporting for:{" "}
-                <Text style={styles.reasonBold}>{selectedReason}</Text>
-              </Text>
-              <Pressable
-                style={styles.confirmButton}
-                onPress={handleConfirmReport}
-              >
-                <Text style={styles.confirmText}>Confirm Report</Text>
-              </Pressable>
-            </View>
-          )}
+
+          {/* Confirmation Section */}
+          <View style={styles.confirmationContainer}>
+            <Pressable
+              style={[
+                styles.confirmButton,
+                !selectedReason && styles.disabledButton,
+              ]}
+              onPress={handleConfirmReport}
+              disabled={!selectedReason}
+            >
+              <Text style={styles.confirmText}>Submit</Text>
+            </Pressable>
+          </View>
         </View>
       </View>
     </Modal>
   );
 };
+
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    justifyContent: "flex-end",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
   },
   modalContent: {
-    width: "100%",
-    backgroundColor: "#37464F",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    paddingVertical: 20,
+    width: "80%",
+    backgroundColor: "#1B2B38",
+    borderRadius: 12,
+    padding: 20,
     alignItems: "center",
-    minHeight: "80%",
-    maxHeight: "80%",
+    elevation: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
   },
-  headerContainer: {
+  modalHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
+    width: "100%",
     alignItems: "center",
-    marginBottom: 22,
   },
-  header: {
-    fontFamily: "Nunito-ExtraBold",
+  modalTitle: {
     fontSize: 24,
-    color: "#fff",
-    flex: 1,
+    fontFamily: "Nunito-Bold",
+    color: "#8AC149",
+    marginBottom: 10,
+    marginTop: 30,
+    width: "100%",
     textAlign: "center",
   },
   closeButton: {
-    paddingRight: 10,
+    position: "absolute",
+    right: 0,
+    top: 0,
   },
   reasonsContainer: {
     width: "100%",
@@ -109,45 +121,42 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   reasonContainer: {
-    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 10,
   },
-  reasonButton: {
-    padding: 15,
-    width: "100%",
+  radioButtonContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  radioButton: {
+    height: 20,
+    width: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "#8AC149",
+    marginRight: 10,
+  },
+  radioButtonSelected: {
+    backgroundColor: "#8AC149",
   },
   reasonText: {
     fontFamily: "Nunito-ExtraBold",
     fontSize: 16,
     color: "#fff",
   },
-  separator: {
-    height: 1,
-    backgroundColor: "#ddd",
-    width: "100%",
-  },
   confirmationContainer: {
-    marginTop: 20,
-    padding: 15,
-    borderRadius: 10,
-    backgroundColor: "#2E3B42",
-    alignItems: "center",
     width: "80%",
   },
-  confirmationText: {
-    color: "#fff",
-    fontSize: 16,
-    textAlign: "center",
-  },
-  reasonBold: {
-    fontWeight: "bold",
-  },
   confirmButton: {
-    marginTop: 10,
     padding: 10,
-    backgroundColor: "#8AC149",
+    backgroundColor: "#ff5536",
     borderRadius: 15,
     width: "100%",
     alignItems: "center",
+  },
+  disabledButton: {
+    backgroundColor: "#A5A5A5",
   },
   confirmText: {
     color: "#fff",
@@ -155,4 +164,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+
 export default ReportModal;

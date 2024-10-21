@@ -5,14 +5,14 @@ import { requestCameraPermissions, pickImage } from "./ImagePickerHandler";
 import Foundation from "@expo/vector-icons/Foundation";
 import ImagePickerModal from "./ImagePickerModal";
 import { useTranslation } from "react-i18next"; // Import useTranslation
-
-const ChallengeItem = ({ challenge, userId, fetchChallenges }) => {
+import { useQueryClient } from '@tanstack/react-query';
+const ChallengeItem = ({ challenge, userId, fetchChallenges, fetchUserData }) => {
   const { t } = useTranslation(); // Use the translation function
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-
+  const queryClient = useQueryClient();
   const handleCameraPress = async () => {
     if (await requestCameraPermissions()) {
       await pickImage("camera", setImage);
@@ -36,6 +36,10 @@ const ChallengeItem = ({ challenge, userId, fetchChallenges }) => {
       setImage(null);
       setModalVisible(false);
       fetchChallenges();
+      fetchUserData();
+      queryClient.refetchQueries(['feed']);
+      queryClient.refetchQueries(['profile']);
+
     } catch (error) {
       console.error("Error submitting form:", error);
     } finally {

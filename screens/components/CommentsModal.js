@@ -19,6 +19,7 @@ const CommentsModal = ({
   visible,
   onClose,
   postId,
+  userData,
   comments: initialComments,
 }) => {
   const { t } = useTranslation(); // Use the translation function
@@ -30,6 +31,7 @@ const CommentsModal = ({
   useEffect(() => {
     setComments(initialComments);
   }, [initialComments]);
+
 
   const handleCommentSubmit = async () => {
     if (newComment.trim() === "") return;
@@ -47,7 +49,11 @@ const CommentsModal = ({
         text: newComment,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        userId: { _id: userId, username: "You", profilePicture: "" },
+        userId: {
+          _id: userId,
+          username: userData?.user.username || "You", // Use the username from userData
+          profilePicture: userData?.user.profilePicture || "", // Use the profile picture from userData
+        },
       };
 
       setComments((prevComments) => [...prevComments, newCommentObject]);

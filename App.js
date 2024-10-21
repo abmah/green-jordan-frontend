@@ -1,4 +1,5 @@
 // App.js
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import useUserIdStore from "./stores/useUserStore";
 import React, { useCallback } from "react";
 import { NavigationContainer } from "@react-navigation/native";
@@ -12,6 +13,8 @@ import i18n from "./utils/i18n";
 import { I18nextProvider } from "react-i18next";
 SplashScreen.preventAutoHideAsync();
 
+
+const queryClient = new QueryClient();
 
 export default function App() {
   const { userId } = useUserIdStore();
@@ -50,17 +53,19 @@ export default function App() {
 
   return (
     <I18nextProvider i18n={i18n}>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor="#0F1F26"
-        translucent={true}
-      />
-      <NavigationContainer >
-        <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-          <BottomTabNavigator />
-        </View>
-        <Toast ref={Toast.setRef} config={toastConfig} />
-      </NavigationContainer>
+      <QueryClientProvider client={queryClient}>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="#0F1F26"
+          translucent={true}
+        />
+        <NavigationContainer >
+          <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+            <BottomTabNavigator />
+          </View>
+          <Toast ref={Toast.setRef} config={toastConfig} />
+        </NavigationContainer>
+      </QueryClientProvider>
     </I18nextProvider>
   );
 }

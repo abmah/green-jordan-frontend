@@ -13,7 +13,7 @@ export { getSelf } from './self';
 export { getFeed, getPersonalFeed } from './feed';
 
 // Post
-export { likeOrUnlikePost, createPost } from './post';
+export { likeOrUnlikePost, createPost, getTimeLinePosts } from './post';
 
 // Comments
 export { getComments, postComment } from './comments';

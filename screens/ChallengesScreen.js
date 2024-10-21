@@ -14,6 +14,7 @@ import Loader from "./components/Loader";
 import { getSelf } from "../api/self";
 import { useTranslation } from "react-i18next"; // Import useTranslation
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useQuery } from '@tanstack/react-query';
 
 const ChallengesScreen = ({ navigation }) => {
   const { t } = useTranslation(); // Use the translation function
@@ -39,9 +40,11 @@ const ChallengesScreen = ({ navigation }) => {
     try {
       const response = await getSelf();
       setUserData(response.user);
+
     } catch (error) {
       console.error("Failed to fetch user data:", error);
       setUserData(null);
+
     }
   };
 
@@ -53,6 +56,22 @@ const ChallengesScreen = ({ navigation }) => {
       setLoading(false);
     }
   }, [userId]);
+
+
+  const queryFetchUserData = () => {
+    fetchUserData();
+    return true
+  };
+
+  useQuery({
+    queryKey: ['challenge-user-data'],
+    queryFn: queryFetchUserData,
+    staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
+    refetchOnWindowFocus: false, // Only refetch when manually triggered
+  });
+
+
+
 
   if (!userId) {
     return (
@@ -117,6 +136,7 @@ const ChallengesScreen = ({ navigation }) => {
         challenge={item}
         userId={userId}
         fetchChallenges={fetchChallenges}
+        fetchUserData={fetchUserData}
       />
     </View>
   );

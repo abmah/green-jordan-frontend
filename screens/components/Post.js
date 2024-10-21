@@ -9,7 +9,7 @@ import formatDate from "../../utils/formatDate";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next"; // Import useTranslation
 
-const Post = ({ post }) => {
+const Post = ({ post, userData }) => {
   const { t } = useTranslation(); // Use the translation function
   const { userId } = useUserStore();
   const [isLiked, setIsLiked] = useState(post.likes.includes(userId));
@@ -117,6 +117,7 @@ const Post = ({ post }) => {
         visible={isModalVisible}
         onClose={() => setIsModalVisible(false)}
         postId={post._id}
+        userData={userData}
       />
 
       <UserProfileModal
@@ -161,8 +162,8 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito-ExtraBold",
   },
   reportText: {
-    color: "#fff",
-    fontFamily: "Nunito-Bold",
+    color: "#ff5536",
+    fontFamily: "Nunito-ExtraBold",
     fontSize: 16,
   },
   imageContainer: {
