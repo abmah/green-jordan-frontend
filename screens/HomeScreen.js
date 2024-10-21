@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { View, FlatList, StyleSheet, Text } from "react-native";
-import { getFeed } from "../api/feed";
-import Loader from "./components/Loader";
-import Post from "./components/Post";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, FlatList, StyleSheet, Text } from 'react-native';
+import { getFeed } from '../api/feed';
+import Loader from './components/Loader';
+import Post from './components/Post';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const HomeScreen = () => {
   const [data, setData] = useState([]);
@@ -18,7 +18,7 @@ const HomeScreen = () => {
       setData(response.data || []);
       setError(false);
     } catch (err) {
-      console.error("Error fetching feed:", err);
+      console.error('Error fetching feed:', err);
       setError(true);
     } finally {
       setLoading(false);
@@ -41,9 +41,7 @@ const HomeScreen = () => {
 
   const ErrorStateComponent = () => (
     <View style={styles.errorStateContainer}>
-      <Text style={styles.errorStateText}>
-        Error loading posts. Please try again later.
-      </Text>
+      <Text style={styles.errorStateText}>Error loading posts. Please try again later.</Text>
     </View>
   );
 
@@ -78,23 +76,23 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   errorStateContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: "#0F1F26",
   },
   errorStateText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 18,
     fontFamily: "Nunito-ExtraBold",
   },
   emptyStateContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: "#0F1F26",
   },
   emptyStateText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 18,
     fontFamily: "Nunito-ExtraBold",
   },

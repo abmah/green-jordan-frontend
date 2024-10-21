@@ -9,29 +9,21 @@ import {
   Alert,
   TouchableOpacity,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
-<<<<<<< HEAD
-import { getFullUser } from "../../api";
-=======
 import { getFullUser, followUser, unfollowUser } from "../../api"; // Import necessary API functions
->>>>>>> c63dc892062299066f3811a3a00a00ddc33b008c
 import Icon from "react-native-vector-icons/Ionicons";
 import { useTranslation } from "react-i18next";
 import useUserIdStore from "../../stores/useUserStore";
-import { followUser, unfollowUser } from "../../api";
 import Loader from "./Loader";
 
 const UserProfileView = ({ selectedUserId, visible, onClose }) => {
   const { t } = useTranslation();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
-<<<<<<< HEAD
-  const [following, setFollowing] = useState(false);
-  const { userId } = useUserIdStore();
-=======
   const [following, setFollowing] = useState(false); // Track follow status
   const [followLoading, setFollowLoading] = useState(false); // Track loading for follow/unfollow
->>>>>>> c63dc892062299066f3811a3a00a00ddc33b008c
+  const { userId } = useUserIdStore();
 
   useEffect(() => {
     if (selectedUserId && visible) {
@@ -40,11 +32,7 @@ const UserProfileView = ({ selectedUserId, visible, onClose }) => {
         try {
           const response = await getFullUser(selectedUserId);
           setUserData(response.data);
-<<<<<<< HEAD
-          setFollowing(response.data.followers.includes(userId));
-=======
           setFollowing(response.data.followings.includes(userId)); // Check if the current user is in the followings
->>>>>>> c63dc892062299066f3811a3a00a00ddc33b008c
         } catch (error) {
           console.error("Failed to fetch user data", error);
           Alert.alert("Error", t("userProfile.error_fetch"));
@@ -55,10 +43,12 @@ const UserProfileView = ({ selectedUserId, visible, onClose }) => {
 
       fetchUserData();
     }
-  }, [selectedUserId, visible]);
+  }, [selectedUserId, visible, userId, t]);
 
-<<<<<<< HEAD
-  const handleFollow = async () => {
+  const handleFollowUnfollow = useCallback(async () => {
+    if (!userData) return; // Exit if userData is not loaded
+
+    setFollowLoading(true);
     try {
       if (following) {
         // If already following, unfollow the user
@@ -68,7 +58,7 @@ const UserProfileView = ({ selectedUserId, visible, onClose }) => {
         // Update userData followers count
         setUserData((prevData) => ({
           ...prevData,
-          followers: prevData.followers.filter((follower) => follower !== userId), // Remove the user from followers
+          followers: prevData.followers.filter((follower) => follower !== userId),
         }));
       } else {
         // If not following, follow the user
@@ -78,56 +68,18 @@ const UserProfileView = ({ selectedUserId, visible, onClose }) => {
         // Update userData followers count
         setUserData((prevData) => ({
           ...prevData,
-          followers: [...prevData.followers, userId], // Add the user to followers
+          followers: [...prevData.followers, userId],
         }));
       }
     } catch (error) {
       console.error("Failed to toggle follow status", error);
       Alert.alert("Error", t("userProfile.error_toggle_follow"));
-    }
-  };
-=======
-  const handleFollowUnfollow = useCallback(async () => {
-    if (!userData) return; // Exit if userData is not loaded
->>>>>>> c63dc892062299066f3811a3a00a00ddc33b008c
-
-    setFollowLoading(true);
-    try {
-      if (following) {
-        await unfollowUser(userData._id, userId); // Pass the correct userId
-        setFollowing(false);
-      } else {
-        await followUser(userData._id, userId); // Pass the correct userId
-        setFollowing(true);
-      }
-
-      // Update followers count locally based on follow/unfollow action
-      const newFollowersCount = following
-        ? userData.followers.length - 1
-        : userData.followers.length + 1;
-      setUserData((prev) => ({
-        ...prev,
-        followers: following
-          ? prev.followers.slice(0, -1)
-          : [...prev.followers, userId],
-      }));
-    } catch (error) {
-      console.error(
-        following ? "Error unfollowing user" : "Error following user",
-        error
-      );
-      Alert.alert(
-        "Error",
-        following
-          ? t("userProfile.error_unfollow")
-          : t("userProfile.error_follow")
-      );
     } finally {
       setFollowLoading(false);
     }
-  }, [following, userData, userId]);
+  }, [following, selectedUserId, userId, userData, t]);
 
-  const renderPost = ({ item }) => <View></View>; // Render posts here
+  const renderPost = ({ item }) => <View></View>;
 
   return (
     <Modal visible={visible} animationType="slide">
@@ -163,23 +115,14 @@ const UserProfileView = ({ selectedUserId, visible, onClose }) => {
                     styles.followButton,
                     { backgroundColor: following ? "#202F36" : "#8AC149" },
                   ]}
-                  disabled={followLoading} // Disable button while loading
                 >
-<<<<<<< HEAD
-                  <Text style={styles.followButtonText}>
-                    {following ? t("userProfile.unfollow") : t("userProfile.follow")}
-                  </Text>
-=======
                   {followLoading ? (
                     <ActivityIndicator size="small" color="#fff" /> // Show loading indicator in button
                   ) : (
                     <Text style={styles.followButtonText}>
-                      {following
-                        ? t("userProfile.unfollow")
-                        : t("userProfile.follow")}
+                      {following ? t("userProfile.unfollow") : t("userProfile.follow")}
                     </Text>
                   )}
->>>>>>> c63dc892062299066f3811a3a00a00ddc33b008c
                 </TouchableOpacity>
               </View>
 
