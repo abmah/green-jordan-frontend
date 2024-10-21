@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { API_BASE_URL } from './config';
-import useUserStore from '../stores/useUserStore';
+
+
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -18,6 +19,27 @@ export const getUser = async (userId) => {
   }
 };
 
+export const followUser = async (targetId, userId) => {
+
+  try {
+    const response = await apiClient.put(`users/follow/${targetId}`, { userId });
+    return response.data;
+  } catch (error) {
+    console.error('API call error:', error);
+    throw error;
+  }
+};
+
+export const unfollowUser = async (targetId, userId) => {
+
+  try {
+    const response = await apiClient.put(`users/unfollow/${targetId}`, { userId });
+    return response.data;
+  } catch (error) {
+    console.error('API call error:', error);
+    throw error;
+  }
+};
 
 export const updateProfilePicture = async (image, userId) => {
   const formData = new FormData();

@@ -113,7 +113,7 @@ const Post = ({ post }) => {
       />
 
       <UserProfileModal
-        userId={selectedUserId}
+        selectedUserId={selectedUserId}
         visible={isProfileModalVisible}
         onClose={() => setIsProfileModalVisible(false)}
       />

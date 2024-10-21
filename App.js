@@ -1,4 +1,5 @@
 // App.js
+import useUserIdStore from "./stores/useUserStore";
 import React, { useCallback } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import BottomTabNavigator from "./navigation/BottomTabNavigator";
@@ -11,7 +12,9 @@ import i18n from "./utils/i18n";
 import { I18nextProvider } from "react-i18next";
 SplashScreen.preventAutoHideAsync();
 
+
 export default function App() {
+  const { userId } = useUserIdStore();
   // Load custom fonts
   const [fontsLoaded] = useFonts({
     "Nunito-Regular": require("./assets/fonts/Nunito-Regular.ttf"),
@@ -52,7 +55,7 @@ export default function App() {
         backgroundColor="#0F1F26"
         translucent={true}
       />
-      <NavigationContainer>
+      <NavigationContainer >
         <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
           <BottomTabNavigator />
         </View>

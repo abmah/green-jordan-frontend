@@ -136,10 +136,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#0F1F26",
   },
   points: {
-    fontSize: 24,
+    fontSize: 30,
     fontFamily: "Nunito-Bold",
     marginBottom: 25,
-    color: "#fff",
+    color: "#FF9804",
     textAlign: "left",
   },
   subheader: {

@@ -6,29 +6,32 @@ import {
   StyleSheet,
   Modal,
   FlatList,
-  ActivityIndicator,
   Alert,
   TouchableOpacity,
   Pressable,
 } from "react-native";
-import { getFullUser } from "../../api"; // Import only the fetch user API function
+import { getFullUser } from "../../api";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useTranslation } from "react-i18next";
+import useUserIdStore from "../../stores/useUserStore";
+import { followUser, unfollowUser } from "../../api";
+import Loader from "./Loader";
 
-const UserProfileView = ({ userId, visible, onClose }) => {
+const UserProfileView = ({ selectedUserId, visible, onClose }) => {
   const { t } = useTranslation();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [following, setFollowing] = useState(false); // Track follow status
+  const [following, setFollowing] = useState(false);
+  const { userId } = useUserIdStore();
 
   useEffect(() => {
-    if (userId && visible) {
+    if (selectedUserId && visible) {
       const fetchUserData = async () => {
         setLoading(true);
         try {
-          const response = await getFullUser(userId);
+          const response = await getFullUser(selectedUserId);
           setUserData(response.data);
-          setFollowing(response.data.isFollowing); // Assume API returns if the user is being followed
+          setFollowing(response.data.followers.includes(userId));
         } catch (error) {
           console.error("Failed to fetch user data", error);
           Alert.alert("Error", t("userProfile.error_fetch"));
@@ -39,11 +42,35 @@ const UserProfileView = ({ userId, visible, onClose }) => {
 
       fetchUserData();
     }
-  }, [userId, visible]);
+  }, [selectedUserId, visible]);
 
-  const handleFollow = () => {
-    // Toggle the following state without making an API request
-    setFollowing((prevFollowing) => !prevFollowing);
+  const handleFollow = async () => {
+    try {
+      if (following) {
+        // If already following, unfollow the user
+        await unfollowUser(selectedUserId, userId);
+        setFollowing(false);
+
+        // Update userData followers count
+        setUserData((prevData) => ({
+          ...prevData,
+          followers: prevData.followers.filter((follower) => follower !== userId), // Remove the user from followers
+        }));
+      } else {
+        // If not following, follow the user
+        await followUser(selectedUserId, userId);
+        setFollowing(true);
+
+        // Update userData followers count
+        setUserData((prevData) => ({
+          ...prevData,
+          followers: [...prevData.followers, userId], // Add the user to followers
+        }));
+      }
+    } catch (error) {
+      console.error("Failed to toggle follow status", error);
+      Alert.alert("Error", t("userProfile.error_toggle_follow"));
+    }
   };
 
   const renderPost = ({ item }) => <View></View>;
@@ -52,11 +79,7 @@ const UserProfileView = ({ userId, visible, onClose }) => {
     <Modal visible={visible} animationType="slide">
       <View style={styles.container}>
         {loading ? (
-          <ActivityIndicator
-            size="large"
-            color="#8AC149"
-            style={{ padding: 20 }}
-          />
+          <Loader />
         ) : (
           <>
             <View style={styles.profileContainer}>
@@ -73,9 +96,7 @@ const UserProfileView = ({ userId, visible, onClose }) => {
               <View style={styles.profileHeader}>
                 <Image
                   source={{
-                    uri:
-                      userData?.profilePicture ||
-                      "https://via.placeholder.com/150",
+                    uri: userData?.profilePicture || "https://via.placeholder.com/150",
                   }}
                   style={styles.profileImage}
                 />
@@ -86,13 +107,11 @@ const UserProfileView = ({ userId, visible, onClose }) => {
                   onPress={handleFollow}
                   style={[
                     styles.followButton,
-                    { backgroundColor: following ? "#21603F" : "#8AC149" },
+                    { backgroundColor: following ? "#202F36" : "#8AC149" },
                   ]}
                 >
                   <Text style={styles.followButtonText}>
-                    {following
-                      ? t("userProfile.unfollow")
-                      : t("userProfile.follow")}
+                    {following ? t("userProfile.unfollow") : t("userProfile.follow")}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -102,12 +121,10 @@ const UserProfileView = ({ userId, visible, onClose }) => {
                   {t("userProfile.points")}: {userData?.points || 0}
                 </Text>
                 <Text style={styles.stats}>
-                  {t("userProfile.followers")}:{" "}
-                  {userData?.followers.length || 0}
+                  {t("userProfile.followers")}: {userData?.followers.length || 0}
                 </Text>
                 <Text style={styles.stats}>
-                  {t("userProfile.following")}:{" "}
-                  {userData?.followings.length || 0}
+                  {t("userProfile.following")}: {userData?.followings.length || 0}
                 </Text>
               </View>
             </View>
@@ -132,7 +149,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    justifyContent: "space-between", // Align back and report buttons to the ends
+    justifyContent: "space-between",
     padding: 10,
   },
   backButton: {
@@ -169,7 +186,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     borderRadius: 20,
     width: "100%",
-    maxWidth: 250,
+    maxWidth: 300,
     alignItems: "center",
     justifyContent: "center",
   },

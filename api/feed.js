@@ -17,3 +17,18 @@ export const getFeed = async () => {
     throw error;
   }
 };
+
+
+// getPersonalFeed
+export const getPersonalFeed = async (userId) => {
+  try {
+    console.log('userId', userId)
+    const response = await apiClient.get('posts/get-timeline-posts', { userId });
+    return response.data;
+  } catch (error) {
+    console.error('API call error:', error);
+    throw error;
+  }
+};
+
+
