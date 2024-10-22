@@ -9,6 +9,7 @@ import {
   Modal,
 } from "react-native";
 import { useTranslation } from "react-i18next"; // Import the translation hook
+import Toast from "react-native-toast-message"; // Import Toast
 
 const AvailableRedeemables = ({ redeemables, userPoints = 0, onRedeem }) => {
   const { t, i18n } = useTranslation(); // Hook to access translation function
@@ -22,8 +23,18 @@ const AvailableRedeemables = ({ redeemables, userPoints = 0, onRedeem }) => {
 
     try {
       await onRedeem(item); // Call the redeem function
+      Toast.show({
+        type: "success",
+        text1: t("availableRedeem.successTitle"),
+        text2: t("availableRedeem.successMessage", { itemName: item.name }),
+      });
     } catch (error) {
       console.error("Error redeeming item:", error);
+      Toast.show({
+        type: "error",
+        text1: t("availableRedeem.errorTitle"),
+        text2: error.message || t("availableRedeem.errorMessage"),
+      });
     } finally {
       setLoading((prev) => ({ ...prev, [item._id]: false }));
       setModalVisible(false); // Close the modal
@@ -43,10 +54,7 @@ const AvailableRedeemables = ({ redeemables, userPoints = 0, onRedeem }) => {
   return (
     <View style={styles.tabContainer}>
       <Text
-        style={[
-          styles.points,
-          { textAlign: i18n.language === "ar" ? "right" : "left" },
-        ]}
+        style={[styles.points, { textAlign: i18n.language === "ar" ? "right" : "left" }]}
       >
         {t("availableRedeem.points")}
         {userPoints}
@@ -67,10 +75,7 @@ const AvailableRedeemables = ({ redeemables, userPoints = 0, onRedeem }) => {
             item ? (
               <View style={styles.itemContainer}>
                 <View style={styles.itemContent}>
-                  <Image
-                    source={{ uri: item.image }}
-                    style={styles.itemImage}
-                  />
+                  <Image source={{ uri: item.image }} style={styles.itemImage} />
                   <View style={styles.textContainer}>
                     <Text style={styles.itemName}>{item.name}</Text>
                     <Text style={styles.itemCost}>{item.description}</Text>
@@ -139,6 +144,7 @@ const AvailableRedeemables = ({ redeemables, userPoints = 0, onRedeem }) => {
           </View>
         </View>
       </Modal>
+
     </View>
   );
 };

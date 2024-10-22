@@ -123,7 +123,7 @@
   },
 
   "noTeam": {
-    "info": "You are not in a team. Either create one or join one. Note that if you create a team, you will not be able to join another.",
+    "info": "You are not in a team. Either create one or join one. Note that if you create a team, you will not be able to join another. Note if you join a team you wont be able to join another.",
     "createButton": "Create Team"
   },
 

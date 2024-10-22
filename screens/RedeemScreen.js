@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Alert, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import {
@@ -17,6 +17,7 @@ import Loader from "./components/Loader"; // Import your custom Loader component
 import MaterialIcons from "@expo/vector-icons/MaterialIcons"; // Import Material Icons
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next"; // Import the translation hook
+import Toast from 'react-native-toast-message'; // Import Toast
 
 const Tab = createBottomTabNavigator();
 
@@ -53,10 +54,11 @@ const RedeemScreen = ({ navigation }) => {
           setRedeemedItems(redeemedIds);
         }
       } catch (error) {
-        Alert.alert(
-          t("redeemScreen.errorTitle"),
-          t("redeemScreen.errorMessage")
-        );
+        Toast.show({
+          text1: t("redeemScreen.errorTitle"),
+          text2: t("redeemScreen.errorMessage"),
+          type: 'error',
+        });
         console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
@@ -68,20 +70,22 @@ const RedeemScreen = ({ navigation }) => {
 
   const handleRedeem = async (item) => {
     if (!item || userPoints < item.cost) {
-      Alert.alert(
-        t("redeemScreen.insufficientPointsTitle"),
-        t("redeemScreen.insufficientPointsMessage")
-      );
+      Toast.show({
+        text1: t("redeemScreen.insufficientPointsTitle"),
+        text2: t("redeemScreen.insufficientPointsMessage"),
+        type: 'error',
+      });
       return;
     }
 
     try {
       const response = await redeemItem(userId, item._id);
       if (response) {
-        Alert.alert(
-          t("redeemScreen.successTitle"),
-          t("redeemScreen.successMessage")
-        );
+        Toast.show({
+          text1: t("redeemScreen.successTitle"),
+          text2: t("redeemScreen.successMessage"),
+          type: 'success',
+        });
         setUserPoints(response.remainingPoints || 0);
         const updatedRedeemables = redeemables.filter(
           (redeemable) => redeemable._id !== item._id
@@ -90,13 +94,18 @@ const RedeemScreen = ({ navigation }) => {
         setRedeemedItems([...redeemedItems, item]);
         queryClient.refetchQueries(["profile"]);
       } else {
-        Alert.alert(t("redeemScreen.errorTitle"), t("redeemScreen.noResponse"));
+        Toast.show({
+          text1: t("redeemScreen.errorTitle"),
+          text2: t("redeemScreen.noResponse"),
+          type: 'error',
+        });
       }
     } catch (error) {
-      Alert.alert(
-        t("redeemScreen.errorTitle"),
-        t("redeemScreen.errorRedeeming")
-      );
+      Toast.show({
+        text1: t("redeemScreen.errorTitle"),
+        text2: t("redeemScreen.errorRedeeming"),
+        type: 'error',
+      });
       console.error("Error redeeming item:", error);
     }
   };
@@ -151,6 +160,7 @@ const RedeemScreen = ({ navigation }) => {
           {() => <RedeemedItems redeemedItems={redeemedItems} />}
         </Tab.Screen>
       </Tab.Navigator>
+
     </View>
   );
 };

@@ -10,6 +10,7 @@ import Toast from "react-native-toast-message";
 import { useTranslation } from "react-i18next"; // Import translation function
 
 const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
+
   const { userId } = useUserIdStore();
   const { t } = useTranslation(); // Initialize translation function
 
@@ -83,7 +84,7 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
         teamData.joinRequests.map((request) => (
           <View key={request._id} style={styles.requestContainer}>
             {request.userId.profilePicture &&
-            request.userId.profilePicture !== "" ? (
+              request.userId.profilePicture !== "" ? (
               <Image
                 source={{ uri: request.userId.profilePicture }}
                 style={styles.profilePicture}

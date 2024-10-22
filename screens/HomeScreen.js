@@ -17,7 +17,7 @@ const HomeScreen = () => {
 
 
   const fetchPosts = async () => {
-    const response = await getTimeLinePosts(userId);
+    const response = await getFeed(userId);
     return response.data;
   };
   const [userData, setUserData] = useState(null); // State to store user data
@@ -35,7 +35,8 @@ const HomeScreen = () => {
         const userResponse = await getSelf();
         setUserData(userResponse); // Store user data
       } catch (error) {
-        console.log('Error fetching user data:', error);
+        // console.log('Error fetching user data:', error);
+        throw error;
       }
     };
 

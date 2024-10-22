@@ -10,6 +10,7 @@ import Overview from "./Overview";
 import CustomTabBar from "./CustomTabBar";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons"; // Import Ionicons
+import Toast from "react-native-toast-message"; // Import Toast
 
 const Tab = createBottomTabNavigator();
 
@@ -37,7 +38,6 @@ const TeamDetailsTabs = () => {
         if (teamResponse.data) {
           setTeamData(teamResponse.data);
           setIsInTeam(teamResponse.data.members.includes(userId));
-
           setIsAdmin(teamResponse.data.admin === userId);
 
           const membersResponse = await getTeamMembers(teamId);
@@ -47,6 +47,12 @@ const TeamDetailsTabs = () => {
         }
       } catch (error) {
         console.error("Failed to fetch team data", error);
+        // Show error message using Toast
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: error.message || "Failed to fetch team data.",
+        });
       }
     };
 
@@ -63,12 +69,6 @@ const TeamDetailsTabs = () => {
         >
           <Ionicons name="arrow-back" size={24} color="#F5F5F5" />
         </TouchableOpacity>
-
-        {/* Uncomment the following if you want to display the team name and description */}
-        {/* 
-        <Text style={styles.teamName}>{teamData.name}</Text>
-        <Text style={styles.teamDescription}>{teamData.description}</Text>
-        */}
       </View>
 
       <Tab.Navigator
@@ -108,6 +108,8 @@ const TeamDetailsTabs = () => {
           </Tab.Screen>
         )}
       </Tab.Navigator>
+
+
     </View>
   );
 };
@@ -127,7 +129,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-
   teamName: {
     fontSize: 28,
     color: "white",

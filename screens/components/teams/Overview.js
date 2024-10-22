@@ -19,15 +19,23 @@ const Overview = ({ teamData, members }) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [showNoMembersMessage, setShowNoMembersMessage] = useState(false);
+  const [requestSent, setRequestSent] = useState(false); // New state to track request status
 
   // Check if the user is a member
   const isMember = teamData.members.some((member) => member._id === userId);
   const isAdmin = teamData.admin === userId;
-  const showJoinButton = !isMember && !isAdmin;
+
+  // Check if the user has already requested to join
+  const hasRequestedJoin = teamData.joinRequests.some(
+    (request) => request.userId._id === userId
+  );
+
+  const showJoinButton = !isMember && !isAdmin && !hasRequestedJoin && !requestSent;
 
   const handleJoinRequest = async () => {
     try {
       await sendJoinRequest(teamData._id, userId);
+      setRequestSent(true); // Disable the button immediately
       // Display success message using Toast
       Toast.show({
         type: "success",
@@ -59,16 +67,14 @@ const Overview = ({ teamData, members }) => {
             {item.username}
             {item._id === teamData.admin && (
               <Text style={styles.adminLabel}>
-                {" "}
-                {t("overview.admin_label")}
+                {" "}{t("overview.admin_label")}
               </Text>
             )}
             {item._id === userId && (
               <Text style={styles.youLabel}> - {t("overview.self_label")}</Text>
             )}
             <Text style={styles.pointsLabel}>
-              {" "}
-              - {item.points} {t("overview.points")}
+              {" "} - {item.points} {t("overview.points")}
             </Text>
           </Text>
         </View>
@@ -82,7 +88,7 @@ const Overview = ({ teamData, members }) => {
       const timer = setTimeout(() => {
         setIsLoading(false);
         setShowNoMembersMessage(true);
-      }, 2000);
+      }, 10000);
 
       return () => clearTimeout(timer);
     } else {
@@ -103,12 +109,18 @@ const Overview = ({ teamData, members }) => {
         {teamData.description}
       </Text>
 
-      {showJoinButton && (
+      {showJoinButton ? (
         <TouchableOpacity style={styles.joinButton} onPress={handleJoinRequest}>
           <Text style={styles.joinButtonText}>
             {t("overview.send_join_request")}
           </Text>
         </TouchableOpacity>
+      ) : (
+        <View style={styles.disabledJoinButton}>
+          <Text style={styles.disabledJoinButtonText}>
+            {t("overview.send_join_request")}
+          </Text>
+        </View>
       )}
 
       <Text style={styles.membersTitle}>{t("overview.members")}</Text>
@@ -210,6 +222,18 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     marginTop: 10,
+  },
+  disabledJoinButton: {
+    backgroundColor: "#B0B0B0", // Gray background for disabled button
+    padding: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  disabledJoinButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontFamily: "Nunito-ExtraBold",
   },
   joinButtonText: {
     color: "white",

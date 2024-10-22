@@ -34,6 +34,7 @@ const Teams = () => {
   const navigation = useNavigation();
   const { t } = useTranslation(); // Use the translation function
 
+  // Fetch all teams
   const fetchTeams = async () => {
     try {
       const response = await getAllTeams();
@@ -41,10 +42,15 @@ const Teams = () => {
         setTeams(response.data);
       }
     } catch (error) {
-      console.error("Error fetching teams:", error);
+      Toast.show({
+        type: "error",
+        text1: t("teams.error.fetch_teams"),
+        text2: error.message || t("teams.error.default_message"),
+      });
     }
   };
 
+  // Fetch user team
   const fetchUserTeam = async () => {
     if (!userId) return setLoading(false);
 
@@ -56,7 +62,11 @@ const Teams = () => {
         setUserTeam(null);
       }
     } catch (error) {
-      console.error("Error fetching user team:", error);
+      Toast.show({
+        type: "error",
+        text1: t("teams.error.fetch_user_team"),
+        text2: error.message || t("teams.error.default_message"),
+      });
     } finally {
       setLoading(false);
     }
@@ -67,13 +77,7 @@ const Teams = () => {
     fetchUserTeam();
   }, [userId]);
 
-  const onRefresh = async () => {
-    setIsRefreshing(true);
-    await fetchTeams();
-    await fetchUserTeam();
-    setIsRefreshing(false);
-  };
-
+  // Handle team creation
   const handleCreateTeam = async (teamData) => {
     try {
       const response = await createTeam(userId, teamData);
@@ -88,6 +92,7 @@ const Teams = () => {
       Toast.show({
         type: "error",
         text1: t("teams.error.create_team"),
+        text2: error.message || t("teams.error.default_message"),
       });
     }
   };
@@ -118,7 +123,12 @@ const Teams = () => {
       refreshControl={
         <RefreshControl
           refreshing={isRefreshing}
-          onRefresh={onRefresh}
+          onRefresh={async () => {
+            setIsRefreshing(true);
+            await fetchTeams();
+            await fetchUserTeam();
+            setIsRefreshing(false);
+          }}
           tintColor="white"
         />
       }

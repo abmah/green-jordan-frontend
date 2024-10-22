@@ -6,9 +6,7 @@ import {
   StyleSheet,
   Modal,
   FlatList,
-  Alert,
   TouchableOpacity,
-  Pressable,
   ActivityIndicator,
 } from "react-native";
 import { getFullUser, followUser, unfollowUser } from "../../api"; // Import necessary API functions
@@ -17,6 +15,7 @@ import { useTranslation } from "react-i18next";
 import useUserIdStore from "../../stores/useUserStore";
 import Loader from "./Loader";
 import Post from "./Post";
+import Toast from 'react-native-toast-message'; // Import Toast
 
 const UserProfileView = ({ selectedUserId, visible, onClose }) => {
   const { t } = useTranslation();
@@ -36,7 +35,11 @@ const UserProfileView = ({ selectedUserId, visible, onClose }) => {
           setFollowing(response.data.followers.includes(userId));
         } catch (error) {
           console.error("Failed to fetch user data", error);
-          Alert.alert("Error", t("userProfile.error_fetch"));
+          Toast.show({
+            text1: "Error",
+            text2: t("userProfile.error_fetch"),
+            type: 'error',
+          });
         } finally {
           setLoading(false);
         }
@@ -61,6 +64,11 @@ const UserProfileView = ({ selectedUserId, visible, onClose }) => {
           ...prevData,
           followers: prevData.followers.filter((follower) => follower !== userId),
         }));
+        Toast.show({
+          text1: "Success",
+          text2: t("userProfile.unfollowed"),
+          type: 'success',
+        });
       } else {
         // If not following, follow the user
         await followUser(selectedUserId, userId);
@@ -71,10 +79,19 @@ const UserProfileView = ({ selectedUserId, visible, onClose }) => {
           ...prevData,
           followers: [...prevData.followers, userId],
         }));
+        Toast.show({
+          text1: "Success",
+          text2: t("userProfile.followed"),
+          type: 'success',
+        });
       }
     } catch (error) {
       console.error("Failed to toggle follow status", error);
-      Alert.alert("Error", t("userProfile.error_toggle_follow"));
+      Toast.show({
+        text1: "Error",
+        text2: t("userProfile.error_toggle_follow"),
+        type: 'error',
+      });
     } finally {
       setFollowLoading(false);
     }
@@ -94,10 +111,6 @@ const UserProfileView = ({ selectedUserId, visible, onClose }) => {
                 <TouchableOpacity onPress={onClose} style={styles.backButton}>
                   <Icon name="arrow-back" size={30} color="#fff" />
                 </TouchableOpacity>
-
-                {/* <Pressable>
-                  <Text style={styles.profileReport}>{t("post.report")}</Text>
-                </Pressable> */}
               </View>
 
               <View style={styles.profileHeader}>
@@ -109,22 +122,24 @@ const UserProfileView = ({ selectedUserId, visible, onClose }) => {
                 />
                 <Text style={styles.username}>{userData?.username}</Text>
 
-                {/* Follow Button */}
-                <TouchableOpacity
-                  onPress={handleFollowUnfollow}
-                  style={[
-                    styles.followButton,
-                    { backgroundColor: following ? "#202F36" : "#8AC149" },
-                  ]}
-                >
-                  {followLoading ? (
-                    <ActivityIndicator size="small" color="#fff" /> // Show loading indicator in button
-                  ) : (
-                    <Text style={styles.followButtonText}>
-                      {following ? t("userProfile.unfollow") : t("userProfile.follow")}
-                    </Text>
-                  )}
-                </TouchableOpacity>
+                {/* Conditionally render the follow button if userId exists */}
+                {userId && (
+                  <TouchableOpacity
+                    onPress={handleFollowUnfollow}
+                    style={[
+                      styles.followButton,
+                      { backgroundColor: following ? "#202F36" : "#8AC149" }, // Added height
+                    ]}
+                  >
+                    {followLoading ? (
+                      <ActivityIndicator size="small" color="#fff" /> // Show loading indicator in button
+                    ) : (
+                      <Text style={styles.followButtonText}>
+                        {following ? t("userProfile.unfollow") : t("userProfile.follow")}
+                      </Text>
+                    )}
+                  </TouchableOpacity>
+                )}
               </View>
 
               <View style={styles.statsContainer}>
@@ -166,11 +181,6 @@ const styles = StyleSheet.create({
   backButton: {
     padding: 10,
   },
-  profileReport: {
-    color: "#fff",
-    fontFamily: "Nunito-Bold",
-    fontSize: 16,
-  },
   profileHeader: {
     alignItems: "center",
     borderBottomWidth: 1,
@@ -195,7 +205,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingVertical: 10,
     paddingHorizontal: 30,
-    borderRadius: 20,
+    borderRadius: 25,
+    height: 50,
     width: "100%",
     maxWidth: 300,
     alignItems: "center",

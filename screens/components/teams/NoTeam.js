@@ -9,8 +9,6 @@ const NoTeam = ({ setModalVisible }) => {
     <View style={styles.noTeamContainer}>
       <View style={styles.topSection}>
         <Text style={styles.noTeamText}>{t("noTeam.info")}</Text>
-        <Text>{""}</Text>
-        <Text style={styles.noTeamText}>{t("noTeam.info2")}</Text>
       </View>
 
       <View style={styles.bottomSection}>
