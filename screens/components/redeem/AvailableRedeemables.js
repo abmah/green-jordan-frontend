@@ -54,7 +54,10 @@ const AvailableRedeemables = ({ redeemables, userPoints = 0, onRedeem }) => {
   return (
     <View style={styles.tabContainer}>
       <Text
-        style={[styles.points, { textAlign: i18n.language === "ar" ? "right" : "left" }]}
+        style={[
+          styles.points,
+          { textAlign: i18n.language === "ar" ? "right" : "left" },
+        ]}
       >
         {t("availableRedeem.points")}
         {userPoints}
@@ -75,7 +78,10 @@ const AvailableRedeemables = ({ redeemables, userPoints = 0, onRedeem }) => {
             item ? (
               <View style={styles.itemContainer}>
                 <View style={styles.itemContent}>
-                  <Image source={{ uri: item.image }} style={styles.itemImage} />
+                  <Image
+                    source={{ uri: item.image }}
+                    style={styles.itemImage}
+                  />
                   <View style={styles.textContainer}>
                     <Text style={styles.itemName}>{item.name}</Text>
                     <Text style={styles.itemCost}>{item.description}</Text>
@@ -98,7 +104,8 @@ const AvailableRedeemables = ({ redeemables, userPoints = 0, onRedeem }) => {
                     <Text style={styles.redeemButtonText}>
                       {loading[item._id]
                         ? t("availableRedeem.processing")
-                        : t("availableRedeem.getFor", { cost: item.cost })}
+                        : t("availableRedeem.getFor")}
+                      {item.cost}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -144,7 +151,6 @@ const AvailableRedeemables = ({ redeemables, userPoints = 0, onRedeem }) => {
           </View>
         </View>
       </Modal>
-
     </View>
   );
 };
@@ -246,13 +252,14 @@ const styles = StyleSheet.create({
   modalContent: {
     width: 300,
     padding: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "#37464F",
     borderRadius: 10,
     alignItems: "center",
   },
   modalTitle: {
     fontSize: 20,
     fontFamily: "Nunito-ExtraBold",
+    color: "#fff",
     marginBottom: 10,
   },
   modalMessage: {
@@ -260,6 +267,7 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito-Regular",
     textAlign: "center",
     marginBottom: 20,
+    color: "#fff",
   },
   modalActions: {
     flexDirection: "row",

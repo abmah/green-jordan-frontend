@@ -238,11 +238,13 @@
     "subheader": "العناصر المتاحة",
     "noItemsText": "لا توجد عناصر متاحة للاسترداد.",
     "processing": "تجري المعالجة...",
-    "getFor": "احصل عليه مقابل {{cost}} نقاط",
+    "getFor": "مقابل ",
     "confirmRedemption": "تأكيد المبادلة",
-    "confirmMessage": "هل أنت متأكد أنك تريد استبدال ",
+    "confirmMessage": " تأكيد أنك تريد استبدال  {{itemName}} مقابل {{cost}}",
     "cancel": "إلغاء",
-    "confirm": "تأكيد"
+    "confirm": "تأكيد",
+    "successTitle": "نجاح",
+    "successMessage": "تم تبديل العنصر بنجاح."
   },
 
   "allRedeemables": {

@@ -17,7 +17,7 @@ import Loader from "./components/Loader"; // Import your custom Loader component
 import MaterialIcons from "@expo/vector-icons/MaterialIcons"; // Import Material Icons
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next"; // Import the translation hook
-import Toast from 'react-native-toast-message'; // Import Toast
+import Toast from "react-native-toast-message"; // Import Toast
 
 const Tab = createBottomTabNavigator();
 
@@ -57,7 +57,7 @@ const RedeemScreen = ({ navigation }) => {
         Toast.show({
           text1: t("redeemScreen.errorTitle"),
           text2: t("redeemScreen.errorMessage"),
-          type: 'error',
+          type: "error",
         });
         console.error("Error fetching data:", error);
       } finally {
@@ -73,7 +73,7 @@ const RedeemScreen = ({ navigation }) => {
       Toast.show({
         text1: t("redeemScreen.insufficientPointsTitle"),
         text2: t("redeemScreen.insufficientPointsMessage"),
-        type: 'error',
+        type: "error",
       });
       return;
     }
@@ -82,9 +82,8 @@ const RedeemScreen = ({ navigation }) => {
       const response = await redeemItem(userId, item._id);
       if (response) {
         Toast.show({
-          text1: t("redeemScreen.successTitle"),
-          text2: t("redeemScreen.successMessage"),
-          type: 'success',
+          text1: t("redeemScreen.successMessage"),
+          type: "success",
         });
         setUserPoints(response.remainingPoints || 0);
         const updatedRedeemables = redeemables.filter(
@@ -97,14 +96,14 @@ const RedeemScreen = ({ navigation }) => {
         Toast.show({
           text1: t("redeemScreen.errorTitle"),
           text2: t("redeemScreen.noResponse"),
-          type: 'error',
+          type: "error",
         });
       }
     } catch (error) {
       Toast.show({
         text1: t("redeemScreen.errorTitle"),
         text2: t("redeemScreen.errorRedeeming"),
-        type: 'error',
+        type: "error",
       });
       console.error("Error redeeming item:", error);
     }
@@ -160,7 +159,6 @@ const RedeemScreen = ({ navigation }) => {
           {() => <RedeemedItems redeemedItems={redeemedItems} />}
         </Tab.Screen>
       </Tab.Navigator>
-
     </View>
   );
 };
