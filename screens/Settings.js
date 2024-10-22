@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Modal,
   Alert,
   Platform,
 } from "react-native";
@@ -22,15 +21,13 @@ const Settings = ({ navigation }) => {
   const { clearuserId, userId } = useUserStore();
 
   const [selectedTheme, setSelectedTheme] = useState("dark");
-  const [languageModalVisible, setLanguageModalVisible] = useState(false);
-  const [themeModalVisible, setThemeModalVisible] = useState(false);
-  const [newLanguage, setNewLanguage] = useState(i18n.language); // Track selected language in modal
-  const [newTheme, setNewTheme] = useState(selectedTheme); // Track selected theme in modal
+  const [newLanguage, setNewLanguage] = useState(i18n.language);
 
   const changeLanguage = async (lang) => {
     try {
       await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
       i18n.changeLanguage(lang);
+      setNewLanguage(lang); // Update the newLanguage state
 
       Toast.show({
         type: "success",
@@ -54,8 +51,6 @@ const Settings = ({ navigation }) => {
       }),
       position: "bottom",
     });
-
-    // Logic to apply the theme can be added here
   };
 
   const loadSavedLanguage = async () => {
@@ -92,16 +87,6 @@ const Settings = ({ navigation }) => {
     ]);
   };
 
-  const handleLanguageSelect = () => {
-    changeLanguage(newLanguage);
-    setLanguageModalVisible(false);
-  };
-
-  const handleThemeSelect = () => {
-    handleThemeChange(newTheme);
-    setThemeModalVisible(false);
-  };
-
   return (
     <View style={styles.container}>
       {/* Back button */}
@@ -115,108 +100,62 @@ const Settings = ({ navigation }) => {
         <Text style={styles.title}>{t("settings.header")}</Text>
       </View>
 
-      {/* Language button */}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => setLanguageModalVisible(true)}
-      >
-        <Text style={styles.buttonText}>
-          {t("settings.language")}:{" "}
-          {newLanguage === "en" ? "English" : "العربية"}
-        </Text>
-      </TouchableOpacity>
+      {/* Language Selection */}
+      <View style={styles.languageContainer}>
+        <Text style={styles.settingText}>{t("settings.language")}</Text>
+        <View style={styles.languageButtonsContainer}>
+          <TouchableOpacity
+            style={[
+              styles.languageButton,
+              newLanguage === "en" && styles.activeLanguageButton,
+            ]}
+            onPress={() => changeLanguage("en")}
+          >
+            <Text style={styles.languageButtonText}>English</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.languageButton,
+              newLanguage === "ar" && styles.activeLanguageButton,
+            ]}
+            onPress={() => changeLanguage("ar")}
+          >
+            <Text style={styles.languageButtonText}>العربية</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
 
-      {/* Theme button */}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => setThemeModalVisible(true)}
-      >
-        <Text style={styles.buttonText}>
-          {t("settings.theme")}:{" "}
-          {newTheme === "dark" ? t("settings.dark") : t("settings.light")}
-        </Text>
-      </TouchableOpacity>
+      {/* Theme Selection */}
+      <View style={styles.themeContainer}>
+        <Text style={styles.settingText}>{t("settings.theme")}</Text>
+        <View style={styles.themeButtonsContainer}>
+          <TouchableOpacity
+            style={[
+              styles.themeButton,
+              selectedTheme === "dark" && styles.activeThemeButton,
+            ]}
+            onPress={() => handleThemeChange("dark")}
+          >
+            <Text style={styles.themeButtonText}>{t("settings.dark")}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.themeButton,
+              selectedTheme === "light" && styles.activeThemeButton,
+            ]}
+            onPress={() => handleThemeChange("light")}
+          >
+            <Text style={styles.themeButtonText}>{t("settings.light")}</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
 
       {/* Logout button */}
       {userId && (
-        <TouchableOpacity style={styles.button} onPress={handleLogout}>
-          <Text style={styles.buttonText}>{t("profile.logout")}</Text>
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <Text style={styles.logoutButtonText}>{t("profile.logout")}</Text>
         </TouchableOpacity>
       )}
-
-      {/* Language Selection Modal */}
-      <Modal
-        transparent={true}
-        animationType="slide"
-        visible={languageModalVisible}
-        onRequestClose={() => setLanguageModalVisible(false)}
-      >
-        <View style={styles.modalBackground}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>{t("settings.language")}</Text>
-            <TouchableOpacity onPress={() => setNewLanguage("en")}>
-              <Text style={styles.modalOption}>English</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setNewLanguage("ar")}>
-              <Text style={styles.modalOption}>العربية</Text>
-            </TouchableOpacity>
-
-            <View style={styles.modalButtons}>
-              <TouchableOpacity
-                style={styles.modalButton}
-                onPress={() => setLanguageModalVisible(false)}
-              >
-                <Text style={styles.modalButtonText}>
-                  {t("settings.cancel")}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.modalButton}
-                onPress={handleLanguageSelect}
-              >
-                <Text style={styles.modalButtonText}>{t("settings.ok")}</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
-
-      {/* Theme Selection Modal */}
-      <Modal
-        transparent={true}
-        animationType="slide"
-        visible={themeModalVisible}
-        onRequestClose={() => setThemeModalVisible(false)}
-      >
-        <View style={styles.modalBackground}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>{t("settings.theme")}</Text>
-            <TouchableOpacity onPress={() => setNewTheme("dark")}>
-              <Text style={styles.modalOption}>{t("settings.dark")}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setNewTheme("light")}>
-              <Text style={styles.modalOption}>{t("settings.light")}</Text>
-            </TouchableOpacity>
-
-            <View style={styles.modalButtons}>
-              <TouchableOpacity
-                style={styles.modalButton}
-                onPress={() => setThemeModalVisible(false)}
-              >
-                <Text style={styles.modalButtonText}>
-                  {t("settings.cancel")}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.modalButton}
-                onPress={handleThemeSelect}
-              >
-                <Text style={styles.modalButtonText}>{t("settings.ok")}</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 };
@@ -231,12 +170,13 @@ const styles = StyleSheet.create({
   backButtonHeaderContainer: {
     alignItems: "center",
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
   },
   backButton: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 16,
+    marginRight: 10,
   },
   title: {
     fontSize: 26,
@@ -244,53 +184,71 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito-Bold",
     marginBottom: 16,
   },
-  button: {
-    backgroundColor: "#1B2B38",
-    padding: 20,
-    borderRadius: 8,
-    marginVertical: 12,
+  languageContainer: {
+    marginBottom: 32,
   },
-  buttonText: {
-    color: "#F5F5F5",
-    fontSize: 18,
-    fontFamily: "Nunito-SemiBold",
+  themeContainer: {
+    marginBottom: 32,
   },
-  modalBackground: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  modalContainer: {
-    backgroundColor: "#37464F",
-    padding: 20,
-    borderRadius: 10,
-    width: "80%",
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontFamily: "Nunito-Bold",
-    marginBottom: 20,
-  },
-  modalOption: {
-    fontSize: 18,
-    marginVertical: 10,
-  },
-  modalButtons: {
+  languageButtonsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 20,
+    marginTop: 10,
   },
-  modalButton: {
+  languageButton: {
     backgroundColor: "#1B2B38",
     padding: 10,
     borderRadius: 8,
-    width: "45%",
+    width: "48%",
     alignItems: "center",
   },
-  modalButtonText: {
-    color: "#FFF",
+  activeLanguageButton: {
+    backgroundColor: "#21603F",
+  },
+  languageButtonText: {
+    color: "#FFFFFF",
     fontSize: 16,
+    fontFamily: "Nunito-Bold",
+  },
+  themeButtonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 10,
+  },
+  themeButton: {
+    backgroundColor: "#1B2B38",
+    padding: 10,
+    borderRadius: 8,
+    width: "48%",
+    alignItems: "center",
+  },
+  activeThemeButton: {
+    backgroundColor: "#21603F",
+  },
+  themeButtonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontFamily: "Nunito-Bold",
+  },
+  settingText: {
+    color: "#F5F5F5",
+    fontSize: 18,
+    fontFamily: "Nunito-Bold",
+    marginBottom: 5,
+    textAlign: "center",
+  },
+  logoutButton: {
+    backgroundColor: "#1B2B38",
+    padding: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 30,
+    width: "100%",
+  },
+  logoutButtonText: {
+    color: "#EE5555",
+    fontSize: 18,
+    fontFamily: "Nunito-Bold",
   },
 });
 
