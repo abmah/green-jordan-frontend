@@ -1,5 +1,5 @@
 // App.js
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import useUserIdStore from "./stores/useUserStore";
 import React, { useCallback } from "react";
 import { NavigationContainer } from "@react-navigation/native";
@@ -12,7 +12,6 @@ import toastConfig from "./utils/toastConfig";
 import i18n from "./utils/i18n";
 import { I18nextProvider } from "react-i18next";
 SplashScreen.preventAutoHideAsync();
-
 
 const queryClient = new QueryClient();
 
@@ -59,7 +58,7 @@ export default function App() {
           backgroundColor="#0F1F26"
           translucent={true}
         />
-        <NavigationContainer >
+        <NavigationContainer>
           <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
             <BottomTabNavigator />
           </View>

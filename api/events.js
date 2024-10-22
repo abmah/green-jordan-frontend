@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { API_BASE_URL } from './config';
+import axios from "axios";
+import { API_BASE_URL } from "./config";
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -9,10 +9,20 @@ const apiClient = axios.create({
 // Function to get all events
 export const getAllEvents = async () => {
   try {
-    const response = await apiClient.get('event/');
+    const response = await apiClient.get("event/");
     return response.data;
   } catch (error) {
-    console.error('API call error:', error);
+    console.error("API call error:", error);
+    throw error;
+  }
+};
+
+export const getEventDetails = async (eventId) => {
+  try {
+    const response = await apiClient.get(`event/${eventId}`);
+    return response.data;
+  } catch (error) {
+    console.error("API call error:", error);
     throw error;
   }
 };
@@ -21,9 +31,12 @@ export const getAllEvents = async () => {
 export const joinEvent = async (eventId, userId) => {
   try {
     const response = await apiClient.put(`event/join/${eventId}`, { userId });
-    return response.data; // Returns the response data from the server
+    return response.data;
   } catch (error) {
-    console.error('Error joining event:', error.response?.data || error.message);
+    console.error(
+      "Error joining event:",
+      error.response?.data || error.message
+    );
     throw error;
   }
 };
@@ -32,9 +45,12 @@ export const joinEvent = async (eventId, userId) => {
 export const leaveEvent = async (eventId, userId) => {
   try {
     const response = await apiClient.put(`event/leave/${eventId}`, { userId });
-    return response.data; // Returns the response data from the server
+    return response.data;
   } catch (error) {
-    console.error('Error leaving event:', error.response?.data || error.message);
+    console.error(
+      "Error leaving event:",
+      error.response?.data || error.message
+    );
     throw error;
   }
 };
