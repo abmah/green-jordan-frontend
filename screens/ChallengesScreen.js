@@ -111,7 +111,7 @@ const ChallengesScreen = ({ navigation }) => {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => navigation.navigate("EventsScreen")}
+              onPress={() => navigation.navigate("EventsStackNavigator")}
               style={styles.eventsButton}
             >
               <MaterialIcons name="event" size={24} color="#FF9804" />
