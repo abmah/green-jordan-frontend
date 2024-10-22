@@ -16,6 +16,15 @@ import { Ionicons } from "@expo/vector-icons";
 
 const LANGUAGE_STORAGE_KEY = "appLanguage";
 
+const Button = ({ title, isActive, onPress }) => (
+  <TouchableOpacity
+    style={[styles.button, isActive && styles.activeButton]}
+    onPress={onPress}
+  >
+    <Text style={styles.buttonText}>{title}</Text>
+  </TouchableOpacity>
+);
+
 const Settings = ({ navigation }) => {
   const { t, i18n } = useTranslation();
   const { clearuserId, userId } = useUserStore();
@@ -27,8 +36,7 @@ const Settings = ({ navigation }) => {
     try {
       await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
       i18n.changeLanguage(lang);
-      setNewLanguage(lang); // Update the newLanguage state
-
+      setNewLanguage(lang);
       Toast.show({
         type: "success",
         text1: t("settings.language_changed", {
@@ -43,7 +51,6 @@ const Settings = ({ navigation }) => {
 
   const handleThemeChange = (theme) => {
     setSelectedTheme(theme);
-
     Toast.show({
       type: "success",
       text1: t("settings.theme_changed", {
@@ -53,18 +60,17 @@ const Settings = ({ navigation }) => {
     });
   };
 
-  const loadSavedLanguage = async () => {
-    try {
-      const savedLanguage = await AsyncStorage.getItem(LANGUAGE_STORAGE_KEY);
-      if (savedLanguage) {
-        i18n.changeLanguage(savedLanguage);
-      }
-    } catch (error) {
-      console.error("Failed to load language from AsyncStorage:", error);
-    }
-  };
-
   useEffect(() => {
+    const loadSavedLanguage = async () => {
+      try {
+        const savedLanguage = await AsyncStorage.getItem(LANGUAGE_STORAGE_KEY);
+        if (savedLanguage) {
+          i18n.changeLanguage(savedLanguage);
+        }
+      } catch (error) {
+        console.error("Failed to load language from AsyncStorage:", error);
+      }
+    };
     loadSavedLanguage();
   }, []);
 
@@ -101,52 +107,36 @@ const Settings = ({ navigation }) => {
       </View>
 
       {/* Language Selection */}
-      <View style={styles.languageContainer}>
+      <View style={styles.settingContainer}>
         <Text style={styles.settingText}>{t("settings.language")}</Text>
-        <View style={styles.languageButtonsContainer}>
-          <TouchableOpacity
-            style={[
-              styles.languageButton,
-              newLanguage === "en" && styles.activeLanguageButton,
-            ]}
+        <View style={styles.buttonContainer}>
+          <Button
+            title="English"
+            isActive={newLanguage === "en"}
             onPress={() => changeLanguage("en")}
-          >
-            <Text style={styles.languageButtonText}>English</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.languageButton,
-              newLanguage === "ar" && styles.activeLanguageButton,
-            ]}
+          />
+          <Button
+            title="العربية"
+            isActive={newLanguage === "ar"}
             onPress={() => changeLanguage("ar")}
-          >
-            <Text style={styles.languageButtonText}>العربية</Text>
-          </TouchableOpacity>
+          />
         </View>
       </View>
 
       {/* Theme Selection */}
-      <View style={styles.themeContainer}>
+      <View style={styles.settingContainer}>
         <Text style={styles.settingText}>{t("settings.theme")}</Text>
-        <View style={styles.themeButtonsContainer}>
-          <TouchableOpacity
-            style={[
-              styles.themeButton,
-              selectedTheme === "dark" && styles.activeThemeButton,
-            ]}
+        <View style={styles.buttonContainer}>
+          <Button
+            title={t("settings.dark")}
+            isActive={selectedTheme === "dark"}
             onPress={() => handleThemeChange("dark")}
-          >
-            <Text style={styles.themeButtonText}>{t("settings.dark")}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.themeButton,
-              selectedTheme === "light" && styles.activeThemeButton,
-            ]}
+          />
+          <Button
+            title={t("settings.light")}
+            isActive={selectedTheme === "light"}
             onPress={() => handleThemeChange("light")}
-          >
-            <Text style={styles.themeButtonText}>{t("settings.light")}</Text>
-          </TouchableOpacity>
+          />
         </View>
       </View>
 
@@ -173,8 +163,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   backButton: {
-    flexDirection: "row",
-    alignItems: "center",
     marginBottom: 16,
     marginRight: 10,
   },
@@ -184,48 +172,25 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito-Bold",
     marginBottom: 16,
   },
-  languageContainer: {
+  settingContainer: {
     marginBottom: 32,
   },
-  themeContainer: {
-    marginBottom: 32,
-  },
-  languageButtonsContainer: {
+  buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 10,
   },
-  languageButton: {
+  button: {
     backgroundColor: "#1B2B38",
     padding: 10,
     borderRadius: 8,
     width: "48%",
     alignItems: "center",
   },
-  activeLanguageButton: {
+  activeButton: {
     backgroundColor: "#21603F",
   },
-  languageButtonText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontFamily: "Nunito-Bold",
-  },
-  themeButtonsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 10,
-  },
-  themeButton: {
-    backgroundColor: "#1B2B38",
-    padding: 10,
-    borderRadius: 8,
-    width: "48%",
-    alignItems: "center",
-  },
-  activeThemeButton: {
-    backgroundColor: "#21603F",
-  },
-  themeButtonText: {
+  buttonText: {
     color: "#FFFFFF",
     fontSize: 16,
     fontFamily: "Nunito-Bold",
@@ -235,7 +200,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: "Nunito-Bold",
     marginBottom: 5,
-    textAlign: "center",
   },
   logoutButton: {
     backgroundColor: "#1B2B38",
