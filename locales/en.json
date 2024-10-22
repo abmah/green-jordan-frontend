@@ -40,7 +40,9 @@
     "report": "Report",
     "like": "Like",
     "comments": "Comments",
-    "created_at": "Created at"
+    "created_at": "Created at",
+    "reportSubmitted": "Report Submitted",
+    "reportedFor": "You reported for: "
   },
 
   "comments_modal": {
@@ -69,7 +71,9 @@
     "total_points": "Total Points: {{points}}",
     "last_challenge_completed": "Last Challenge Completed: {{date}}",
     "challenges_assigned_today": "Challenges Assigned Today: {{count}}",
-    "never": "Never"
+    "never": "Never",
+    "events": "Events",
+    "redeem": "Redeem"
   },
 
   "challengeItem": {
@@ -183,11 +187,12 @@
   "settings": {
     "header": "Settings",
     "language": "Language",
-    "other_settings": "Other Settings",
-    "notification_preferences": "Notification Preferences",
-    "privacy_settings": "Privacy Settings",
-    "account_management": "Account Management",
+    "theme": "Theme",
+    "dark": "Dark",
+    "light": "Light",
     "language_changed": "Language changed to {{lang}}",
+    "theme_changed": "Theme changed to {{theme}}",
+    "account": "Account",
     "logout": "Logout"
   },
 
@@ -208,5 +213,61 @@
     "followers": "Followers",
     "following": "Following",
     "error_fetch": "Could not load user data."
+  },
+
+  "report": {
+    "title": "Report",
+    "spam": "Spam",
+    "hateful": "Hateful",
+    "graphic_content": "Graphic Content",
+    "other": "Other",
+    "submit": "Submit"
+  },
+
+  "redeemScreen": {
+    "header": "Redeem Items",
+    "insufficientPointsTitle": "Insufficient Points",
+    "insufficientPointsMessage": "You do not have enough points to redeem this item.",
+    "successTitle": "Success",
+    "successMessage": "Item redeemed successfully.",
+    "errorTitle": "Error",
+    "errorMessage": "Failed to load data.",
+    "errorRedeeming": "Failed to redeem item.",
+    "noResponse": "No response from server.",
+    "available": "Available",
+    "redeemables": "Redeemables",
+    "redeemed": "Redeemed"
+  },
+
+  "availableRedeem": {
+    "points": "Points: ",
+    "subheader": "Available Redeemables",
+    "noItemsText": "No items available for redemption.",
+    "processing": "Processing...",
+    "getFor": "Get for {cost}",
+    "confirmRedemption": "Confirm Redemption",
+    "confirmMessage": "Are you sure you want to redeem {itemName} for {cost} points?",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  },
+  "allRedeemables": {
+    "header": "All Redeemables (For Reference)",
+    "noItemsText": "No redeemables available.",
+    "pointsRequired": "Points Required: "
+  },
+  "redeemedItems": {
+    "header": "Redeemed Items",
+    "noItemsText": "No items redeemed yet.",
+    "redeemedFor": "Redeemed for: {cost} points",
+    "processingMessage": "Your redeemed items are being processed and will be sent to you as soon as possible. You will receive a notification once they are on their way."
+  },
+  "eventScreen": {
+    "header": "Events",
+    "attend": "Attend",
+    "attending": "Attending",
+    "confirmAttendance": "Confirm Attendance",
+    "areYouWilling": "Are you willing to participate?",
+    "cancel": "Cancel",
+    "yes": "Yes"
   }
 }

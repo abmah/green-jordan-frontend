@@ -15,14 +15,16 @@ import AllRedeemables from "./components/redeem/AllRedeemables";
 import RedeemedItems from "./components/redeem/RedeemedItems";
 import Loader from "./components/Loader"; // Import your custom Loader component
 import MaterialIcons from "@expo/vector-icons/MaterialIcons"; // Import Material Icons
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next"; // Import the translation hook
+
 const Tab = createBottomTabNavigator();
 
 const RedeemScreen = ({ navigation }) => {
-  // Accept navigation prop
   const { userId } = useUserStore.getState();
+  const { t } = useTranslation(); // Hook to access translation function
   const [userPoints, setUserPoints] = useState(0);
-  const [redeemables, setRedeemables] = useState([]); // Should hold redeemable items
+  const [redeemables, setRedeemables] = useState([]);
   const [allRedeemables, setAllRedeemables] = useState([]);
   const [redeemedItems, setRedeemedItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -35,9 +37,8 @@ const RedeemScreen = ({ navigation }) => {
       try {
         const availableResponse = await getAllAvailableRedeemables(userId);
         if (availableResponse && availableResponse.data) {
-          // Correctly set redeemables from availableResponse
           setUserPoints(availableResponse.data.points || 0);
-          setRedeemables(availableResponse.data.availableRedeemables || []); // Use this line
+          setRedeemables(availableResponse.data.availableRedeemables || []);
         }
 
         const allRedeemablesResponse = await getAllRedeemables();
@@ -52,7 +53,10 @@ const RedeemScreen = ({ navigation }) => {
           setRedeemedItems(redeemedIds);
         }
       } catch (error) {
-        Alert.alert("Error", "Failed to load data.");
+        Alert.alert(
+          t("redeemScreen.errorTitle"),
+          t("redeemScreen.errorMessage")
+        );
         console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
@@ -65,8 +69,8 @@ const RedeemScreen = ({ navigation }) => {
   const handleRedeem = async (item) => {
     if (!item || userPoints < item.cost) {
       Alert.alert(
-        "Insufficient Points",
-        "You do not have enough points to redeem this item."
+        t("redeemScreen.insufficientPointsTitle"),
+        t("redeemScreen.insufficientPointsMessage")
       );
       return;
     }
@@ -74,20 +78,25 @@ const RedeemScreen = ({ navigation }) => {
     try {
       const response = await redeemItem(userId, item._id);
       if (response) {
-        Alert.alert("Success", response.message);
+        Alert.alert(
+          t("redeemScreen.successTitle"),
+          t("redeemScreen.successMessage")
+        );
         setUserPoints(response.remainingPoints || 0);
         const updatedRedeemables = redeemables.filter(
           (redeemable) => redeemable._id !== item._id
         );
         setRedeemables(updatedRedeemables);
         setRedeemedItems([...redeemedItems, item]);
-        queryClient.refetchQueries(['profile']);
-
+        queryClient.refetchQueries(["profile"]);
       } else {
-        Alert.alert("Error", "No response from server.");
+        Alert.alert(t("redeemScreen.errorTitle"), t("redeemScreen.noResponse"));
       }
     } catch (error) {
-      Alert.alert("Error", "Failed to redeem item.");
+      Alert.alert(
+        t("redeemScreen.errorTitle"),
+        t("redeemScreen.errorRedeeming")
+      );
       console.error("Error redeeming item:", error);
     }
   };
@@ -105,12 +114,15 @@ const RedeemScreen = ({ navigation }) => {
         >
           <MaterialIcons name="arrow-back" size={24} color="#FFF" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Redeem Items</Text>
+        <Text style={styles.headerTitle}>{t("redeemScreen.header")}</Text>
       </View>
       <Tab.Navigator tabBar={(props) => <CustomTabBar {...props} />}>
         <Tab.Screen
           name="Available"
-          options={{ tabBarLabel: "Available", headerShown: false }}
+          options={{
+            tabBarLabel: t("redeemScreen.available"),
+            headerShown: false,
+          }}
         >
           {() => (
             <AvailableRedeemables
@@ -122,13 +134,19 @@ const RedeemScreen = ({ navigation }) => {
         </Tab.Screen>
         <Tab.Screen
           name="All"
-          options={{ tabBarLabel: "Redeemables", headerShown: false }}
+          options={{
+            tabBarLabel: t("redeemScreen.redeemables"),
+            headerShown: false,
+          }}
         >
           {() => <AllRedeemables allRedeemables={allRedeemables} />}
         </Tab.Screen>
         <Tab.Screen
           name="Redeemed"
-          options={{ tabBarLabel: "Redeemed", headerShown: false }}
+          options={{
+            tabBarLabel: t("redeemScreen.redeemed"),
+            headerShown: false,
+          }}
         >
           {() => <RedeemedItems redeemedItems={redeemedItems} />}
         </Tab.Screen>

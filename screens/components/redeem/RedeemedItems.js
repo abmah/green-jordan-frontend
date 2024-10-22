@@ -1,41 +1,51 @@
 import React from "react";
 import { View, Text, FlatList, Image, StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next"; // Import the translation hook
 
-const RedeemedItems = ({ redeemedItems }) => (
-  <View style={styles.tabContainer}>
-    <Text style={styles.subheader}>Redeemed Items</Text>
-    {redeemedItems.length === 0 ? (
-      <View style={styles.emptyContainer}>
-        <Text style={styles.noItemsText}>No items redeemed yet.</Text>
-      </View>
-    ) : (
-      <>
-        <FlatList
-          data={redeemedItems}
-          keyExtractor={(item) => item?._id || Math.random().toString()}
-          renderItem={({ item }) =>
-            item ? (
-              <View style={styles.itemContainer}>
-                <Image source={{ uri: item.image }} style={styles.itemImage} />
-                <View style={styles.itemContent}>
-                  <Text style={styles.itemName}>{item.name}</Text>
-                  <Text style={styles.itemDescription}>
-                    Redeemed for: {item.cost} points
-                  </Text>
-                </View>
-              </View>
-            ) : null
-          }
-        />
-        <View style={styles.processingContainer}>
-          <Text style={styles.processingText}>
-            Your redeemed items are being processed and will be sent to you as soon as possible. You will receive a notification once they are on their way.
+const RedeemedItems = ({ redeemedItems }) => {
+  const { t } = useTranslation(); // Hook to access translation function
+
+  return (
+    <View style={styles.tabContainer}>
+      <Text style={styles.subheader}>{t("redeemedItems.header")}</Text>
+      {redeemedItems.length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.noItemsText}>
+            {t("redeemedItems.noItemsText")}
           </Text>
         </View>
-      </>
-    )}
-  </View>
-);
+      ) : (
+        <>
+          <FlatList
+            data={redeemedItems}
+            keyExtractor={(item) => item?._id || Math.random().toString()}
+            renderItem={({ item }) =>
+              item ? (
+                <View style={styles.itemContainer}>
+                  <Image
+                    source={{ uri: item.image }}
+                    style={styles.itemImage}
+                  />
+                  <View style={styles.itemContent}>
+                    <Text style={styles.itemName}>{item.name}</Text>
+                    <Text style={styles.itemDescription}>
+                      {t("redeemedItems.redeemedFor")} {item.cost}
+                    </Text>
+                  </View>
+                </View>
+              ) : null
+            }
+          />
+          <View style={styles.processingContainer}>
+            <Text style={styles.processingText}>
+              {t("redeemedItems.processingMessage")}
+            </Text>
+          </View>
+        </>
+      )}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   tabContainer: {

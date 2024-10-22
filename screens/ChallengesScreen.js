@@ -14,7 +14,7 @@ import Loader from "./components/Loader";
 import { getSelf } from "../api/self";
 import { useTranslation } from "react-i18next"; // Import useTranslation
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 
 const ChallengesScreen = ({ navigation }) => {
   const { t } = useTranslation(); // Use the translation function
@@ -40,11 +40,9 @@ const ChallengesScreen = ({ navigation }) => {
     try {
       const response = await getSelf();
       setUserData(response.user);
-
     } catch (error) {
       console.error("Failed to fetch user data:", error);
       setUserData(null);
-
     }
   };
 
@@ -57,21 +55,17 @@ const ChallengesScreen = ({ navigation }) => {
     }
   }, [userId]);
 
-
   const queryFetchUserData = () => {
     fetchUserData();
-    return true
+    return true;
   };
 
   useQuery({
-    queryKey: ['challenge-user-data'],
+    queryKey: ["challenge-user-data"],
     queryFn: queryFetchUserData,
     staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
     refetchOnWindowFocus: false, // Only refetch when manually triggered
   });
-
-
-
 
   if (!userId) {
     return (
@@ -113,7 +107,7 @@ const ChallengesScreen = ({ navigation }) => {
               style={styles.redeemButton}
             >
               <MaterialIcons name="redeem" size={24} color="#FF9804" />
-              <Text style={styles.redeemText}>Redeem</Text>
+              <Text style={styles.redeemText}>{t("challenges.redeem")}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -121,7 +115,7 @@ const ChallengesScreen = ({ navigation }) => {
               style={styles.eventsButton}
             >
               <MaterialIcons name="event" size={24} color="#FF9804" />
-              <Text style={styles.redeemText}>Events</Text>
+              <Text style={styles.redeemText}>{t("challenges.events")}</Text>
             </TouchableOpacity>
           </View>
         </View>

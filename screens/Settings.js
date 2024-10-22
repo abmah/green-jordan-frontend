@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react"; // Import useState to manage state
 import {
   View,
   Text,
@@ -19,6 +19,9 @@ const LANGUAGE_STORAGE_KEY = "appLanguage"; // Key for storing the language in A
 const Settings = ({ navigation }) => {
   const { t, i18n } = useTranslation();
   const { clearuserId, userId } = useUserStore();
+
+  // State to manage selected theme
+  const [selectedTheme, setSelectedTheme] = useState("dark"); // Default theme
 
   // Function to change the language and store it in AsyncStorage
   const changeLanguage = async (lang) => {
@@ -51,6 +54,20 @@ const Settings = ({ navigation }) => {
     }
   };
 
+  const handleThemeChange = (theme) => {
+    setSelectedTheme(theme);
+
+    Toast.show({
+      type: "success",
+      text1: t("settings.theme_changed", {
+        theme: theme === "dark" ? t("settings.dark") : t("settings.light"),
+      }),
+      position: "bottom",
+    });
+
+    // Logic to apply the theme can be added here
+  };
+
   useEffect(() => {
     loadSavedLanguage(); // Load saved language on component mount
   }, []);
@@ -78,7 +95,6 @@ const Settings = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {/* Back button */}
-
       <View style={styles.backButtonHeaderContainer}>
         <TouchableOpacity
           style={styles.backButton}
@@ -88,6 +104,7 @@ const Settings = ({ navigation }) => {
         </TouchableOpacity>
         <Text style={styles.title}>{t("settings.header")}</Text>
       </View>
+
       <Text style={styles.sectionTitle}>{t("settings.language")}</Text>
       <TouchableOpacity
         style={styles.button}
@@ -102,19 +119,18 @@ const Settings = ({ navigation }) => {
         <Text style={styles.buttonText}>العربية</Text>
       </TouchableOpacity>
 
-      <Text style={styles.sectionTitle}>{t("settings.other_settings")}</Text>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>
-          {t("settings.notification_preferences")}
-        </Text>
+      <Text style={styles.sectionTitle}>{t("settings.theme")}</Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => handleThemeChange("dark")} // Directly call with "dark"
+      >
+        <Text style={styles.buttonText}>{t("settings.dark")}</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>{t("settings.privacy_settings")}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>
-          {t("settings.account_management")}
-        </Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => handleThemeChange("light")} // Directly call with "light"
+      >
+        <Text style={styles.buttonText}>{t("settings.light")}</Text>
       </TouchableOpacity>
 
       {userId && (
@@ -145,12 +161,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 16,
-  },
-  backButtonText: {
-    color: "#F5F5F5",
-    fontSize: 18,
-    fontFamily: "Nunito-SemiBold",
-    marginLeft: 8,
   },
   title: {
     fontSize: 26,

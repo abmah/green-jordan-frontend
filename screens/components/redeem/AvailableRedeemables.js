@@ -8,8 +8,10 @@ import {
   StyleSheet,
   Modal,
 } from "react-native";
+import { useTranslation } from "react-i18next"; // Import the translation hook
 
 const AvailableRedeemables = ({ redeemables, userPoints = 0, onRedeem }) => {
+  const { t, i18n } = useTranslation(); // Hook to access translation function
   const [loading, setLoading] = useState({});
   const [selectedItem, setSelectedItem] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -20,7 +22,6 @@ const AvailableRedeemables = ({ redeemables, userPoints = 0, onRedeem }) => {
 
     try {
       await onRedeem(item); // Call the redeem function
-
     } catch (error) {
       console.error("Error redeeming item:", error);
     } finally {
@@ -41,12 +42,22 @@ const AvailableRedeemables = ({ redeemables, userPoints = 0, onRedeem }) => {
 
   return (
     <View style={styles.tabContainer}>
-      <Text style={styles.points}>Points: {userPoints}</Text>
-      <Text style={styles.subheader}>Available Redeemables</Text>
+      <Text
+        style={[
+          styles.points,
+          { textAlign: i18n.language === "ar" ? "right" : "left" },
+        ]}
+      >
+        {t("availableRedeem.points")}
+        {userPoints}
+      </Text>
+      <Text style={styles.subheader}>{t("availableRedeem.subheader")}</Text>
 
       {redeemables.length === 0 ? (
         <View style={styles.emptyContainer}>
-          <Text style={styles.noItemsText}>No items available for redemption.</Text>
+          <Text style={styles.noItemsText}>
+            {t("availableRedeem.noItemsText")}
+          </Text>
         </View>
       ) : (
         <FlatList
@@ -60,7 +71,6 @@ const AvailableRedeemables = ({ redeemables, userPoints = 0, onRedeem }) => {
                     source={{ uri: item.image }}
                     style={styles.itemImage}
                   />
-
                   <View style={styles.textContainer}>
                     <Text style={styles.itemName}>{item.name}</Text>
                     <Text style={styles.itemCost}>{item.description}</Text>
@@ -82,8 +92,8 @@ const AvailableRedeemables = ({ redeemables, userPoints = 0, onRedeem }) => {
                   >
                     <Text style={styles.redeemButtonText}>
                       {loading[item._id]
-                        ? "Processing..."
-                        : `Get for ${item.cost}`}
+                        ? t("availableRedeem.processing")
+                        : t("availableRedeem.getFor", { cost: item.cost })}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -102,24 +112,28 @@ const AvailableRedeemables = ({ redeemables, userPoints = 0, onRedeem }) => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Confirm Redemption</Text>
+            <Text style={styles.modalTitle}>
+              {t("availableRedeem.confirmRedemption")}
+            </Text>
             <Text style={styles.modalMessage}>
-              Are you sure you want to redeem{" "}
-              <Text style={styles.itemName}>{selectedItem?.name}</Text> for{" "}
-              {selectedItem?.cost} points?
+              {t("availableRedeem.confirmMessage", {
+                itemName: selectedItem?.name,
+                cost: selectedItem?.cost,
+              })}
             </Text>
             <View style={styles.modalActions}>
-              <TouchableOpacity
-                style={styles.modalButton}
-                onPress={closeModal}
-              >
-                <Text style={styles.modalButtonText}>Cancel</Text>
+              <TouchableOpacity style={styles.modalButton} onPress={closeModal}>
+                <Text style={styles.modalButtonText}>
+                  {t("availableRedeem.cancel")}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.modalButton}
                 onPress={() => handleRedeem(selectedItem)}
               >
-                <Text style={styles.modalButtonText}>Confirm</Text>
+                <Text style={styles.modalButtonText}>
+                  {t("availableRedeem.confirm")}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -148,7 +162,6 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito-ExtraBold",
     marginBottom: 15,
     color: "#fff",
-    // textAlign: "center",
   },
   emptyContainer: {
     padding: 20,
@@ -223,7 +236,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-
   },
   modalContent: {
     width: 300,

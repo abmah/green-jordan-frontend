@@ -1,34 +1,47 @@
 import React from "react";
 import { View, Text, FlatList, Image, StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next"; // Import the translation hook
 
-const AllRedeemables = ({ allRedeemables }) => (
-  <View style={styles.tabContainer}>
-    <Text style={styles.subheader}>All Redeemables (For Reference)</Text>
-    {allRedeemables.length === 0 ? (
-      <View style={styles.emptyContainer}>
-        <Text style={styles.noItemsText}>No redeemables available.</Text>
-      </View>
-    ) : (
-      <FlatList
-        data={allRedeemables}
-        keyExtractor={(item) => item?._id || Math.random().toString()}
-        renderItem={({ item }) =>
-          item ? (
-            <View style={styles.itemContainer}>
-              <Image source={{ uri: item.image }} style={styles.itemImage} />
-              <View style={styles.itemContent}>
-                <Text style={styles.itemName}>{item.name}</Text>
-                <Text style={styles.itemDescription}>
-                  Points Required: {item.cost}
-                </Text>
+const AllRedeemables = ({ allRedeemables }) => {
+  const { t } = useTranslation(); // Hook to access translation function
+
+  return (
+    <View style={styles.tabContainer}>
+      <Text style={styles.subheader}>
+        {t("allRedeemables.header", {
+          context: "All Redeemables (For Reference)",
+        })}
+      </Text>
+      {allRedeemables.length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.noItemsText}>
+            {t("allRedeemables.noItemsText", {
+              context: "No redeemables available.",
+            })}
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={allRedeemables}
+          keyExtractor={(item) => item?._id || Math.random().toString()}
+          renderItem={({ item }) =>
+            item ? (
+              <View style={styles.itemContainer}>
+                <Image source={{ uri: item.image }} style={styles.itemImage} />
+                <View style={styles.itemContent}>
+                  <Text style={styles.itemName}>{item.name}</Text>
+                  <Text style={styles.itemDescription}>
+                    {t("allRedeemables.pointsRequired")} {item.cost}
+                  </Text>
+                </View>
               </View>
-            </View>
-          ) : null
-        }
-      />
-    )}
-  </View>
-);
+            ) : null
+          }
+        />
+      )}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   tabContainer: {

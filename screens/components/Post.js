@@ -56,7 +56,7 @@ const Post = ({ post, userData }) => {
   };
 
   const handleReport = (reason) => {
-    Alert.alert("Report Submitted", `You reported for: ${reason}`);
+    Alert.alert(t("post.reportSubmitted"), `${t("post.reportedFor")}${reason}`);
     // Here you would typically handle the report logic (e.g., send it to the backend)
   };
 
