@@ -37,3 +37,8 @@ export {
 
 // Redeemables
 export { getAllAvailableRedeemables, getAllRedeemables, redeemItem, getBasket } from './redeem';
+
+
+//Events
+
+export { getAllEvents, joinEvent, leaveEvent } from './events';
