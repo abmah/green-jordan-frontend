@@ -1,35 +1,37 @@
-import React, { useEffect, useState } from "react"; // Import useState to manage state
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
+  Modal,
   Alert,
   Platform,
 } from "react-native";
 import { useTranslation } from "react-i18next";
-import Toast from "react-native-toast-message"; // Import Toast
-import AsyncStorage from "@react-native-async-storage/async-storage"; // Import AsyncStorage
-import * as SecureStore from "expo-secure-store"; // Import SecureStore for logout functionality
-import useUserStore from "../stores/useUserStore"; // Import your user store
-import { Ionicons } from "@expo/vector-icons"; // Import Ionicons for the back icon
+import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
+import useUserStore from "../stores/useUserStore";
+import { Ionicons } from "@expo/vector-icons";
 
-const LANGUAGE_STORAGE_KEY = "appLanguage"; // Key for storing the language in AsyncStorage
+const LANGUAGE_STORAGE_KEY = "appLanguage";
 
 const Settings = ({ navigation }) => {
   const { t, i18n } = useTranslation();
   const { clearuserId, userId } = useUserStore();
 
-  // State to manage selected theme
-  const [selectedTheme, setSelectedTheme] = useState("dark"); // Default theme
+  const [selectedTheme, setSelectedTheme] = useState("dark");
+  const [languageModalVisible, setLanguageModalVisible] = useState(false);
+  const [themeModalVisible, setThemeModalVisible] = useState(false);
+  const [newLanguage, setNewLanguage] = useState(i18n.language); // Track selected language in modal
+  const [newTheme, setNewTheme] = useState(selectedTheme); // Track selected theme in modal
 
-  // Function to change the language and store it in AsyncStorage
   const changeLanguage = async (lang) => {
     try {
-      await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, lang); // Save selected language
+      await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
       i18n.changeLanguage(lang);
 
-      // Display a toast message when the language changes
       Toast.show({
         type: "success",
         text1: t("settings.language_changed", {
@@ -39,18 +41,6 @@ const Settings = ({ navigation }) => {
       });
     } catch (error) {
       console.error("Failed to save language to AsyncStorage:", error);
-    }
-  };
-
-  // Load the saved language from AsyncStorage when the component mounts
-  const loadSavedLanguage = async () => {
-    try {
-      const savedLanguage = await AsyncStorage.getItem(LANGUAGE_STORAGE_KEY);
-      if (savedLanguage) {
-        i18n.changeLanguage(savedLanguage); // Apply the saved language
-      }
-    } catch (error) {
-      console.error("Failed to load language from AsyncStorage:", error);
     }
   };
 
@@ -68,11 +58,21 @@ const Settings = ({ navigation }) => {
     // Logic to apply the theme can be added here
   };
 
+  const loadSavedLanguage = async () => {
+    try {
+      const savedLanguage = await AsyncStorage.getItem(LANGUAGE_STORAGE_KEY);
+      if (savedLanguage) {
+        i18n.changeLanguage(savedLanguage);
+      }
+    } catch (error) {
+      console.error("Failed to load language from AsyncStorage:", error);
+    }
+  };
+
   useEffect(() => {
-    loadSavedLanguage(); // Load saved language on component mount
+    loadSavedLanguage();
   }, []);
 
-  // Logout functionality
   const handleLogout = async () => {
     Alert.alert(t("profile.logout"), t("profile.logoutConfirmation"), [
       { text: "Cancel", style: "cancel" },
@@ -92,6 +92,16 @@ const Settings = ({ navigation }) => {
     ]);
   };
 
+  const handleLanguageSelect = () => {
+    changeLanguage(newLanguage);
+    setLanguageModalVisible(false);
+  };
+
+  const handleThemeSelect = () => {
+    handleThemeChange(newTheme);
+    setThemeModalVisible(false);
+  };
+
   return (
     <View style={styles.container}>
       {/* Back button */}
@@ -105,42 +115,108 @@ const Settings = ({ navigation }) => {
         <Text style={styles.title}>{t("settings.header")}</Text>
       </View>
 
-      <Text style={styles.sectionTitle}>{t("settings.language")}</Text>
+      {/* Language button */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => changeLanguage("en")}
+        onPress={() => setLanguageModalVisible(true)}
       >
-        <Text style={styles.buttonText}>English</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => changeLanguage("ar")}
-      >
-        <Text style={styles.buttonText}>العربية</Text>
+        <Text style={styles.buttonText}>
+          {t("settings.language")}:{" "}
+          {newLanguage === "en" ? "English" : "العربية"}
+        </Text>
       </TouchableOpacity>
 
-      <Text style={styles.sectionTitle}>{t("settings.theme")}</Text>
+      {/* Theme button */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => handleThemeChange("dark")} // Directly call with "dark"
+        onPress={() => setThemeModalVisible(true)}
       >
-        <Text style={styles.buttonText}>{t("settings.dark")}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => handleThemeChange("light")} // Directly call with "light"
-      >
-        <Text style={styles.buttonText}>{t("settings.light")}</Text>
+        <Text style={styles.buttonText}>
+          {t("settings.theme")}:{" "}
+          {newTheme === "dark" ? t("settings.dark") : t("settings.light")}
+        </Text>
       </TouchableOpacity>
 
+      {/* Logout button */}
       {userId && (
-        <>
-          <Text style={styles.sectionTitle}>{t("settings.logout")}</Text>
-          <TouchableOpacity style={styles.button} onPress={handleLogout}>
-            <Text style={styles.buttonText}>{t("profile.logout")}</Text>
-          </TouchableOpacity>
-        </>
+        <TouchableOpacity style={styles.button} onPress={handleLogout}>
+          <Text style={styles.buttonText}>{t("profile.logout")}</Text>
+        </TouchableOpacity>
       )}
+
+      {/* Language Selection Modal */}
+      <Modal
+        transparent={true}
+        animationType="slide"
+        visible={languageModalVisible}
+        onRequestClose={() => setLanguageModalVisible(false)}
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>{t("settings.language")}</Text>
+            <TouchableOpacity onPress={() => setNewLanguage("en")}>
+              <Text style={styles.modalOption}>English</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setNewLanguage("ar")}>
+              <Text style={styles.modalOption}>العربية</Text>
+            </TouchableOpacity>
+
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => setLanguageModalVisible(false)}
+              >
+                <Text style={styles.modalButtonText}>
+                  {t("settings.cancel")}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={handleLanguageSelect}
+              >
+                <Text style={styles.modalButtonText}>{t("settings.ok")}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Theme Selection Modal */}
+      <Modal
+        transparent={true}
+        animationType="slide"
+        visible={themeModalVisible}
+        onRequestClose={() => setThemeModalVisible(false)}
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>{t("settings.theme")}</Text>
+            <TouchableOpacity onPress={() => setNewTheme("dark")}>
+              <Text style={styles.modalOption}>{t("settings.dark")}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setNewTheme("light")}>
+              <Text style={styles.modalOption}>{t("settings.light")}</Text>
+            </TouchableOpacity>
+
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => setThemeModalVisible(false)}
+              >
+                <Text style={styles.modalButtonText}>
+                  {t("settings.cancel")}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={handleThemeSelect}
+              >
+                <Text style={styles.modalButtonText}>{t("settings.ok")}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -168,23 +244,53 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito-Bold",
     marginBottom: 16,
   },
-  sectionTitle: {
-    fontSize: 22,
-    color: "#F5F5F5",
-    fontFamily: "Nunito-ExtraBold",
-    marginTop: 20,
-    marginBottom: 12,
-  },
   button: {
     backgroundColor: "#1B2B38",
-    padding: 10,
+    padding: 20,
     borderRadius: 8,
-    marginVertical: 6,
+    marginVertical: 12,
   },
   buttonText: {
     color: "#F5F5F5",
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: "Nunito-SemiBold",
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContainer: {
+    backgroundColor: "#37464F",
+    padding: 20,
+    borderRadius: 10,
+    width: "80%",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontFamily: "Nunito-Bold",
+    marginBottom: 20,
+  },
+  modalOption: {
+    fontSize: 18,
+    marginVertical: 10,
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 20,
+  },
+  modalButton: {
+    backgroundColor: "#1B2B38",
+    padding: 10,
+    borderRadius: 8,
+    width: "45%",
+    alignItems: "center",
+  },
+  modalButtonText: {
+    color: "#FFF",
+    fontSize: 16,
   },
 });
 

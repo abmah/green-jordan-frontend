@@ -244,9 +244,9 @@
     "subheader": "Available Redeemables",
     "noItemsText": "No items available for redemption.",
     "processing": "Processing...",
-    "getFor": "Get for {cost}",
+    "getFor": "GET FOR ",
     "confirmRedemption": "Confirm Redemption",
-    "confirmMessage": "Are you sure you want to redeem {itemName} for {cost} points?",
+    "confirmMessage": "Are you sure you want to redeem {{itemName}} for {{cost}} points?",
     "cancel": "Cancel",
     "confirm": "Confirm"
   },
