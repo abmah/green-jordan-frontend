@@ -16,6 +16,7 @@ import useUserIdStore from "../../stores/useUserStore";
 import Loader from "./Loader";
 import Post from "./Post";
 import Toast from 'react-native-toast-message'; // Import Toast
+import UserImage from '../../assets/user.png';
 
 const UserProfileView = ({ selectedUserId, visible, onClose }) => {
   const { t } = useTranslation();
@@ -115,9 +116,11 @@ const UserProfileView = ({ selectedUserId, visible, onClose }) => {
 
               <View style={styles.profileHeader}>
                 <Image
-                  source={{
-                    uri: userData?.profilePicture || "https://via.placeholder.com/150",
-                  }}
+                  source={
+                    userData?.profilePicture
+                      ? { uri: userData.profilePicture }
+                      : UserImage // Ensure the default image works
+                  }
                   style={styles.profileImage}
                 />
                 <Text style={styles.username}>{userData?.username}</Text>

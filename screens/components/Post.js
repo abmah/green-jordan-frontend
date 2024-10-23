@@ -9,6 +9,7 @@ import formatDate from "../../utils/formatDate";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next"; // Import useTranslation
 import Toast from 'react-native-toast-message';
+import UserImage from '../../assets/user.png';
 
 const Post = ({ post, userData }) => {
   const { t } = useTranslation(); // Use the translation function
@@ -51,9 +52,9 @@ const Post = ({ post, userData }) => {
     setCommentsCount(newCommentsCount);
   };
 
-  const userProfilePicture =
-    post.userId.profilePicture || "https://via.placeholder.com/150";
-  const username = post.userId.username || "User";
+  const userProfilePicture = post?.userId?.profilePicture || Image.resolveAssetSource(UserImage).uri;
+  const username = post?.userId?.username || "User";
+
 
   const openUserProfile = () => {
     if (post.userId._id !== userId) {

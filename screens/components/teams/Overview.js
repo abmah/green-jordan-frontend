@@ -12,7 +12,7 @@ import useUserIdStore from "../../../stores/useUserStore";
 import Loader from "../Loader";
 import Toast from "react-native-toast-message"; // Importing Toast
 import { useTranslation } from "react-i18next"; // Import useTranslation
-
+import UserImage from '../../../assets/user.png'
 const Overview = ({ teamData, members }) => {
   const { t } = useTranslation(); // Use the translation function
   const { userId } = useUserIdStore();
@@ -58,7 +58,7 @@ const Overview = ({ teamData, members }) => {
       <View style={styles.memberCard}>
         <Image
           source={{
-            uri: item.profilePicture || "https://via.placeholder.com/100",
+            uri: item.profilePicture || Image.resolveAssetSource(UserImage).uri,
           }}
           style={styles.profilePicture}
         />

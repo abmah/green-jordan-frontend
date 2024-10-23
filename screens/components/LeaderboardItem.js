@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import { useTranslation } from "react-i18next"; // Import useTranslation
+import UserImage from '../../assets/user.png';
 
 const LeaderboardItem = ({ rank, username, points, profilePicture }) => {
   const { t } = useTranslation(); // Use the translation function
@@ -27,7 +28,7 @@ const LeaderboardItem = ({ rank, username, points, profilePicture }) => {
               source={
                 profilePicture
                   ? { uri: profilePicture }
-                  : { uri: "https://via.placeholder.com/150" }
+                  : { uri: Image.resolveAssetSource(UserImage) }
               }
               style={styles.podiumImage}
             />
@@ -50,7 +51,7 @@ const LeaderboardItem = ({ rank, username, points, profilePicture }) => {
           source={
             profilePicture
               ? { uri: profilePicture }
-              : { uri: "https://via.placeholder.com/150" }
+              : { uri: Image.resolveAssetSource(UserImage).uri }
           }
           style={styles.profileImage}
         />

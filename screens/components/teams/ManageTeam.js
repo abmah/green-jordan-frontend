@@ -134,7 +134,7 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
               />
             ) : (
               <Image
-                source={require("../../../assets/default-avatar.png")}
+                source={require("../../../assets/user.png")}
                 style={styles.profilePicture}
               />
             )}

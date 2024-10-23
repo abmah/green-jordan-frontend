@@ -26,6 +26,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useQuery } from '@tanstack/react-query';
 import Toast from 'react-native-toast-message';
+import UserImage from '../assets/user.png'
 
 // Render stats component
 const renderStats = ({ followers, followings, points, t }) => (
@@ -226,7 +227,7 @@ const ProfileScreen = ({ navigation }) => {
         <View style={styles.profileImageContainer}>
           <Image
             source={{
-              uri: userData?.profilePicture || "https://via.placeholder.com/150",
+              uri: userData?.profilePicture || Image.resolveAssetSource(UserImage).uri,
             }}
             style={styles.profilePicture}
           />
