@@ -78,7 +78,10 @@ const CommentsModal = ({
             style={styles.profilePicture}
           />
         ) : (
-          <View style={styles.profilePicturePlaceholder} />
+          <Image
+            source={require("../../assets/user.png")}
+            style={styles.profilePicture}
+          />
         )}
         <View style={styles.commentContent}>
           <Text style={styles.username}>
