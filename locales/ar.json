@@ -268,5 +268,14 @@
     "cancel": "إلغاء",
     "yes": "نعم",
     "viewDetails": "عرض التفاصيل"
+  },
+  "eventDetails": {
+    "joinSuccess": "تم الانضمام بنجاح",
+    "leaveSuccess": "تم الغاء الانضمام بنجاح",
+    "joinError": "فشل الانضمام",
+    "leaveError": "فشل الغاء الانضمام",
+    "header": "تفاصيل الفعاليه",
+    "join": "انضمام",
+    "leave": "الغاء الانضمام"
   }
 }

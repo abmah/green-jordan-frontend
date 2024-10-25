@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingVertical: 12,
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
     borderRadius: 16,
     marginVertical: 6,
   },
@@ -118,12 +118,12 @@ const styles = StyleSheet.create({
   // Podium styling for the top 3
   podiumItem: {
     marginVertical: 20,
-    marginHorizontal: 10,
-    width: "40%",
-    maxWidth: 120,
+    // marginHorizontal: 10,
+    width: 120,
     height: 250,
     elevation: 4,
     shadowColor: '#fff',
+    shadowOffset: { width: 0, height: 4 },
 
   },
   imageNameContainer: {

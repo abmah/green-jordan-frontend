@@ -270,5 +270,14 @@
     "cancel": "Cancel",
     "yes": "Yes",
     "viewDetails": "View Details"
+  },
+  "eventDetails": {
+    "joinSuccess": "Joined successfully!",
+    "leaveSuccess": "Left successfully!",
+    "joinError": "Failed to join",
+    "leaveError": "Failed to leave",
+    "header": "Event Details",
+    "join": "Join",
+    "leave": "Leave"
   }
 }

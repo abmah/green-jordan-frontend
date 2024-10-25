@@ -124,7 +124,7 @@ const Settings = ({ navigation }) => {
       </View>
 
       {/* Theme Selection */}
-      <View style={styles.settingContainer}>
+      {/* <View style={styles.settingContainer}>
         <Text style={styles.settingText}>{t("settings.theme")}</Text>
         <View style={styles.buttonContainer}>
           <Button
@@ -138,7 +138,7 @@ const Settings = ({ navigation }) => {
             onPress={() => handleThemeChange("light")}
           />
         </View>
-      </View>
+      </View> */}
 
       {/* Logout button */}
       {userId && (
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   settingContainer: {
-    marginBottom: 32,
+    marginBottom: 16,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -206,7 +206,6 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 8,
     alignItems: "center",
-    marginTop: 30,
     width: "100%",
   },
   logoutButtonText: {

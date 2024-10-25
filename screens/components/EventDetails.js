@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import Toast from "react-native-toast-message";
 import { useTranslation } from "react-i18next";
 import { getEventDetails, joinEvent, leaveEvent } from "../../api";
 import Loader from "./Loader";
 import useUserIdStore from "../../stores/useUserStore";
-import Icon from "react-native-vector-icons/Ionicons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 const EventDetails = ({ route, navigation }) => {
   const { eventId } = route.params;
@@ -31,7 +25,10 @@ const EventDetails = ({ route, navigation }) => {
         );
       } catch (error) {
         console.error("Error fetching event details:", error);
-        Alert.alert(t("error"), t("eventDetails.fetchError"));
+        Toast.show({
+          type: "error",
+          text1: t("eventDetails.fetchError"),
+        });
       } finally {
         setLoading(false);
       }
@@ -48,10 +45,16 @@ const EventDetails = ({ route, navigation }) => {
         ...prevDetails,
         participants: [...prevDetails.participants, { _id: userId }],
       }));
-      Alert.alert(t("success"), t("eventDetails.joinSuccess"));
+      Toast.show({
+        type: "success",
+        text1: t("eventDetails.joinSuccess"),
+      });
     } catch (error) {
       console.error("Error joining event:", error);
-      Alert.alert(t("error"), t("eventDetails.joinError"));
+      Toast.show({
+        type: "error",
+        text1: t("eventDetails.joinError"),
+      });
     }
   };
 
@@ -65,10 +68,16 @@ const EventDetails = ({ route, navigation }) => {
           (participant) => participant._id !== userId
         ),
       }));
-      Alert.alert(t("success"), t("eventDetails.leaveSuccess"));
+      Toast.show({
+        type: "success",
+        text1: t("eventDetails.leaveSuccess"),
+      });
     } catch (error) {
       console.error("Error leaving event:", error);
-      Alert.alert(t("error"), t("eventDetails.leaveError"));
+      Toast.show({
+        type: "error",
+        text1: t("eventDetails.leaveError"),
+      });
     }
   };
 
@@ -88,12 +97,16 @@ const EventDetails = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => navigation.goBack()}
-      >
-        <Icon name="arrow-back" size={30} color="#FFF" />
-      </TouchableOpacity>
+      {/* Header with Back Button */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}
+        >
+          <MaterialIcons name="arrow-back" size={24} color="#FFF" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>{t("eventDetails.header")}</Text>
+      </View>
 
       <Image source={{ uri: eventDetails.image }} style={styles.eventImage} />
       <Text style={styles.eventTitle}>{eventDetails.title}</Text>
@@ -109,7 +122,7 @@ const EventDetails = ({ route, navigation }) => {
         onPress={hasJoined ? handleLeaveEvent : handleJoinEvent}
       >
         <Text style={styles.buttonText}>
-          {hasJoined ? t("leave") : t("join")}
+          {hasJoined ? t("eventDetails.leave") : t("eventDetails.join")}
         </Text>
       </TouchableOpacity>
     </View>
@@ -121,18 +134,26 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: "#001c2c",
-    paddingVertical: 40,
+
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingTop: 20,
+    gap: 20,
+    // paddingHorizontal: 20,
   },
   backButton: {
-    position: "absolute",
-    top: 20,
-    left: 20,
-    zIndex: 1,
     paddingVertical: 10,
   },
+  headerTitle: {
+    fontSize: 24,
+    fontFamily: "Nunito-ExtraBold",
+    color: "#FFF",
+  },
   eventImage: {
-    width: "100%",
-    height: 200,
+    objectFit: "contain",
+    height: 300,
     borderRadius: 12,
   },
   eventTitle: {
@@ -143,15 +164,15 @@ const styles = StyleSheet.create({
   },
   eventDescription: {
     fontSize: 16,
-    fontFamily: "Nunito-Regular",
+    fontFamily: "Nunito-Bold",
     color: "#FFF",
-    marginBottom: 10,
+    marginBottom: 40,
   },
   participantCount: {
-    fontSize: 14,
-    fontFamily: "Nunito-Regular",
+    fontSize: 20,
+    fontFamily: "Nunito-Bold",
     color: "#FFF",
-    marginBottom: 20,
+    marginBottom: 10,
   },
   joinButton: {
     backgroundColor: "#8AC149",
