@@ -29,6 +29,8 @@ const CommentsModal = ({
   const [newComment, setNewComment] = useState("");
   const [error, setError] = useState(null);
 
+
+
   useEffect(() => {
     setComments(initialComments);
   }, [initialComments]);

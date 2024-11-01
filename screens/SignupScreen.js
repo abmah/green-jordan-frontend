@@ -16,6 +16,7 @@ import * as SecureStore from "expo-secure-store";
 import useUserStore from "../stores/useUserStore";
 import { useTranslation } from "react-i18next"; // Import useTranslation
 import { Ionicons } from "@expo/vector-icons";
+import { useQueryClient } from '@tanstack/react-query';
 const SignupScreen = ({ navigation }) => {
   const { t } = useTranslation(); // Use the translation function
   const [username, setUsername] = useState("");
@@ -24,6 +25,7 @@ const SignupScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { setuserId } = useUserStore();
+  const queryClient = useQueryClient();
 
   const buttonOffset = useState(new Animated.Value(0))[0];
 
@@ -36,6 +38,7 @@ const SignupScreen = ({ navigation }) => {
 
       await SecureStore.setItemAsync("userId", userId);
       await setuserId(userId);
+      queryClient.refetchQueries(['fetchUserHomeScreen']);
       navigation.navigate("Profile");
     } catch (error) {
       console.error("API call error:", error);

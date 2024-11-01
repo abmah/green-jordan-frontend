@@ -1,54 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import { View, FlatList, StyleSheet, Text } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
-import { getFeed, getSelf } from '../api'; // Import both feed and self API calls
-import Loader from './components/Loader'; // Custom loader component
-import Post from './components/Post'; // Component to render each post
+import { getFeed, getSelf } from '../api';
+import Loader from './components/Loader';
+import Post from './components/Post';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getTimeLinePosts } from '../api';
 import useUserIdStore from '../stores/useUserStore';
 
-
-
-
 const HomeScreen = () => {
-
   const { userId } = useUserIdStore();
-
 
   const fetchPosts = async () => {
     const response = await getFeed(userId);
     return response.data;
   };
-  const [userData, setUserData] = useState(null); // State to store user data
+
+  // Fetch user posts using React Query
   const { data: posts = [], isLoading, isError, refetch, isFetching } = useQuery({
     queryKey: ['feed'],
     queryFn: fetchPosts,
-    staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
-    refetchOnWindowFocus: false, // Only refetch when manually triggered
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
   });
 
-  // Fetch user data in useEffect
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const userResponse = await getSelf();
-        setUserData(userResponse); // Store user data
-      } catch (error) {
-        // console.log('Error fetching user data:', error);
-        throw error;
-      }
-    };
-
-    fetchUserData();
-  }, []);
-
-
-
+  // Fetch user data using React Query
+  const {
+    data: userData,
+    refetch: refetchUserData,
+    isLoading: isUserLoading,
+  } = useQuery({
+    queryKey: ['fetchUserHomeScreen'],
+    queryFn: getSelf,
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+  });
 
   const reversedData = [...posts].reverse();
 
-  if (isLoading) {
+  if (isLoading || isUserLoading) {
     return <Loader />;
   }
 
@@ -76,9 +65,12 @@ const HomeScreen = () => {
         ListEmptyComponent={<EmptyStateComponent />}
         data={reversedData}
         keyExtractor={(item) => item._id}
-        renderItem={({ item }) => <Post post={item} userData={userData} />} // Pass user data to Post component
+        renderItem={({ item }) => <Post post={item} userData={userData} />}
         refreshing={isFetching}
-        onRefresh={refetch} // Use refetch to reload data
+        onRefresh={() => {
+          refetch();       // Refetch posts
+          refetchUserData(); // Refetch user data
+        }}
       />
     </SafeAreaView>
   );

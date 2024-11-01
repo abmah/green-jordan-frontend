@@ -18,6 +18,7 @@ import GreenJordan from "../assets/green-jordan.svg";
 import MainLogo from "../assets/main-logo.svg";
 import { useTranslation } from "react-i18next"; // Import useTranslation
 import { Ionicons } from "@expo/vector-icons";
+import { useQueryClient } from '@tanstack/react-query';
 const LoginScreen = ({ navigation }) => {
   const { t } = useTranslation(); // Use the translation function
   const [email, setEmail] = useState("");
@@ -25,7 +26,7 @@ const LoginScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { setuserId } = useUserStore();
-
+  const queryClient = useQueryClient();
   const handleLogin = async () => {
     setLoading(true);
     setError(null);
@@ -34,7 +35,9 @@ const LoginScreen = ({ navigation }) => {
       const userId = response.data._id;
       await SecureStore.setItemAsync("userId", userId);
       await setuserId(userId);
+      queryClient.refetchQueries(['fetchUserHomeScreen']);
       navigation.navigate("Profile");
+
     } catch (error) {
       console.error("API call error:", error);
       setError(t("login.login_error")); // Use translation for login error message
