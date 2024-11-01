@@ -39,7 +39,8 @@
     "comments": "التعليقات",
     "created_at": "تم إنشاؤه في",
     "reportSubmitted": " تم تقديم الإبلاغ بنجاح",
-    "reportedFor": "لقد قمت بالتبليغ عن: "
+    "reportedFor": "لقد قمت بالتبليغ عن: ",
+    "date": "{{date}}"
   },
 
   "comments_modal": {
@@ -70,13 +71,14 @@
     "challenges_assigned_today": "تحديات اليوم: {{count}}",
     "never": "لم تقم بأي تحد بعد",
     "events": "فعاليات",
-    "redeem": "تبديل"
+    "redeem": "الجوائز"
   },
 
   "challengeItem": {
     "validation_error": "خطأ في التحقق: يرجى تقديم وصف واختيار صورة.",
     "done": "منجز",
-    "attempt": "محاولة"
+    "attempt": "محاولة",
+    "points": "نقطة"
   },
 
   "imagePickerModal": {
@@ -219,7 +221,7 @@
   },
 
   "redeemScreen": {
-    "header": "تبديل",
+    "header": "الجوائز",
     "insufficientPointsTitle": "نقاط غير كافية",
     "insufficientPointsMessage": "ليس لديك نقاط كافية لتبديلها بالعنصر",
     "successTitle": "نجاح",
@@ -228,35 +230,35 @@
     "errorMessage": "فشل تحميل البيانات.",
     "errorRedeeming": "فشل تبديل العنصر.",
     "noResponse": "لا يوجد رد من الخادم.",
-    "available": "متاح",
-    "redeemables": "العناصر",
-    "redeemed": "مستبدلة"
+    "available": "الجوائز المتاحة",
+    "redeemables": "قائمة الجوائز",
+    "redeemed": "الجوائز المستبدلة"
   },
 
   "availableRedeem": {
     "points": "النقاط: ",
-    "subheader": "العناصر المتاحة",
-    "noItemsText": "لا توجد عناصر متاحة للاسترداد.",
-    "processing": "تجري المعالجة...",
+    "subheader": "الجوائز المتاحة",
+    "noItemsText": "لا توجد جوائز متاحة للاسترداد.",
+    "processing": "يتم الاجراء...",
     "getFor": "مقابل ",
-    "confirmRedemption": "تأكيد المبادلة",
+    "confirmRedemption": "تأكيد الاستبدال",
     "confirmMessage": " تأكيد أنك تريد استبدال  {{itemName}} مقابل {{cost}}",
     "cancel": "إلغاء",
     "confirm": "تأكيد",
-    "successTitle": "نجاح",
-    "successMessage": "تم تبديل العنصر بنجاح."
+    "successTitle": "تم بنجاح",
+    "successMessage": "تم تبديل الجائزة بنجاح."
   },
 
   "allRedeemables": {
-    "header": "جميع العناصر (للمرجع)",
-    "noItemsText": "لا توجد عناصر متاحة.",
+    "header": "قائمة الجوائز",
+    "noItemsText": "لا توجد جوائز متاحة حالياً.",
     "pointsRequired": "النقاط المطلوبة: "
   },
   "redeemedItems": {
-    "header": "العناصر المبدلة",
-    "noItemsText": "لم يتم تبديل أي عناصر بعد.",
+    "header": "الجوائز المستبدلة",
+    "noItemsText": "لم يتم تبديل أي جوائز بعد.",
     "redeemedFor": "تم تبديله مقابل:",
-    "processingMessage": "يتم العمل على العناصر المستبدلة وسيتم إرسالها إليك في أقرب وقت ممكن. يرجى تفقد بريدك الالكتروني"
+    "processingMessage": "يتم العمل على الجوائز المستبدلة وسيتم إرسالها إليك في أقرب وقت ممكن. يرجى تفقد بريدك الالكتروني"
   },
 
   "eventScreen": {

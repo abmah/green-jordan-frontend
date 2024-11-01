@@ -8,11 +8,11 @@ import ReportModal from "./ReportModal"; // Import ReportModal
 import formatDate from "../../utils/formatDate";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next"; // Import useTranslation
-import Toast from 'react-native-toast-message';
-import UserImage from '../../assets/user.png';
+import Toast from "react-native-toast-message";
+import UserImage from "../../assets/user.png";
 
 const Post = ({ post, userData }) => {
-  const { t } = useTranslation(); // Use the translation function
+  const { t, i18n } = useTranslation(); // Use the translation function
   const { userId } = useUserStore();
   const [isLiked, setIsLiked] = useState(post.likes.includes(userId));
   const [likesCount, setLikesCount] = useState(post.likes.length);
@@ -52,9 +52,9 @@ const Post = ({ post, userData }) => {
     setCommentsCount(newCommentsCount);
   };
 
-  const userProfilePicture = post?.userId?.profilePicture || Image.resolveAssetSource(UserImage).uri;
+  const userProfilePicture =
+    post?.userId?.profilePicture || Image.resolveAssetSource(UserImage).uri;
   const username = post?.userId?.username || "User";
-
 
   const openUserProfile = () => {
     if (post.userId._id !== userId) {
@@ -67,7 +67,7 @@ const Post = ({ post, userData }) => {
     Toast.show({
       text1: t("post.reportSubmitted"),
       text2: `${t("post.reportedFor")}${reason}`,
-      type: 'info', // You can set the type to 'info', 'success', or 'error' based on the context
+      type: "info", // You can set the type to 'info', 'success', or 'error' based on the context
     });
     // Here you would typically handle the report logic (e.g., send it to the backend)
   };
@@ -121,7 +121,9 @@ const Post = ({ post, userData }) => {
             </Text>
           </Pressable>
         </View>
-        <Text style={styles.timestamp}>{formatDate(post.createdAt)}</Text>
+        <Text style={styles.timestamp}>
+          {t("post.date", { date: formatDate(post.createdAt, i18n.language) })}
+        </Text>
       </View>
 
       <CommentsModal
@@ -130,7 +132,7 @@ const Post = ({ post, userData }) => {
         onClose={() => setIsModalVisible(false)}
         postId={post._id}
         userData={userData}
-        onCommentsUpdate={handleCommentsUpdate} // Pass the callback to the modal
+        onCommentsUpdate={handleCommentsUpdate}
       />
 
       <UserProfileModal
@@ -147,8 +149,6 @@ const Post = ({ post, userData }) => {
     </View>
   );
 };
-
-
 
 const styles = StyleSheet.create({
   container: {

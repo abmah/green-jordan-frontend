@@ -1,18 +1,35 @@
 import { useState } from "react";
-import { View, Text, Pressable, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  Alert,
+  I18nManager,
+} from "react-native";
 import { createPost } from "../../api/post";
 import { requestCameraPermissions, pickImage } from "./ImagePickerHandler";
 import Foundation from "@expo/vector-icons/Foundation";
 import ImagePickerModal from "./ImagePickerModal";
-import { useTranslation } from "react-i18next"; // Import useTranslation
-import { useQueryClient } from '@tanstack/react-query';
-const ChallengeItem = ({ challenge, userId, fetchChallenges, fetchUserData }) => {
-  const { t } = useTranslation(); // Use the translation function
+import { useTranslation } from "react-i18next";
+import { useQueryClient } from "@tanstack/react-query";
+
+const ChallengeItem = ({
+  challenge,
+  userId,
+  fetchChallenges,
+  fetchUserData,
+}) => {
+  const { t, i18n } = useTranslation();
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const queryClient = useQueryClient();
+
+  const isArabic = i18n.language === "ar";
+  I18nManager.allowRTL(isArabic);
+
   const handleCameraPress = async () => {
     if (await requestCameraPermissions()) {
       await pickImage("camera", setImage);
@@ -25,7 +42,7 @@ const ChallengeItem = ({ challenge, userId, fetchChallenges, fetchUserData }) =>
 
   const handleSubmit = async () => {
     if (!description.trim() || !image) {
-      Alert.alert("Validation Error", t("challengeItem.validation_error")); // Use translation
+      Alert.alert("Validation Error", t("challengeItem.validation_error"));
       return;
     }
 
@@ -37,9 +54,8 @@ const ChallengeItem = ({ challenge, userId, fetchChallenges, fetchUserData }) =>
       setModalVisible(false);
       fetchChallenges();
       fetchUserData();
-      queryClient.refetchQueries(['feed']);
-      queryClient.refetchQueries(['profile']);
-
+      queryClient.refetchQueries(["feed"]);
+      queryClient.refetchQueries(["profile"]);
     } catch (error) {
       console.error("Error submitting form:", error);
     } finally {
@@ -54,18 +70,46 @@ const ChallengeItem = ({ challenge, userId, fetchChallenges, fetchUserData }) =>
         challenge.completed && styles.completedContainer,
       ]}
     >
-      <View style={styles.cardContent}>
-        <View style={styles.challengeImage}>
+      <View
+        style={[
+          styles.cardContent,
+          isArabic && { flexDirection: "row-reverse" },
+        ]}
+      >
+        <View
+          style={[
+            styles.challengeImage,
+            isArabic && { alignItems: "flex-end" },
+          ]}
+        >
           <Foundation name="trees" size={100} color="#28A745" />
         </View>
         <View style={styles.textContent}>
-          <Text style={styles.challengeTitle}>{challenge.title}</Text>
-          <Text style={styles.challengePoints}>Points: {challenge.points}</Text>
-          <Text style={styles.challengeDescription}>
-            {challenge.description}
+          <Text
+            style={[styles.challengeTitle, isArabic && { textAlign: "right" }]}
+          >
+            {isArabic ? challenge.titleAR : challenge.title}
+          </Text>
+          <Text
+            style={[styles.challengePoints, isArabic && { textAlign: "right" }]}
+          >
+            {challenge.points} {t("challengeItem.points")}
+          </Text>
+          <Text
+            style={[
+              styles.challengeDescription,
+              isArabic && { textAlign: "right" },
+            ]}
+          >
+            {isArabic ? challenge.descriptionAR : challenge.description}
           </Text>
 
-          <View style={styles.attemptButtonContainer}>
+          <View
+            style={[
+              styles.attemptButtonContainer,
+              isArabic && { alignItems: "flex-end" },
+            ]}
+          >
             <Pressable
               disabled={challenge.completed}
               style={({ pressed }) => [
@@ -82,7 +126,7 @@ const ChallengeItem = ({ challenge, userId, fetchChallenges, fetchUserData }) =>
               >
                 {challenge.completed
                   ? t("challengeItem.done")
-                  : t("challengeItem.attempt")}{" "}
+                  : t("challengeItem.attempt")}
               </Text>
             </Pressable>
             <View style={styles.attemptButtonUnderline}></View>
@@ -90,7 +134,6 @@ const ChallengeItem = ({ challenge, userId, fetchChallenges, fetchUserData }) =>
         </View>
       </View>
 
-      {/* ImagePickerModal */}
       <ImagePickerModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}

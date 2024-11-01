@@ -79,7 +79,8 @@
   "challengeItem": {
     "validation_error": "Validation Error: Please provide a description and select an image.",
     "done": "DONE",
-    "attempt": "ATTEMPT"
+    "attempt": "ATTEMPT",
+    "points": "Points"
   },
 
   "imagePickerModal": {
