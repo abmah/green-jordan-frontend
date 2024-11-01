@@ -39,7 +39,8 @@
     "comments": "التعليقات",
     "created_at": "تم إنشاؤه في",
     "reportSubmitted": " تم تقديم الإبلاغ بنجاح",
-    "reportedFor": "لقد قمت بالتبليغ عن: "
+    "reportedFor": "لقد قمت بالتبليغ عن: ",
+    "date": "{{date}}"
   },
 
   "comments_modal": {
@@ -76,7 +77,8 @@
   "challengeItem": {
     "validation_error": "خطأ في التحقق: يرجى تقديم وصف واختيار صورة.",
     "done": "منجز",
-    "attempt": "محاولة"
+    "attempt": "محاولة",
+    "points": "نقطة"
   },
 
   "imagePickerModal": {
