@@ -13,22 +13,22 @@
     }
   },
   "login": {
-    "header": "تسجيل الدخول",
+    "login_error": "فشل تسجيل الدخول. يرجى التحقق من بياناتك والمحاولة مرة أخرى.",
+    "login_button": "تسجيل الدخول",
     "email_placeholder": "البريد الإلكتروني",
     "password_placeholder": "كلمة المرور",
-    "login_button": "تسجيل الدخول",
     "signup_prompt": "ليس لديك حساب؟",
-    "signup_button": "سجل!",
-    "login_error": "فشل تسجيل الدخول. يرجى التحقق من بياناتك والمحاولة مرة أخرى."
+    "signup_button": "سجل!"
   },
   "signup": {
+    "signup_error": "فشل التسجيل. يرجى المحاولة مرة أخرى.",
+    "signup_button": "تسجيل",
     "username_placeholder": "اسم المستخدم",
     "email_placeholder": "البريد الإلكتروني",
     "password_placeholder": "كلمة المرور",
-    "signup_button": "إنشاء حساب",
-    "signup_error": "حدث خطأ أثناء التسجيل. حاول مرة أخرى.",
-    "login_prompt": "هل لديك حساب بالفعل؟",
-    "login_button": "قم بتسجيل الدخول"
+    "login_prompt": "لديك حساب بالفعل؟",
+    "login_button": "تسجيل الدخول",
+    "complete_all_fields": "يرجى ملء جميع الحقول."
   },
   "post": {
     "error_title": "خطأ",
@@ -189,19 +189,23 @@
   "settings": {
     "header": "الإعدادات",
     "language": "اللغة",
-    "theme": "السمة",
-    "dark": "داكن",
-    "light": "فاتح",
+    "theme": "الثيم",
     "language_changed": "تم تغيير اللغة إلى {{lang}}",
-    "theme_changed": "تم تغيير السمة إلى {{theme}}",
     "account_management": "إدارة الحساب",
     "change_password": "تغيير كلمة المرور",
     "change_username": "تغيير اسم المستخدم",
-    "new_username": "اسم مستخدم جديد",
+    "new_username": "اسم المستخدم الجديد",
+    "username_updated": "تم تحديث اسم المستخدم",
     "change_password_title": "تغيير كلمة المرور",
     "old_password": "كلمة المرور الحالية",
     "new_password": "كلمة المرور الجديدة",
     "confirm_new_password": "تأكيد كلمة المرور الجديدة",
+    "password_updated": "تم تحديث كلمة المرور",
+    "error": "خطأ",
+    "password_update_error": "تعذر تحديث كلمة المرور",
+    "password_mismatch": "كلمات المرور غير متطابقة",
+    "new_username_taken": "اسم المستخدم الجديد محجوز",
+    "password_same_error": "كلمة المرور الجديدة لا يمكن أن تكون نفس القديمة",
     "submit": "إرسال",
     "cancel": "إلغاء",
     "logout": "تسجيل الخروج"
@@ -281,7 +285,8 @@
     "areYouWilling": "هل ترغب فعلاً في المشاركة؟",
     "cancel": "إلغاء",
     "yes": "نعم",
-    "viewDetails": "عرض التفاصيل"
+    "viewDetails": "عرض التفاصيل",
+    "maxMembers": "عدد الاشخاص المطلوبين:"
   },
   "eventDetails": {
     "joinSuccess": "تم الانضمام بنجاح",
@@ -289,6 +294,9 @@
     "joinError": "فشل الانضمام",
     "leaveError": "فشل الغاء الانضمام",
     "header": "تفاصيل الفعاليه",
+    "currentParticipants": "المشاركين الحاليين:",
+    "maxParticipants": "عدد الاشخاص المطلوبين: ",
+    "aboutEvent": "حول الفعالية: ",
     "join": "انضمام",
     "leave": "الغاء الانضمام"
   }

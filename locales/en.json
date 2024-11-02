@@ -14,23 +14,22 @@
   },
 
   "login": {
-    "header": "Login",
+    "login_error": "Login failed. Please check your credentials and try again.",
+    "login_button": "Log In",
     "email_placeholder": "Email",
     "password_placeholder": "Password",
-    "login_button": "Login",
     "signup_prompt": "Don't have an account?",
-    "signup_button": "Sign up!",
-    "login_error": "*Login failed. Please check your credentials and try again."
+    "signup_button": "Sign Up!"
   },
   "signup": {
-    "header": "Sign Up",
+    "signup_error": "Sign-up failed. Please try again.",
+    "signup_button": "Sign Up",
     "username_placeholder": "Username",
     "email_placeholder": "Email",
     "password_placeholder": "Password",
-    "signup_button": "Sign Up",
     "login_prompt": "Already have an account?",
-    "login_button": "Login",
-    "signup_error": "*Signup failed. Please try again."
+    "login_button": "Log In",
+    "complete_all_fields": "Please complete all fields."
   },
 
   "post": {
@@ -192,18 +191,22 @@
     "header": "Settings",
     "language": "Language",
     "theme": "Theme",
-    "dark": "Dark",
-    "light": "Light",
     "language_changed": "Language changed to {{lang}}",
-    "theme_changed": "Theme changed to {{theme}}",
     "account_management": "Account Management",
     "change_password": "Change Password",
     "change_username": "Change Username",
     "new_username": "New Username",
+    "username_updated": "Username Updated",
     "change_password_title": "Change Password",
     "old_password": "Current Password",
     "new_password": "New Password",
     "confirm_new_password": "Confirm New Password",
+    "password_updated": "Password Updated",
+    "error": "Error",
+    "password_update_error": "Password couldn't be updated",
+    "password_mismatch": "Passwords do not match",
+    "new_username_taken": "New username is already taken",
+    "password_same_error": "New password can't be same as old password",
     "submit": "Submit",
     "cancel": "Cancel",
     "logout": "Logout"
@@ -282,7 +285,8 @@
     "areYouWilling": "Are you willing to participate?",
     "cancel": "Cancel",
     "yes": "Yes",
-    "viewDetails": "View Details"
+    "viewDetails": "View Details",
+    "maxMembers": "Max participants:"
   },
   "eventDetails": {
     "joinSuccess": "Joined successfully!",
@@ -290,7 +294,10 @@
     "joinError": "Failed to join",
     "leaveError": "Failed to leave",
     "header": "Event Details",
-    "join": "Join",
+    "currentParticipants": "Joined:",
+    "maxParticipants": "Max:",
+    "aboutEvent": "About this event: ",
+    "join": "Attend",
     "leave": "Leave"
   }
 }
