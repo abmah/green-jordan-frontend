@@ -46,3 +46,7 @@ export {
 //Events
 
 export { getAllEvents, getEventDetails, joinEvent, leaveEvent } from "./events";
+
+
+// update
+export { updatePassword, updateUsername } from "./updateUser"

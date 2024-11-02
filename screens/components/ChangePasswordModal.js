@@ -6,69 +6,23 @@ import {
   Modal,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import Toast from "react-native-toast-message";
 import { useTranslation } from "react-i18next";
-import { Ionicons } from "@expo/vector-icons"; // Ensure you have this library for the "X" icon
+import { Ionicons } from "@expo/vector-icons";
+import useUserIdStore from "../../stores/useUserStore";
+import { updatePassword } from "../../api";
 
-
-export const ChangeUsernameModal = ({ visible, onClose, onChange }) => {
-
-  const { t } = useTranslation();
-  const [newUsername, setNewUsername] = React.useState("");
-
-  const handleChangeUsername = () => {
-    if (newUsername.trim() === "") {
-      Toast.show({
-        type: "error",
-        text1: t("settings.username_empty_error"),
-        position: "bottom",
-      });
-      return;
-    }
-    onChange(newUsername);
-    onClose();
-  };
-
-  return (
-    <Modal
-      transparent={true}
-      animationType="slide"
-      visible={visible}
-      onRequestClose={onClose}
-    >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <Ionicons name="close" size={24} color="#F5F5F5" />
-          </TouchableOpacity>
-          <Text style={styles.modalTitle}>{t("settings.change_username")}</Text>
-          <TextInput
-            style={styles.input}
-            placeholder={t("settings.new_username")}
-            placeholderTextColor="#B3B3B3"
-            value={newUsername}
-            onChangeText={setNewUsername}
-          />
-          <TouchableOpacity
-            style={styles.submitButton}
-            onPress={handleChangeUsername}
-          >
-            <Text style={styles.submitButtonText}>{t("settings.submit")}</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </Modal>
-  );
-};
-
-export const ChangePasswordModal = ({ visible, onClose, onChange }) => {
+export const ChangePasswordModal = ({ visible, onClose }) => {
   const { t } = useTranslation();
   const [oldPassword, setOldPassword] = React.useState("");
   const [newPassword, setNewPassword] = React.useState("");
   const [confirmNewPassword, setConfirmNewPassword] = React.useState("");
+  const [loading, setLoading] = React.useState(false); // State for loading
+  const { userId } = useUserIdStore();
 
-  const handleChangePassword = () => {
+  const handleChangePassword = async () => {
     if (
       oldPassword.trim() === "" ||
       newPassword.trim() === "" ||
@@ -89,8 +43,42 @@ export const ChangePasswordModal = ({ visible, onClose, onChange }) => {
       });
       return;
     }
-    onChange(oldPassword, newPassword);
-    onClose();
+    if (oldPassword === newPassword) { // Check if old and new passwords are the same
+      Toast.show({
+        type: "error",
+        text1: t("settings.password_same_error"), // Ensure you have this translation key
+        position: "bottom",
+      });
+      return;
+    }
+
+    // Set loading to true
+    setLoading(true);
+
+    try {
+      await updatePassword(oldPassword, newPassword, userId);
+      Toast.show({
+        type: "success",
+        text1: t("settings.password_updated"),
+        position: "bottom",
+      });
+
+      // Clear the form fields
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmNewPassword("");
+
+      onClose();
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: t("settings.password_update_error"),
+        position: "bottom",
+      });
+    } finally {
+      // Set loading to false
+      setLoading(false);
+    }
   };
 
   return (
@@ -133,8 +121,13 @@ export const ChangePasswordModal = ({ visible, onClose, onChange }) => {
           <TouchableOpacity
             style={styles.submitButton}
             onPress={handleChangePassword}
+            disabled={loading} // Disable button while loading
           >
-            <Text style={styles.submitButtonText}>{t("settings.submit")}</Text>
+            {loading ? ( // Show activity indicator if loading
+              <ActivityIndicator size="small" color="#ffffff" />
+            ) : (
+              <Text style={styles.submitButtonText}>{t("settings.submit")}</Text>
+            )}
           </TouchableOpacity>
         </View>
       </View>
@@ -199,4 +192,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default { ChangeUsernameModal, ChangePasswordModal };
+export default ChangePasswordModal;

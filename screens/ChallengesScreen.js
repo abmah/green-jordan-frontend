@@ -23,6 +23,10 @@ const ChallengesScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
 
+
+
+
+
   const fetchChallenges = async () => {
     try {
       setLoading(true);
@@ -45,6 +49,8 @@ const ChallengesScreen = ({ navigation }) => {
       setUserData(null);
     }
   };
+
+
 
   useEffect(() => {
     if (userId) {

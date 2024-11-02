@@ -14,10 +14,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
 import useUserStore from "../stores/useUserStore";
 import { Ionicons } from "@expo/vector-icons";
-import {
-  ChangeUsernameModal,
-  ChangePasswordModal,
-} from "./components/SettingsModals";
+import ChangeUsernameModal from './components/ChangeUsernameModal';
+import ChangePasswordModal from './components/ChangePasswordModal';
+
 
 const LANGUAGE_STORAGE_KEY = "appLanguage";
 
