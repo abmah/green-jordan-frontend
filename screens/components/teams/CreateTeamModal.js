@@ -16,18 +16,33 @@ const CreateTeamModal = ({
   setModalVisible,
   handleCreateTeam,
 }) => {
-  const { t } = useTranslation(); // Use translation hook
+  const { t } = useTranslation();
   const [newTeamName, setNewTeamName] = useState("");
   const [newTeamDescription, setNewTeamDescription] = useState("");
+  const [loading, setLoading] = useState(false); // Add loading state
 
-  const onCreateTeam = () => {
+  const onCreateTeam = async () => {
     if (!newTeamName || !newTeamDescription) {
       Alert.alert(t("createTeam.error"), t("createTeam.missingFields"));
       return;
     }
-    handleCreateTeam({ name: newTeamName, description: newTeamDescription });
-    setNewTeamName("");
-    setNewTeamDescription("");
+    setLoading(true); // Start loading
+    try {
+      await handleCreateTeam({
+        name: newTeamName,
+        description: newTeamDescription,
+      });
+      setNewTeamName("");
+      setNewTeamDescription("");
+      setModalVisible(false); // Close the modal on success
+    } catch (error) {
+      Alert.alert(
+        t("createTeam.error"),
+        error.message || t("createTeam.failed")
+      );
+    } finally {
+      setLoading(false); // Stop loading
+    }
   };
 
   return (
@@ -39,15 +54,16 @@ const CreateTeamModal = ({
     >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          {/* Top Section: Header */}
           <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>{t("createTeam.header")}</Text>
-            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
+            <TouchableOpacity
+              onPress={() => setModalVisible(false)}
+              style={styles.closeButton}
+            >
               <Ionicons name="close" size={24} color="#F5F5F5" />
             </TouchableOpacity>
           </View>
 
-          {/* Bottom Section: Form and Buttons */}
           <View style={styles.bottomSection}>
             <TextInput
               style={styles.input}
@@ -65,13 +81,19 @@ const CreateTeamModal = ({
             />
             <TouchableOpacity
               onPress={onCreateTeam}
-              style={styles.createTeamButton}
+              style={
+                loading
+                  ? styles.disabledCreateTeamButton
+                  : styles.createTeamButton
+              } // Conditional styling
+              disabled={loading} // Disable button while loading
             >
               <Text style={styles.createTeamButtonText}>
-                {t("createTeam.createButton")}
+                {loading
+                  ? t("createTeam.loading")
+                  : t("createTeam.createButton")}
               </Text>
             </TouchableOpacity>
-
           </View>
         </View>
       </View>
@@ -101,7 +123,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
     alignItems: "center",
-
   },
   closeButton: {
     alignSelf: "flex-end",
@@ -134,12 +155,21 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "#8AC149",
     height: 45,
-    alignSelf: "flex-end",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 8,
     paddingVertical: 10,
     elevation: 2,
+    marginTop: 10,
+  },
+  disabledCreateTeamButton: {
+    width: "100%",
+    backgroundColor: "#B0B0B0",
+    height: 45,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 8,
+    paddingVertical: 10,
     marginTop: 10,
   },
   createTeamButtonText: {

@@ -1,6 +1,6 @@
 {
   "teams": {
-    "header": "Teams",
+    "header": "My Team",
     "no_teams": "There are no teams",
     "login_prompt": "Please log in first.",
     "login_button": "Go to Login",
@@ -85,7 +85,9 @@
 
   "imagePickerModal": {
     "caption_placeholder": "Write a caption",
-    "submit": "SUBMIT"
+    "submit": "SUBMIT",
+    "instruction_text": "Please select an image to upload. Make sure the image is clear and shows that you've actually done the challenge. Failing to do so might put your account at a risk of a ban.",
+    "close": "Close"
   },
 
   "profile": {
@@ -120,7 +122,8 @@
     "createButton": "Create Team",
     "closeButton": "Close",
     "error": "Error",
-    "missingFields": "Please provide a team name and description."
+    "missingFields": "Please provide a team name and description.",
+    "loading": "Creating Team..."
   },
 
   "noTeam": {
@@ -193,7 +196,16 @@
     "light": "Light",
     "language_changed": "Language changed to {{lang}}",
     "theme_changed": "Theme changed to {{theme}}",
-    "account": "Account",
+    "account_management": "Account Management",
+    "change_password": "Change Password",
+    "change_username": "Change Username",
+    "new_username": "New Username",
+    "change_password_title": "Change Password",
+    "old_password": "Current Password",
+    "new_password": "New Password",
+    "confirm_new_password": "Confirm New Password",
+    "submit": "Submit",
+    "cancel": "Cancel",
     "logout": "Logout"
   },
 

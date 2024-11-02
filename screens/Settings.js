@@ -1,3 +1,4 @@
+// Settings.js
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -13,9 +14,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
 import useUserStore from "../stores/useUserStore";
 import { Ionicons } from "@expo/vector-icons";
+import {
+  ChangeUsernameModal,
+  ChangePasswordModal,
+} from "./components/SettingsModals";
 
 const LANGUAGE_STORAGE_KEY = "appLanguage";
 
+// Button Component
 const Button = ({ title, isActive, onPress }) => (
   <TouchableOpacity
     style={[styles.button, isActive && styles.activeButton]}
@@ -27,10 +33,13 @@ const Button = ({ title, isActive, onPress }) => (
 
 const Settings = ({ navigation }) => {
   const { t, i18n } = useTranslation();
-  const { clearuserId, userId } = useUserStore();
+  const { clearuserId } = useUserStore();
 
-  const [selectedTheme, setSelectedTheme] = useState("dark");
   const [newLanguage, setNewLanguage] = useState(i18n.language);
+
+  // State for modals
+  const [usernameModalVisible, setUsernameModalVisible] = useState(false);
+  const [passwordModalVisible, setPasswordModalVisible] = useState(false);
 
   const changeLanguage = async (lang) => {
     try {
@@ -47,17 +56,6 @@ const Settings = ({ navigation }) => {
     } catch (error) {
       console.error("Failed to save language to AsyncStorage:", error);
     }
-  };
-
-  const handleThemeChange = (theme) => {
-    setSelectedTheme(theme);
-    Toast.show({
-      type: "success",
-      text1: t("settings.theme_changed", {
-        theme: theme === "dark" ? t("settings.dark") : t("settings.light"),
-      }),
-      position: "bottom",
-    });
   };
 
   useEffect(() => {
@@ -103,114 +101,142 @@ const Settings = ({ navigation }) => {
         >
           <Ionicons name="arrow-back" size={24} color="#F5F5F5" />
         </TouchableOpacity>
-        <Text style={styles.title}>{t("settings.header")}</Text>
+        <Text style={styles.headerText}>{t("settings.header")}</Text>
       </View>
 
       {/* Language Selection */}
-      <View style={styles.settingContainer}>
-        <Text style={styles.settingText}>{t("settings.language")}</Text>
-        <View style={styles.buttonContainer}>
-          <Button
-            title="English"
-            isActive={newLanguage === "en"}
-            onPress={() => changeLanguage("en")}
-          />
-          <Button
-            title="العربية"
-            isActive={newLanguage === "ar"}
-            onPress={() => changeLanguage("ar")}
-          />
-        </View>
+      <Text style={styles.sectionTitle}>{t("settings.language")}</Text>
+      <View style={styles.buttonContainer}>
+        <Button
+          title="English"
+          isActive={newLanguage === "en"}
+          onPress={() => changeLanguage("en")}
+        />
+        <Button
+          title="العربية"
+          isActive={newLanguage === "ar"}
+          onPress={() => changeLanguage("ar")}
+        />
       </View>
 
-      {/* Theme Selection */}
-      {/* <View style={styles.settingContainer}>
-        <Text style={styles.settingText}>{t("settings.theme")}</Text>
-        <View style={styles.buttonContainer}>
-          <Button
-            title={t("settings.dark")}
-            isActive={selectedTheme === "dark"}
-            onPress={() => handleThemeChange("dark")}
-          />
-          <Button
-            title={t("settings.light")}
-            isActive={selectedTheme === "light"}
-            onPress={() => handleThemeChange("light")}
-          />
-        </View>
-      </View> */}
-
-      {/* Logout button */}
-      {userId && (
-        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Text style={styles.logoutButtonText}>{t("profile.logout")}</Text>
+      {/* Username and Password Change */}
+      <Text style={styles.sectionTitle}>
+        {t("settings.account_management")}
+      </Text>
+      <View style={styles.modalButtonContainer}>
+        <TouchableOpacity
+          style={styles.changeButton}
+          onPress={() => setUsernameModalVisible(true)}
+        >
+          <Text style={styles.buttonText}>{t("settings.change_username")}</Text>
         </TouchableOpacity>
-      )}
+        <TouchableOpacity
+          style={styles.changeButton}
+          onPress={() => setPasswordModalVisible(true)}
+        >
+          <Text style={styles.buttonText}>{t("settings.change_password")}</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Logout Button */}
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <Text style={styles.logoutButtonText}>{t("settings.logout")}</Text>
+      </TouchableOpacity>
+
+      {/* Modals */}
+      <ChangeUsernameModal
+        visible={usernameModalVisible}
+        onClose={() => setUsernameModalVisible(false)}
+        onChange={(newUsername) => {
+          Toast.show({
+            type: "success",
+            text1: t("settings.username_changed", { username: newUsername }),
+            position: "bottom",
+          });
+        }}
+      />
+      <ChangePasswordModal
+        visible={passwordModalVisible}
+        onClose={() => setPasswordModalVisible(false)}
+        onChange={(oldPassword, newPassword) => {
+          Toast.show({
+            type: "success",
+            text1: t("settings.password_changed"),
+            position: "bottom",
+          });
+        }}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    paddingTop: Platform.OS === "android" ? 60 : 0,
-    backgroundColor: "#0F1F26",
     flex: 1,
+    padding: 20,
+    backgroundColor: "#1B2B38",
   },
   backButtonHeaderContainer: {
-    alignItems: "center",
     flexDirection: "row",
-    justifyContent: "flex-start",
+    alignItems: "center",
+    marginTop: Platform.OS === "android" ? 20 : 0,
   },
   backButton: {
-    marginBottom: 16,
     marginRight: 10,
   },
-  title: {
-    fontSize: 26,
+  headerText: {
+    fontSize: 24,
     color: "#F5F5F5",
     fontFamily: "Nunito-Bold",
-    marginBottom: 16,
   },
-  settingContainer: {
-    marginBottom: 16,
+  sectionTitle: {
+    fontSize: 18,
+    color: "#F5F5F5",
+    marginVertical: 10,
   },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 10,
+    marginBottom: 20,
   },
   button: {
-    backgroundColor: "#1B2B38",
-    padding: 10,
-    borderRadius: 8,
-    width: "48%",
+    flex: 1,
+    backgroundColor: "#2C3E50",
+    borderRadius: 5,
+    paddingVertical: 10,
     alignItems: "center",
+    marginHorizontal: 5,
   },
   activeButton: {
     backgroundColor: "#21603F",
   },
   buttonText: {
-    color: "#FFFFFF",
-    fontSize: 16,
+    color: "#F5F5F5",
     fontFamily: "Nunito-Bold",
   },
-  settingText: {
-    color: "#F5F5F5",
-    fontSize: 18,
-    fontFamily: "Nunito-Bold",
-    marginBottom: 5,
+  modalButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 20,
+  },
+  changeButton: {
+    flex: 1,
+    backgroundColor: "#2C3E50",
+    borderRadius: 5,
+    paddingVertical: 10,
+    alignItems: "center",
+    marginHorizontal: 5,
   },
   logoutButton: {
-    backgroundColor: "#1B2B38",
-    padding: 10,
-    borderRadius: 8,
+    backgroundColor: "#2C3E50",
+    borderRadius: 5,
+    paddingVertical: 10,
     alignItems: "center",
-    width: "100%",
+    marginTop: 20,
   },
   logoutButtonText: {
     color: "#EE5555",
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: "Nunito-Bold",
   },
 });

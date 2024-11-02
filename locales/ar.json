@@ -1,6 +1,6 @@
 {
   "teams": {
-    "header": "الفرق",
+    "header": "فريقي",
     "no_teams": "لا توجد فرق",
     "login_prompt": "يرجى تسجيل الدخول أولاً.",
     "login_button": "الذهاب إلى تسجيل الدخول",
@@ -19,7 +19,7 @@
     "login_button": "تسجيل الدخول",
     "signup_prompt": "ليس لديك حساب؟",
     "signup_button": "سجل!",
-    "login_error": "فشل تسجيل الدخول. يرجى التحقق من بيانات الاعتماد الخاصة بك والمحاولة مرة أخرى."
+    "login_error": "فشل تسجيل الدخول. يرجى التحقق من بياناتك والمحاولة مرة أخرى."
   },
   "signup": {
     "username_placeholder": "اسم المستخدم",
@@ -83,7 +83,9 @@
 
   "imagePickerModal": {
     "caption_placeholder": "اكتب وصف",
-    "submit": "إرسال"
+    "submit": "إرسال",
+    "instruction_text": "يرجى اختيار صورة لتحميلها. تأكد من أن الصورة واضحة وتظهر أنك قد أنجزت التحدي فعلاً. عدم القيام بذلك قد يعرض حسابك لخطر الحظر.",
+    "close": "إغلاق"
   },
 
   "profile": {
@@ -118,7 +120,8 @@
     "createButton": "إنشاء فريق",
     "closeButton": "إغلاق",
     "error": "خطأ",
-    "missingFields": "يرجى تحديد اسم ووصف الفريق."
+    "missingFields": "يرجى تحديد اسم ووصف الفريق.",
+    "loading": "جاري انشاء الفريق"
   },
 
   "noTeam": {
@@ -191,7 +194,16 @@
     "light": "فاتح",
     "language_changed": "تم تغيير اللغة إلى {{lang}}",
     "theme_changed": "تم تغيير السمة إلى {{theme}}",
-    "account": "الحساب",
+    "account_management": "إدارة الحساب",
+    "change_password": "تغيير كلمة المرور",
+    "change_username": "تغيير اسم المستخدم",
+    "new_username": "اسم مستخدم جديد",
+    "change_password_title": "تغيير كلمة المرور",
+    "old_password": "كلمة المرور الحالية",
+    "new_password": "كلمة المرور الجديدة",
+    "confirm_new_password": "تأكيد كلمة المرور الجديدة",
+    "submit": "إرسال",
+    "cancel": "إلغاء",
     "logout": "تسجيل الخروج"
   },
 
