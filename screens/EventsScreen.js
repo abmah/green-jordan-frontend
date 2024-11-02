@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
+  I18nManager,
 } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useTranslation } from "react-i18next";
@@ -13,9 +14,12 @@ import { getAllEvents } from "../api";
 import Loader from "./components/Loader";
 
 const EventsScreen = ({ navigation }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [eventsData, setEventsData] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const isArabic = i18n.language === "ar";
+  I18nManager.allowRTL(isArabic);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -33,22 +37,27 @@ const EventsScreen = ({ navigation }) => {
   }, []);
 
   const renderEventCard = ({ item }) => {
-
-
     return (
       <View style={styles.eventCard}>
         {item.image && (
           <Image
             source={{ uri: item.image }}
-            style={styles.eventImage}
+            style={[
+              styles.eventImage,
+              isArabic ? styles.imageLeft : styles.imageRight,
+            ]}
             resizeMode="cover"
           />
         )}
-        <Text style={styles.eventTitle}>{item.title}</Text>
-        <Text style={styles.eventDescription}>{item.description}</Text>
+        <Text style={styles.eventTitle}>
+          {isArabic ? item.titleAR : item.title}
+        </Text>
+        <Text style={styles.eventDescription}>
+          {isArabic ? item.descriptionAR : item.description}
+        </Text>
         <View style={styles.footer}>
           <Text style={styles.maxParticipants}>
-            Max Participants: {item.requiredParticipants}
+            {t("eventScreen.maxMembers")} {item.requiredParticipants}
           </Text>
           <TouchableOpacity
             style={styles.viewDetailsButton}
@@ -106,7 +115,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: "Nunito-ExtraBold",
     color: "#FFF",
-
   },
   listContainer: {
     paddingHorizontal: 20,
@@ -128,11 +136,16 @@ const styles = StyleSheet.create({
   eventImage: {
     position: "absolute",
     top: 0,
-    right: 0,
     height: 220,
     width: 220,
     opacity: 0.5,
     borderRadius: 10,
+  },
+  imageLeft: {
+    left: 0,
+  },
+  imageRight: {
+    right: 0,
   },
   eventTitle: {
     fontSize: 24,

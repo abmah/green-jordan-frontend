@@ -9,11 +9,8 @@ import {
 } from "react-native";
 import Toast from "react-native-toast-message";
 import { useTranslation } from "react-i18next";
-import { Ionicons } from "@expo/vector-icons"; // Ensure you have this library for the "X" icon
-
-
+import { Ionicons } from "@expo/vector-icons";
 export const ChangeUsernameModal = ({ visible, onClose, onChange }) => {
-
   const { t } = useTranslation();
   const [newUsername, setNewUsername] = React.useState("");
 
