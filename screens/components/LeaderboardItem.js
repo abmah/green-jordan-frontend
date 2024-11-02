@@ -1,9 +1,24 @@
-import { View, Text, StyleSheet, Image } from "react-native";
-import { useTranslation } from "react-i18next"; // Import useTranslation
+import React, { useState } from "react";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { useTranslation } from "react-i18next";
 import UserImage from '../../assets/user.png';
+import UserProfileView from "./UserProfileModal";
+import useUserIdStore from "../../stores/useUserStore";
 
-const LeaderboardItem = ({ rank, username, points, profilePicture }) => {
-  const { t } = useTranslation(); // Use the translation function
+const LeaderboardItem = ({ rank, username, points, profilePicture, userId }) => {
+  const { userId: loggedUserId } = useUserIdStore();
+  const { t } = useTranslation();
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handlePress = () => {
+    if (userId !== loggedUserId) {
+      setModalVisible(true);
+    }
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
 
   // Style the top 3 ranks differently
   let backgroundColor, podiumStyle;
@@ -23,7 +38,7 @@ const LeaderboardItem = ({ rank, username, points, profilePicture }) => {
       <View style={[styles.podiumItem, podiumStyle]}>
         <View style={styles.podiumContent}>
           <Text style={[styles.rankText, styles.podiumRankText]}>{rank}</Text>
-          <View style={styles.imageNameContainer}>
+          <TouchableOpacity onPress={handlePress} style={styles.imageNameContainer}>
             <Image
               source={
                 profilePicture
@@ -33,11 +48,12 @@ const LeaderboardItem = ({ rank, username, points, profilePicture }) => {
               style={styles.podiumImage}
             />
             <Text style={styles.username}>{username}</Text>
-          </View>
+          </TouchableOpacity>
           <Text style={[styles.points, styles.podiumPoints]}>
             {points}
           </Text>
         </View>
+        <UserProfileView selectedUserId={userId} visible={modalVisible} onClose={closeModal} />
       </View>
     );
   }
@@ -47,31 +63,34 @@ const LeaderboardItem = ({ rank, username, points, profilePicture }) => {
     <View style={styles.item}>
       <View style={styles.userInfo}>
         <Text style={styles.rankText}>{rank}</Text>
-        <Image
-          source={
-            profilePicture
-              ? { uri: profilePicture }
-              : { uri: Image.resolveAssetSource(UserImage).uri }
-          }
-          style={styles.profileImage}
-        />
-        <Text style={styles.username}>{username}</Text>
+        <TouchableOpacity onPress={handlePress}>
+          <Image
+            source={
+              profilePicture
+                ? { uri: profilePicture }
+                : { uri: Image.resolveAssetSource(UserImage).uri }
+            }
+            style={styles.profileImage}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handlePress}>
+          <Text style={styles.username}>{username}</Text>
+        </TouchableOpacity>
       </View>
       <Text style={styles.points}>
         {points} {t("leaderboard.points")}
       </Text>
+      <UserProfileView selectedUserId={userId} visible={modalVisible} onClose={closeModal} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  // Regular leaderboard items
   item: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingVertical: 12,
-    // paddingHorizontal: 20,
     borderRadius: 16,
     marginVertical: 6,
   },
@@ -114,17 +133,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: "Nunito-Black",
   },
-
-  // Podium styling for the top 3
   podiumItem: {
     marginVertical: 20,
-    // marginHorizontal: 10,
     width: 120,
     height: 250,
     elevation: 4,
     shadowColor: '#fff',
     shadowOffset: { width: 0, height: 4 },
-
   },
   imageNameContainer: {
     alignItems: "center",

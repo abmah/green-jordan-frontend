@@ -354,13 +354,13 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   closeButton: {
-    padding: 10,
+    // padding: 10,
   },
   modalTitle: {
     fontSize: 24,
     color: "white",
     textAlign: "center",
-    marginBottom: 10,
+    marginBottom: 20,
   },
   imageOptionButtonContainer: {
     flexDirection: "row",

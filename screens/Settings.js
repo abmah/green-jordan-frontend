@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#1B2B38",
+    backgroundColor: "#0F1F26",
   },
   backButtonHeaderContainer: {
     flexDirection: "row",
@@ -198,6 +198,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 20,
+    gap: 10,
   },
   button: {
     flex: 1,
@@ -205,7 +206,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingVertical: 10,
     alignItems: "center",
-    marginHorizontal: 5,
+
   },
   activeButton: {
     backgroundColor: "#21603F",
@@ -218,6 +219,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 20,
+    gap: 10,
   },
   changeButton: {
     flex: 1,
@@ -225,7 +227,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingVertical: 10,
     alignItems: "center",
-    marginHorizontal: 5,
+
   },
   logoutButton: {
     backgroundColor: "#2C3E50",

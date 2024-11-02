@@ -1,4 +1,3 @@
-// UserModals.js
 import React from "react";
 import {
   View,
@@ -10,6 +9,7 @@ import {
 } from "react-native";
 import Toast from "react-native-toast-message";
 import { useTranslation } from "react-i18next";
+import { Ionicons } from "@expo/vector-icons"; // Ensure you have this library for the "X" icon
 
 export const ChangeUsernameModal = ({ visible, onClose, onChange }) => {
   const { t } = useTranslation();
@@ -37,21 +37,22 @@ export const ChangeUsernameModal = ({ visible, onClose, onChange }) => {
     >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
+          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+            <Ionicons name="close" size={24} color="#F5F5F5" />
+          </TouchableOpacity>
           <Text style={styles.modalTitle}>{t("settings.change_username")}</Text>
           <TextInput
             style={styles.input}
             placeholder={t("settings.new_username")}
+            placeholderTextColor="#B3B3B3"
             value={newUsername}
             onChangeText={setNewUsername}
           />
           <TouchableOpacity
-            style={styles.modalButton}
+            style={styles.submitButton}
             onPress={handleChangeUsername}
           >
-            <Text style={styles.modalButtonText}>{t("settings.submit")}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <Text style={styles.closeButtonText}>{t("settings.cancel")}</Text>
+            <Text style={styles.submitButtonText}>{t("settings.submit")}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -99,10 +100,14 @@ export const ChangePasswordModal = ({ visible, onClose, onChange }) => {
     >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
+          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+            <Ionicons name="close" size={24} color="#F5F5F5" />
+          </TouchableOpacity>
           <Text style={styles.modalTitle}>{t("settings.change_password")}</Text>
           <TextInput
             style={styles.input}
             placeholder={t("settings.old_password")}
+            placeholderTextColor="#B3B3B3"
             secureTextEntry
             value={oldPassword}
             onChangeText={setOldPassword}
@@ -110,6 +115,7 @@ export const ChangePasswordModal = ({ visible, onClose, onChange }) => {
           <TextInput
             style={styles.input}
             placeholder={t("settings.new_password")}
+            placeholderTextColor="#B3B3B3"
             secureTextEntry
             value={newPassword}
             onChangeText={setNewPassword}
@@ -117,18 +123,16 @@ export const ChangePasswordModal = ({ visible, onClose, onChange }) => {
           <TextInput
             style={styles.input}
             placeholder={t("settings.confirm_new_password")}
+            placeholderTextColor="#B3B3B3"
             secureTextEntry
             value={confirmNewPassword}
             onChangeText={setConfirmNewPassword}
           />
           <TouchableOpacity
-            style={styles.modalButton}
+            style={styles.submitButton}
             onPress={handleChangePassword}
           >
-            <Text style={styles.modalButtonText}>{t("settings.submit")}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <Text style={styles.closeButtonText}>{t("settings.cancel")}</Text>
+            <Text style={styles.submitButtonText}>{t("settings.submit")}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -141,44 +145,56 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
     width: "80%",
     backgroundColor: "#1B2B38",
     borderRadius: 8,
     padding: 20,
-  },
-  modalTitle: {
-    fontSize: 20,
-    color: "#F5F5F5",
-    fontFamily: "Nunito-Bold",
-    marginBottom: 10,
-  },
-  input: {
-    backgroundColor: "#F5F5F5",
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 15,
-  },
-  modalButton: {
-    backgroundColor: "#21603F",
-    padding: 10,
-    borderRadius: 5,
     alignItems: "center",
-  },
-  modalButtonText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontFamily: "Nunito-Bold",
+    elevation: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
   },
   closeButton: {
-    marginTop: 10,
-    alignItems: "center",
+    position: "absolute",
+    top: 15,
+    right: 15,
   },
-  closeButtonText: {
+  modalTitle: {
+    fontSize: 24,
+    marginBottom: 20,
+    marginTop: 20,
+    fontFamily: "Nunito-Bold",
+    color: "#8AC149",
+  },
+  input: {
+    padding: 12,
+    marginBottom: 20,
+    borderRadius: 8,
     color: "#F5F5F5",
     fontSize: 16,
-    fontFamily: "Nunito-Bold",
+    width: "100%",
+    backgroundColor: "#2C3E50",
+    fontFamily: "Nunito-Medium",
+  },
+  submitButton: {
+    width: "100%",
+    backgroundColor: "#8AC149",
+    height: 45,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 8,
+    paddingVertical: 10,
+    elevation: 2,
+    marginTop: 10,
+  },
+  submitButtonText: {
+    color: "#ffffff",
+    fontFamily: "Nunito-ExtraBold",
+    fontSize: 16,
   },
 });
+
+export default { ChangeUsernameModal, ChangePasswordModal };
