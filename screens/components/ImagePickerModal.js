@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   View,
@@ -9,10 +9,12 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  I18nManager,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import AntDesign from "@expo/vector-icons/AntDesign";
 import { useTranslation } from "react-i18next";
 
 const ImagePickerModal = ({
@@ -25,37 +27,75 @@ const ImagePickerModal = ({
   isUploading,
   handleCameraPress,
   handleLibraryPress,
-  challengeTitle, // New prop for challenge title
-  showDescription, // Indicates whether to show the description input
+  challenge,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const [tooltipVisible, setTooltipVisible] = useState(false);
+
+  const isArabic = i18n.language === "ar";
+  I18nManager.allowRTL(isArabic);
 
   return (
-    <Modal animationType="slide" transparent={true} visible={visible} onRequestClose={onClose}>
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={visible}
+      onRequestClose={onClose}
+    >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <View style={styles.modalHeader}>
+            {/* Question Mark Icon with Tooltip */}
+            <TouchableOpacity
+              style={styles.infoButton}
+              onPress={() => setTooltipVisible(!tooltipVisible)}
+            >
+              <AntDesign name="question" size={24} color="#F5F5F5" />
+            </TouchableOpacity>
             <TouchableOpacity style={styles.closeButton} onPress={onClose}>
               <Ionicons name="close" size={24} color="#F5F5F5" />
             </TouchableOpacity>
           </View>
 
+          {/* Tooltip for Instructions */}
+          {tooltipVisible && (
+            <View style={styles.tooltip}>
+              {/* Close icon for the tooltip */}
+              <TouchableOpacity
+                style={styles.tooltipCloseIcon}
+                onPress={() => setTooltipVisible(false)}
+              >
+                <Ionicons name="close" size={24} color="#F5F5F5" />
+              </TouchableOpacity>
+              <Text style={styles.tooltipText}>
+                {t("imagePickerModal.instruction_text")}
+                {/* Edit this text in your translation file */}
+              </Text>
+            </View>
+          )}
+
           {/* Challenge Title */}
-          <Text style={styles.modalTitle}>{challengeTitle}</Text>
+          <Text style={styles.modalTitle}>
+            {isArabic ? challenge.titleAR : challenge.title}
+          </Text>
+
+          <Text style={styles.modalChallengeDescription}>
+            {isArabic ? challenge.descriptionAR : challenge.description}
+          </Text>
 
           {/* Image Preview */}
-          {image && <Image source={{ uri: image.uri }} style={styles.imagePreview} />}
+          {image && (
+            <Image source={{ uri: image.uri }} style={styles.imagePreview} />
+          )}
 
           {/* Description Input */}
-          {showDescription && (
-            <TextInput
-              placeholder={t("imagePickerModal.caption_placeholder")}
-              placeholderTextColor="#B0B0B0"
-              value={description}
-              onChangeText={setDescription}
-              style={styles.input}
-            />
-          )}
+          <TextInput
+            placeholder={t("imagePickerModal.caption_placeholder")}
+            placeholderTextColor="#B0B0B0"
+            value={description}
+            onChangeText={setDescription}
+            style={styles.input}
+          />
 
           {/* Buttons */}
           <View style={styles.buttonContainer}>
@@ -63,7 +103,10 @@ const ImagePickerModal = ({
               <Pressable style={styles.modalButton} onPress={handleCameraPress}>
                 <FontAwesome name="camera" size={24} color="#fff" />
               </Pressable>
-              <Pressable style={styles.modalButton} onPress={handleLibraryPress}>
+              <Pressable
+                style={styles.modalButton}
+                onPress={handleLibraryPress}
+              >
                 <MaterialIcons name="photo-library" size={24} color="#fff" />
               </Pressable>
             </View>
@@ -73,7 +116,7 @@ const ImagePickerModal = ({
               disabled={isUploading}
             >
               {isUploading ? (
-                <ActivityIndicator size="small" color="#fff" />
+                <ActivityIndicator size="{small}" color="#fff" />
               ) : (
                 <Text style={styles.submitButtonText}>
                   {t("imagePickerModal.submit")}
@@ -92,7 +135,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-
   },
   modalContent: {
     width: "80%",
@@ -112,10 +154,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 15,
   },
+  infoButton: {
+    position: "absolute",
+    left: -6,
+    top: 0,
+  },
   closeButton: {
     alignSelf: "flex-end",
     position: "absolute",
-    right: 0,
+    right: -6,
     top: 0,
   },
   modalTitle: {
@@ -124,6 +171,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontFamily: "Nunito-Bold",
     color: "#8AC149",
+  },
+  modalChallengeDescription: {
+    fontSize: 16,
+    color: "white",
+    fontFamily: "Nunito-Bold",
+    marginBottom: 8,
+    textAlign: "center",
   },
   imagePreview: {
     width: "100%",
@@ -145,14 +199,11 @@ const styles = StyleSheet.create({
   buttonContainer: {
     justifyContent: "space-between",
     width: "100%",
-
   },
   imageOptionButtonContainer: {
     justifyContent: "space-between",
     flexDirection: "row",
     width: "100%",
-
-
   },
   modalButton: {
     backgroundColor: "#121c23",
@@ -161,7 +212,6 @@ const styles = StyleSheet.create({
     height: 45,
     borderRadius: 8,
     width: "45%",
-
   },
   submitButton: {
     width: "100%",
@@ -179,6 +229,30 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     fontFamily: "Nunito-ExtraBold",
     fontSize: 16,
+  },
+  tooltip: {
+    position: "absolute",
+    top: 60,
+    left: 10,
+    backgroundColor: "#1B2B38",
+    padding: 10,
+    paddingVertical: 40,
+    paddingBottom: 20,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#2C3E50",
+    zIndex: 10,
+    width: "100%",
+  },
+  tooltipText: {
+    color: "#F5F5F5",
+    fontSize: 16,
+    textAlign: "center",
+  },
+  tooltipCloseIcon: {
+    position: "absolute",
+    right: 10,
+    top: 10,
   },
 });
 

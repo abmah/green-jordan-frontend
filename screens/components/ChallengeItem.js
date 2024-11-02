@@ -144,7 +144,7 @@ const ChallengeItem = ({
         isUploading={isUploading}
         handleCameraPress={handleCameraPress}
         handleLibraryPress={handleLibraryPress}
-        challengeTitle={challenge.title}
+        challenge={challenge}
         showDescription={true}
       />
     </View>
