@@ -172,10 +172,10 @@ const EventsScreen = ({ navigation }) => {
         data={eventsData}
         renderItem={(props) => renderEventCard({ ...props, isPast: false })}
         keyExtractor={(item) => item._id}
-        ListHeaderComponent={<Text style={styles.sectionTitle}>Upcoming Events</Text>}
+        ListHeaderComponent={<Text style={styles.sectionTitle}>الفعاليات القادمه</Text>}
         ListFooterComponent={() => (
           <>
-            <Text style={styles.sectionTitle}>Past Events</Text>
+            <Text style={styles.sectionTitle}>الفعاليات المنتهية</Text>
             <FlatList
               data={pastEventsData}
               renderItem={(props) => renderEventCard({ ...props, isPast: true })}
