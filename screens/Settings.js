@@ -17,7 +17,6 @@ import { Ionicons } from "@expo/vector-icons";
 import ChangeUsernameModal from './components/ChangeUsernameModal';
 import ChangePasswordModal from './components/ChangePasswordModal';
 
-
 const LANGUAGE_STORAGE_KEY = "appLanguage";
 
 // Button Component
@@ -32,11 +31,9 @@ const Button = ({ title, isActive, onPress }) => (
 
 const Settings = ({ navigation }) => {
   const { t, i18n } = useTranslation();
-  const { clearuserId } = useUserStore();
+  const { userId, clearuserId } = useUserStore();
 
   const [newLanguage, setNewLanguage] = useState(i18n.language);
-
-  // State for modals
   const [usernameModalVisible, setUsernameModalVisible] = useState(false);
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
 
@@ -118,29 +115,31 @@ const Settings = ({ navigation }) => {
         />
       </View>
 
-      {/* Username and Password Change */}
-      <Text style={styles.sectionTitle}>
-        {t("settings.account_management")}
-      </Text>
-      <View style={styles.modalButtonContainer}>
-        <TouchableOpacity
-          style={styles.changeButton}
-          onPress={() => setUsernameModalVisible(true)}
-        >
-          <Text style={styles.buttonText}>{t("settings.change_username")}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.changeButton}
-          onPress={() => setPasswordModalVisible(true)}
-        >
-          <Text style={styles.buttonText}>{t("settings.change_password")}</Text>
-        </TouchableOpacity>
-      </View>
+      {/* Account Management (Visible Only if Logged In) */}
+      {userId && (
+        <>
+          <Text style={styles.sectionTitle}>{t("settings.account_management")}</Text>
+          <View style={styles.modalButtonContainer}>
+            <TouchableOpacity
+              style={styles.changeButton}
+              onPress={() => setUsernameModalVisible(true)}
+            >
+              <Text style={styles.buttonText}>{t("settings.change_username")}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.changeButton}
+              onPress={() => setPasswordModalVisible(true)}
+            >
+              <Text style={styles.buttonText}>{t("settings.change_password")}</Text>
+            </TouchableOpacity>
+          </View>
 
-      {/* Logout Button */}
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutButtonText}>{t("settings.logout")}</Text>
-      </TouchableOpacity>
+          {/* Logout Button */}
+          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+            <Text style={styles.logoutButtonText}>{t("settings.logout")}</Text>
+          </TouchableOpacity>
+        </>
+      )}
 
       {/* Modals */}
       <ChangeUsernameModal
@@ -205,7 +204,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingVertical: 10,
     alignItems: "center",
-
   },
   activeButton: {
     backgroundColor: "#21603F",
@@ -226,7 +224,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingVertical: 10,
     alignItems: "center",
-
   },
   logoutButton: {
     backgroundColor: "#2C3E50",

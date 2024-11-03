@@ -286,7 +286,8 @@
     "cancel": "Cancel",
     "yes": "Yes",
     "viewDetails": "View Details",
-    "maxMembers": "Max participants:"
+    "maxMembers": "Max participants:",
+    "pastEvent": "Past Event"
   },
   "eventDetails": {
     "joinSuccess": "Joined successfully!",

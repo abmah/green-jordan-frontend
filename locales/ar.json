@@ -286,7 +286,8 @@
     "cancel": "إلغاء",
     "yes": "نعم",
     "viewDetails": "عرض التفاصيل",
-    "maxMembers": "عدد الاشخاص المطلوبين:"
+    "maxMembers": "عدد الاشخاص المطلوبين:",
+    "pastEvent": "انتهت الفعالية"
   },
   "eventDetails": {
     "joinSuccess": "تم الانضمام بنجاح",

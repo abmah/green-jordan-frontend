@@ -199,6 +199,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 20,
     paddingBottom: 15,
+
+
   },
   backButton: {
     paddingVertical: 10,
@@ -279,7 +281,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     paddingVertical: 12,
     alignItems: "center",
-    marginTop: 20,
+    // marginTop: 20,
     borderWidth: 1,
     borderColor: "#6B9B38",
     shadowColor: "#000",
@@ -296,7 +298,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     paddingVertical: 12,
     alignItems: "center",
-    marginTop: 20,
+    // marginTop: 20,
     borderWidth: 1,
     borderColor: "#C34A29",
     shadowColor: "#000",

@@ -11,7 +11,8 @@ import StackNavigator from "./LoginRegisterStackNavigator";
 import TeamsStackNavigator from "./TeamsStackNavigator";
 import Settings from "../screens/Settings";
 import { useTranslation } from "react-i18next"; // Import useTranslation
-import ProfileSettings from './ProfileSettings'
+import ProfileSettings from './ProfileSettings';
+import EventsScreen from "../screens/EventsScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -99,13 +100,13 @@ const BottomTabNavigator = () => {
         }}
       />
       {/* <Tab.Screen
-        name="Settings"
-        component={Settings}
+        name="Events"
+        component={EventsScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="settings" size={size} color={color} />
+            <Ionicons name="calendar" size={size} color={color} />
           ),
-          tabBarLabel: t("tabs.settings"), // Use translation for tab label
+          tabBarLabel: t("tabs.events") // Use translation for tab label
         }}
       /> */}
     </Tab.Navigator>

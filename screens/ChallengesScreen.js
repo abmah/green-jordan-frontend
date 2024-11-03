@@ -76,7 +76,13 @@ const ChallengesScreen = ({ navigation }) => {
   if (!userId) {
     return (
       <View style={styles.loginPromptContainer}>
-        <Text style={styles.loginPrompt}>{t("challenges.login_prompt")}</Text>
+        <Text style={styles.loginPromptText}>{t("teams.login_prompt")}</Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Login")}
+          style={styles.loginButton}
+        >
+          <Text style={styles.loginButtonText}>{t("teams.login_button")}</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -237,7 +243,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#0E1725",
+    backgroundColor: "#0F1F26",
+  },
+  loginPromptText: {
+    color: "white",
+    marginBottom: 10,
+  },
+  loginButton: {
+    backgroundColor: "#007BFF",
+    padding: 10,
+    borderRadius: 8,
+  },
+  loginButtonText: {
+    color: "white",
   },
   loginPrompt: {
     fontSize: 20,

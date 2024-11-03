@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from "react-native";
 import {
   acceptJoinRequest,
   rejectJoinRequest,
@@ -8,6 +8,7 @@ import {
 import useUserIdStore from "../../../stores/useUserStore";
 import Toast from "react-native-toast-message";
 import { useTranslation } from "react-i18next"; // Import translation function
+
 
 const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
 
@@ -78,7 +79,7 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.header}>{t("manage_team.header")}</Text>
       {teamData.joinRequests.length > 0 ? (
         teamData.joinRequests.map((request) => (
@@ -161,7 +162,7 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
       ) : (
         <Text style={styles.noMembers}>{t("manage_team.no_members")}</Text>
       )}
-    </View>
+    </ScrollView>
   );
 };
 
@@ -238,6 +239,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   removeButton: {
+    marginHorizontal: 10,
+    paddingHorizontal: 12,
     backgroundColor: "#FF3D00",
     paddingVertical: 6,
     paddingHorizontal: 12,
