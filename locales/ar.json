@@ -1,43 +1,46 @@
 {
   "teams": {
-    "header": "الفرق",
+    "header": "فريقي",
     "no_teams": "لا توجد فرق",
     "login_prompt": "يرجى تسجيل الدخول أولاً.",
     "login_button": "الذهاب إلى تسجيل الدخول",
     "other_teams": "فرق أخرى",
     "success": {
-      "create_team": "تم إنشاء الفريق بنجاح!"
+      "create_team": "تم إنشاء فريقك بنجاح!"
     },
     "error": {
-      "create_team": "فشل في إنشاء الفريق."
+      "create_team": "حدث خطأ في انشاء الفريق."
     }
   },
   "login": {
-    "header": "تسجيل الدخول",
+    "login_error": "فشل تسجيل الدخول. يرجى التحقق من بياناتك والمحاولة مرة أخرى.",
+    "login_button": "تسجيل الدخول",
     "email_placeholder": "البريد الإلكتروني",
     "password_placeholder": "كلمة المرور",
-    "login_button": "تسجيل الدخول",
     "signup_prompt": "ليس لديك حساب؟",
-    "signup_button": "سجل!",
-    "login_error": "*فشل تسجيل الدخول. يرجى التحقق من بيانات الاعتماد الخاصة بك والمحاولة مرة أخرى."
+    "signup_button": "سجل!"
   },
   "signup": {
+    "signup_error": "فشل التسجيل. يرجى المحاولة مرة أخرى.",
+    "signup_button": "تسجيل",
     "username_placeholder": "اسم المستخدم",
     "email_placeholder": "البريد الإلكتروني",
     "password_placeholder": "كلمة المرور",
-    "signup_button": "إنشاء حساب",
-    "signup_error": "حدث خطأ أثناء التسجيل. حاول مرة أخرى.",
-    "login_prompt": "هل لديك حساب بالفعل؟",
-    "login_button": "تسجيل الدخول"
+    "login_prompt": "لديك حساب بالفعل؟",
+    "login_button": "تسجيل الدخول",
+    "complete_all_fields": "يرجى ملء جميع الحقول."
   },
   "post": {
     "error_title": "خطأ",
     "login_required": "يجب عليك تسجيل الدخول لتسجيل الإعجاب بالمنشور.",
     "like_error": "تعذر تسجيل الإعجاب أو إلغاء الإعجاب. يرجى المحاولة مرة أخرى.",
-    "report": "الإبلاغ",
+    "report": "إبلاغ",
     "like": "إعجاب",
     "comments": "التعليقات",
-    "created_at": "تم إنشاؤه في"
+    "created_at": "تم إنشاؤه في",
+    "reportSubmitted": " تم تقديم الإبلاغ بنجاح",
+    "reportedFor": "لقد قمت بالتبليغ عن: ",
+    "date": "{{date}}"
   },
 
   "comments_modal": {
@@ -45,7 +48,7 @@
     "no_comments": "لا توجد تعليقات بعد. كن أول من يعلق!",
     "write_comment": "اكتب تعليقاً...",
     "submit": "إرسال",
-    "error": "فشل في نشر التعليق.",
+    "error": "تعذر نشر التعليق.",
     "login_prompt": "يرجى تسجيل الدخول أولاً"
   },
 
@@ -65,43 +68,48 @@
     "current_streak": "السلسلة الحالية: {{streak}}",
     "total_points": "إجمالي النقاط: {{points}}",
     "last_challenge_completed": "آخر تحدٍ مكتمل: {{date}}",
-    "challenges_assigned_today": "التحديات المعينة اليوم: {{count}}",
-    "never": "لم تعمل اي تحدي بعد"
+    "challenges_assigned_today": "تحديات اليوم: {{count}}",
+    "never": "لم تقم بأي تحد بعد",
+    "events": "فعاليات",
+    "redeem": "الجوائز"
   },
 
   "challengeItem": {
     "validation_error": "خطأ في التحقق: يرجى تقديم وصف واختيار صورة.",
-    "done": "تم",
-    "attempt": "حاول"
+    "done": "منجز",
+    "attempt": "محاولة",
+    "points": "نقطة"
   },
 
   "imagePickerModal": {
     "caption_placeholder": "اكتب وصف",
-    "submit": "إرسال"
+    "submit": "إرسال",
+    "instruction_text": "يرجى اختيار صورة لتحميلها. تأكد من أن الصورة واضحة وتظهر أنك قد أنجزت التحدي فعلاً. عدم القيام بذلك قد يعرض حسابك لخطر الحظر.",
+    "close": "إغلاق"
   },
 
   "profile": {
     "followers": "المتابعون: ",
-    "following": "المتابعة: ",
+    "following": "يتابع: ",
     "points": "النقاط: ",
     "noPostsMessage": "لا توجد منشورات بعد.",
     "selectProfilePicture": "اختر صورة الملف الشخصي",
     "takePhoto": "التقط صورة",
-    "chooseFromLibrary": "اختر من المكتبة",
+    "chooseFromLibrary": "اختر من المعرض",
     "upload": "تحميل",
     "close": "إغلاق",
     "noImageSelected": "لم يتم اختيار أي صورة",
     "profileUpdated": "تم تحديث الملف الشخصي بنجاح!",
-    "failedToUpdateProfile": "فشل في تحديث صورة الملف الشخصي",
+    "failedToUpdateProfile": "لم يتم تحديث صورة الملف الشخصي",
     "logout": "تسجيل الخروج",
     "logoutConfirmation": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
     "loggedOutSuccessfully": "تم تسجيل الخروج بنجاح",
-    "errorFetchingProfile": "خطأ في جلب ملف التعريف الخاص بك",
+    "errorFetchingProfile": "خطأ في جلب المعلومات الخاصة بك",
     "profileEdit": "تعديل حسابي",
     "selectImage": "اختر صورة",
-    "fromLibrary": "اختر من المكتبة",
+    "fromLibrary": "اختر من المعرض",
     "fromCamera": "التقاط صورة",
-    "update": "تحميل",
+    "update": "تحديث",
     "cancel": "إلغاء"
   },
 
@@ -112,11 +120,12 @@
     "createButton": "إنشاء فريق",
     "closeButton": "إغلاق",
     "error": "خطأ",
-    "missingFields": "يرجى تقديم اسم الفريق والوصف."
+    "missingFields": "يرجى تحديد اسم ووصف الفريق.",
+    "loading": "جاري انشاء الفريق"
   },
 
   "noTeam": {
-    "info": "أنت لست في فريق. يمكنك إما إنشاء واحد أو الانضمام إلى واحد. لاحظ أنه إذا قمت بإنشاء فريق، فلن تتمكن من الانضمام إلى آخر.",
+    "info": "أنت لست في فريق. يمكنك إما إنشاء فريق أو الانضمام إلى آخر. ملاحظة: إذا كنت ضمن فريق، فلن تتمكن من الانضمام إلى آخر.",
     "createButton": "إنشاء فريق"
   },
 
@@ -132,7 +141,7 @@
     },
     "error": {
       "join_request_error": "خطأ",
-      "member_removal_error": "فشل في إزالة العضو. يرجى المحاولة مرة أخرى."
+      "member_removal_error": "لم تتم إزالة العضو. يرجى المحاولة مرة أخرى."
     },
     "accept_button": "قبول",
     "deny_button": "رفض",
@@ -142,14 +151,14 @@
   },
 
   "userTeam": {
-    "no_description": "لا توجد وصف للفريق.",
+    "no_description": "لا يوجد وصف للفريق.",
     "members": "الأعضاء: {{count}}",
     "total_points": "إجمالي النقاط: {{points}}",
     "manage_team": "إدارة الفريق"
   },
 
   "teamDetails": {
-    "overview": "نظرة عامة",
+    "overview": "عام",
     "team_posts": "منشورات الفريق",
     "manage_team": "إدارة الفريق"
   },
@@ -163,7 +172,7 @@
     "name": "الاسم: ",
     "description": "الوصف: ",
     "send_join_request": "إرسال طلب الانضمام",
-    "no_members_found": "لا توجد أعضاء في الفريق.",
+    "no_members_found": "لا يوجد أعضاء في الفريق.",
     "admin_label": "قائد",
     "self_label": "أنت",
     "points": "نقطة",
@@ -180,11 +189,25 @@
   "settings": {
     "header": "الإعدادات",
     "language": "اللغة",
-    "other_settings": "إعدادات أخرى",
-    "notification_preferences": "تفضيلات الإشعارات",
-    "privacy_settings": "إعدادات الخصوصية",
-    "account_management": "إدارة الحساب",
+    "theme": "الثيم",
     "language_changed": "تم تغيير اللغة إلى {{lang}}",
+    "account_management": "إدارة الحساب",
+    "change_password": "تغيير كلمة المرور",
+    "change_username": "تغيير اسم المستخدم",
+    "new_username": "اسم المستخدم الجديد",
+    "username_updated": "تم تحديث اسم المستخدم",
+    "change_password_title": "تغيير كلمة المرور",
+    "old_password": "كلمة المرور الحالية",
+    "new_password": "كلمة المرور الجديدة",
+    "confirm_new_password": "تأكيد كلمة المرور الجديدة",
+    "password_updated": "تم تحديث كلمة المرور",
+    "error": "خطأ",
+    "password_update_error": "تعذر تحديث كلمة المرور",
+    "password_mismatch": "كلمات المرور غير متطابقة",
+    "new_username_taken": "اسم المستخدم الجديد محجوز",
+    "password_same_error": "كلمة المرور الجديدة لا يمكن أن تكون نفس القديمة",
+    "submit": "إرسال",
+    "cancel": "إلغاء",
     "logout": "تسجيل الخروج"
   },
 
@@ -194,15 +217,88 @@
     "challenges": "التحديات",
     "teams": "الفرق",
     "profile": "الملف الشخصي",
-    "login": "تسجيل الدخول",
-    "settings": "الإعدادات"
+    "login": "تسجيل الدخول"
   },
   "userProfile": {
     "points": "النقاط",
-    "followers": "المتابعين",
-    "following": "المتابَعون",
+    "followers": "المتابعون",
+    "following": "يتابع",
     "error_fetch": "تعذر تحميل بيانات المستخدم.",
     "follow": "متابعة",
-    "unfollow": "الفاء المتابعة"
+    "unfollow": "الغاء المتابعة"
+  },
+  "report": {
+    "title": "إبلاغ",
+    "spam": "محتوى مخادع او مزعج",
+    "hateful": "محتوى مسيء",
+    "graphic_content": "محتوى غير لائق",
+    "other": "أخرى",
+    "submit": "إرسال"
+  },
+
+  "redeemScreen": {
+    "header": "الجوائز",
+    "insufficientPointsTitle": "نقاط غير كافية",
+    "insufficientPointsMessage": "ليس لديك نقاط كافية لتبديلها بالعنصر",
+    "successTitle": "نجاح",
+    "successMessage": "تم تبديل العنصر بنجاح.",
+    "errorTitle": "خطأ",
+    "errorMessage": "فشل تحميل البيانات.",
+    "errorRedeeming": "فشل تبديل العنصر.",
+    "noResponse": "لا يوجد رد من الخادم.",
+    "available": "الجوائز المتاحة",
+    "redeemables": "قائمة الجوائز",
+    "redeemed": "الجوائز المستبدلة"
+  },
+
+  "availableRedeem": {
+    "points": "النقاط: ",
+    "subheader": "الجوائز المتاحة",
+    "noItemsText": "لا توجد جوائز متاحة للاسترداد.",
+    "processing": "يتم الاجراء...",
+    "getFor": "مقابل ",
+    "confirmRedemption": "تأكيد الاستبدال",
+    "confirmMessage": " تأكيد أنك تريد استبدال  {{itemName}} مقابل {{cost}}",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "successTitle": "تم بنجاح",
+    "successMessage": "تم تبديل الجائزة بنجاح."
+  },
+
+  "allRedeemables": {
+    "header": "قائمة الجوائز",
+    "noItemsText": "لا توجد جوائز متاحة حالياً.",
+    "pointsRequired": "النقاط المطلوبة: "
+  },
+  "redeemedItems": {
+    "header": "الجوائز المستبدلة",
+    "noItemsText": "لم يتم تبديل أي جوائز بعد.",
+    "redeemedFor": "تم تبديله مقابل:",
+    "processingMessage": "يتم العمل على الجوائز المستبدلة وسيتم إرسالها إليك في أقرب وقت ممكن. يرجى تفقد بريدك الالكتروني"
+  },
+
+  "eventScreen": {
+    "header": "الفعاليات",
+    "attend": "حضور",
+    "attending": "سأحضر",
+    "confirmAttendance": "تأكيد الحضور",
+    "areYouWilling": "هل ترغب فعلاً في المشاركة؟",
+    "cancel": "إلغاء",
+    "yes": "نعم",
+    "viewDetails": "عرض التفاصيل",
+    "maxMembers": "عدد الاشخاص المطلوبين:",
+    "pastEvent": "انتهت الفعالية"
+  },
+  "eventDetails": {
+    "joinSuccess": "تم الانضمام بنجاح",
+    "leaveSuccess": "تم الغاء الانضمام بنجاح",
+    "joinError": "فشل الانضمام",
+    "leaveError": "فشل الغاء الانضمام",
+    "header": "تفاصيل الفعاليه",
+    "currentParticipants": "المشاركين الحاليين:",
+    "maxParticipants": "عدد الاشخاص المطلوبين: ",
+    "aboutEvent": "حول الفعالية: ",
+    "join": "انضمام",
+    "leave": "الغاء الانضمام"
   }
 }

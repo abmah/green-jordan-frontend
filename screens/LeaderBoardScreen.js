@@ -62,18 +62,21 @@ const LeaderboardScreen = () => {
           <View style={styles.podiumContainer}>
             <LeaderboardItem
               rank={2}
+              userId={topThree[1]._id}
               username={topThree[1]?.username}
               points={topThree[1]?.allTimePoints}
               profilePicture={topThree[1]?.profilePicture || null}
             />
             <LeaderboardItem
               rank={1}
+              userId={topThree[0]._id}
               username={topThree[0]?.username}
               points={topThree[0]?.allTimePoints}
               profilePicture={topThree[0]?.profilePicture || null}
             />
             <LeaderboardItem
               rank={3}
+              userId={topThree[2]._id}
               username={topThree[2]?.username}
               points={topThree[2]?.allTimePoints}
               profilePicture={topThree[2]?.profilePicture || null}
@@ -91,6 +94,7 @@ const LeaderboardScreen = () => {
                 username={item.username}
                 points={item.allTimePoints}
                 profilePicture={item.profilePicture || null}
+                userId={item._id}
               />
             )}
             refreshing={refreshing}
@@ -137,7 +141,7 @@ const styles = StyleSheet.create({
   },
   podiumContainer: {
     flexDirection: "row",
-    justifyContent: "center", // Spaces evenly between 2nd, 1st, and 3rd
+    justifyContent: "space-between", // Spaces evenly between 2nd, 1st, and 3rd
     paddingBottom: 20,
     borderBottomColor: "#37464f",
     borderBottomWidth: 1,

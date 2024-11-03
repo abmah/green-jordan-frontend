@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from "react-native";
 import {
   acceptJoinRequest,
   rejectJoinRequest,
@@ -9,7 +9,9 @@ import useUserIdStore from "../../../stores/useUserStore";
 import Toast from "react-native-toast-message";
 import { useTranslation } from "react-i18next"; // Import translation function
 
+
 const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
+
   const { userId } = useUserIdStore();
   const { t } = useTranslation(); // Initialize translation function
 
@@ -77,13 +79,13 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.header}>{t("manage_team.header")}</Text>
       {teamData.joinRequests.length > 0 ? (
         teamData.joinRequests.map((request) => (
           <View key={request._id} style={styles.requestContainer}>
             {request.userId.profilePicture &&
-            request.userId.profilePicture !== "" ? (
+              request.userId.profilePicture !== "" ? (
               <Image
                 source={{ uri: request.userId.profilePicture }}
                 style={styles.profilePicture}
@@ -133,7 +135,7 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
               />
             ) : (
               <Image
-                source={require("../../../assets/default-avatar.png")}
+                source={require("../../../assets/user.png")}
                 style={styles.profilePicture}
               />
             )}
@@ -160,7 +162,7 @@ const ManageTeam = ({ teamData, teamId, members, setMembers, setTeamData }) => {
       ) : (
         <Text style={styles.noMembers}>{t("manage_team.no_members")}</Text>
       )}
-    </View>
+    </ScrollView>
   );
 };
 
@@ -237,6 +239,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   removeButton: {
+    marginHorizontal: 10,
+    paddingHorizontal: 12,
     backgroundColor: "#FF3D00",
     paddingVertical: 6,
     paddingHorizontal: 12,

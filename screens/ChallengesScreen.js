@@ -14,7 +14,7 @@ import Loader from "./components/Loader";
 import { getSelf } from "../api/self";
 import { useTranslation } from "react-i18next"; // Import useTranslation
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 
 const ChallengesScreen = ({ navigation }) => {
   const { t } = useTranslation(); // Use the translation function
@@ -22,6 +22,10 @@ const ChallengesScreen = ({ navigation }) => {
   const { userId } = useUserStore();
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
+
+
+
+
 
   const fetchChallenges = async () => {
     try {
@@ -40,13 +44,13 @@ const ChallengesScreen = ({ navigation }) => {
     try {
       const response = await getSelf();
       setUserData(response.user);
-
     } catch (error) {
       console.error("Failed to fetch user data:", error);
       setUserData(null);
-
     }
   };
+
+
 
   useEffect(() => {
     if (userId) {
@@ -57,26 +61,28 @@ const ChallengesScreen = ({ navigation }) => {
     }
   }, [userId]);
 
-
   const queryFetchUserData = () => {
     fetchUserData();
-    return true
+    return true;
   };
 
   useQuery({
-    queryKey: ['challenge-user-data'],
+    queryKey: ["challenge-user-data"],
     queryFn: queryFetchUserData,
     staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
     refetchOnWindowFocus: false, // Only refetch when manually triggered
   });
 
-
-
-
   if (!userId) {
     return (
       <View style={styles.loginPromptContainer}>
-        <Text style={styles.loginPrompt}>{t("challenges.login_prompt")}</Text>
+        <Text style={styles.loginPromptText}>{t("teams.login_prompt")}</Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Login")}
+          style={styles.loginButton}
+        >
+          <Text style={styles.loginButtonText}>{t("teams.login_button")}</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -113,15 +119,15 @@ const ChallengesScreen = ({ navigation }) => {
               style={styles.redeemButton}
             >
               <MaterialIcons name="redeem" size={24} color="#FF9804" />
-              <Text style={styles.redeemText}>Redeem</Text>
+              <Text style={styles.redeemText}>{t("challenges.redeem")}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => navigation.navigate("EventsScreen")}
+              onPress={() => navigation.navigate("EventsStackNavigator")}
               style={styles.eventsButton}
             >
               <MaterialIcons name="event" size={24} color="#FF9804" />
-              <Text style={styles.redeemText}>Events</Text>
+              <Text style={styles.redeemText}>{t("challenges.events")}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -237,7 +243,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#0E1725",
+    backgroundColor: "#0F1F26",
+  },
+  loginPromptText: {
+    color: "white",
+    marginBottom: 10,
+  },
+  loginButton: {
+    backgroundColor: "#007BFF",
+    padding: 10,
+    borderRadius: 8,
+  },
+  loginButtonText: {
+    color: "white",
   },
   loginPrompt: {
     fontSize: 20,

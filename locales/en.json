@@ -1,6 +1,6 @@
 {
   "teams": {
-    "header": "Teams",
+    "header": "My Team",
     "no_teams": "There are no teams",
     "login_prompt": "Please log in first.",
     "login_button": "Go to Login",
@@ -14,23 +14,22 @@
   },
 
   "login": {
-    "header": "Login",
+    "login_error": "Login failed. Please check your credentials and try again.",
+    "login_button": "Log In",
     "email_placeholder": "Email",
     "password_placeholder": "Password",
-    "login_button": "Login",
     "signup_prompt": "Don't have an account?",
-    "signup_button": "Sign up!",
-    "login_error": "*Login failed. Please check your credentials and try again."
+    "signup_button": "Sign Up!"
   },
   "signup": {
-    "header": "Sign Up",
+    "signup_error": "Sign-up failed. Please try again.",
+    "signup_button": "Sign Up",
     "username_placeholder": "Username",
     "email_placeholder": "Email",
     "password_placeholder": "Password",
-    "signup_button": "Sign Up",
     "login_prompt": "Already have an account?",
-    "login_button": "Login",
-    "signup_error": "*Signup failed. Please try again."
+    "login_button": "Log In",
+    "complete_all_fields": "Please complete all fields."
   },
 
   "post": {
@@ -40,7 +39,9 @@
     "report": "Report",
     "like": "Like",
     "comments": "Comments",
-    "created_at": "Created at"
+    "created_at": "Created at",
+    "reportSubmitted": "Report Submitted",
+    "reportedFor": "You reported for: "
   },
 
   "comments_modal": {
@@ -69,18 +70,23 @@
     "total_points": "Total Points: {{points}}",
     "last_challenge_completed": "Last Challenge Completed: {{date}}",
     "challenges_assigned_today": "Challenges Assigned Today: {{count}}",
-    "never": "Never"
+    "never": "Never",
+    "events": "Events",
+    "redeem": "Redeem"
   },
 
   "challengeItem": {
     "validation_error": "Validation Error: Please provide a description and select an image.",
     "done": "DONE",
-    "attempt": "ATTEMPT"
+    "attempt": "ATTEMPT",
+    "points": "Points"
   },
 
   "imagePickerModal": {
     "caption_placeholder": "Write a caption",
-    "submit": "SUBMIT"
+    "submit": "SUBMIT",
+    "instruction_text": "Please select an image to upload. Make sure the image is clear and shows that you've actually done the challenge. Failing to do so might put your account at a risk of a ban.",
+    "close": "Close"
   },
 
   "profile": {
@@ -115,11 +121,12 @@
     "createButton": "Create Team",
     "closeButton": "Close",
     "error": "Error",
-    "missingFields": "Please provide a team name and description."
+    "missingFields": "Please provide a team name and description.",
+    "loading": "Creating Team..."
   },
 
   "noTeam": {
-    "info": "You are not in a team. Either create one or join one. Note that if you create a team, you will not be able to join another.",
+    "info": "You are not in a team. Either create one or join one. Note that if you create a team, you will not be able to join another. Note if you join a team you wont be able to join another.",
     "createButton": "Create Team"
   },
 
@@ -183,11 +190,25 @@
   "settings": {
     "header": "Settings",
     "language": "Language",
-    "other_settings": "Other Settings",
-    "notification_preferences": "Notification Preferences",
-    "privacy_settings": "Privacy Settings",
-    "account_management": "Account Management",
+    "theme": "Theme",
     "language_changed": "Language changed to {{lang}}",
+    "account_management": "Account Management",
+    "change_password": "Change Password",
+    "change_username": "Change Username",
+    "new_username": "New Username",
+    "username_updated": "Username Updated",
+    "change_password_title": "Change Password",
+    "old_password": "Current Password",
+    "new_password": "New Password",
+    "confirm_new_password": "Confirm New Password",
+    "password_updated": "Password Updated",
+    "error": "Error",
+    "password_update_error": "Password couldn't be updated",
+    "password_mismatch": "Passwords do not match",
+    "new_username_taken": "New username is already taken",
+    "password_same_error": "New password can't be same as old password",
+    "submit": "Submit",
+    "cancel": "Cancel",
     "logout": "Logout"
   },
 
@@ -208,5 +229,76 @@
     "followers": "Followers",
     "following": "Following",
     "error_fetch": "Could not load user data."
+  },
+
+  "report": {
+    "title": "Report",
+    "spam": "Spam",
+    "hateful": "Hateful",
+    "graphic_content": "Graphic Content",
+    "other": "Other",
+    "submit": "Submit"
+  },
+
+  "redeemScreen": {
+    "header": "Redeem Items",
+    "insufficientPointsTitle": "Insufficient Points",
+    "insufficientPointsMessage": "You do not have enough points to redeem this item.",
+    "successTitle": "Success",
+    "successMessage": "Item redeemed successfully.",
+    "errorTitle": "Error",
+    "errorMessage": "Failed to load data.",
+    "errorRedeeming": "Failed to redeem item.",
+    "noResponse": "No response from server.",
+    "available": "Available",
+    "redeemables": "Redeemables",
+    "redeemed": "Redeemed"
+  },
+
+  "availableRedeem": {
+    "points": "Points: ",
+    "subheader": "Available Redeemables",
+    "noItemsText": "No items available for redemption.",
+    "processing": "Processing...",
+    "getFor": "GET FOR ",
+    "confirmRedemption": "Confirm Redemption",
+    "confirmMessage": "Are you sure you want to redeem {{itemName}} for {{cost}} points?",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  },
+  "allRedeemables": {
+    "header": "All Redeemables (For Reference)",
+    "noItemsText": "No redeemables available.",
+    "pointsRequired": "Points Required: "
+  },
+  "redeemedItems": {
+    "header": "Redeemed Items",
+    "noItemsText": "No items redeemed yet.",
+    "redeemedFor": "Redeemed for: {cost} points",
+    "processingMessage": "Your redeemed items are being processed and will be sent to you as soon as possible. You will receive a notification once they are on their way."
+  },
+  "eventScreen": {
+    "header": "Events",
+    "attend": "Attend",
+    "attending": "Attending",
+    "confirmAttendance": "Confirm Attendance",
+    "areYouWilling": "Are you willing to participate?",
+    "cancel": "Cancel",
+    "yes": "Yes",
+    "viewDetails": "View Details",
+    "maxMembers": "Max participants:",
+    "pastEvent": "Past Event"
+  },
+  "eventDetails": {
+    "joinSuccess": "Joined successfully!",
+    "leaveSuccess": "Left successfully!",
+    "joinError": "Failed to join",
+    "leaveError": "Failed to leave",
+    "header": "Event Details",
+    "currentParticipants": "Joined:",
+    "maxParticipants": "Max:",
+    "aboutEvent": "About this event: ",
+    "join": "Attend",
+    "leave": "Leave"
   }
 }

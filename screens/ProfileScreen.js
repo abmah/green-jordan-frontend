@@ -5,7 +5,6 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
-  Alert,
   FlatList,
   RefreshControl,
   ActivityIndicator,
@@ -13,7 +12,6 @@ import {
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import useUserStore from "../stores/useUserStore";
-
 import { getSelf } from "../api/self";
 import { getUserPosts } from "../api/post";
 import Post from "./components/Post";
@@ -27,6 +25,9 @@ import Loader from "./components/Loader";
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useQuery } from '@tanstack/react-query';
+import Toast from 'react-native-toast-message';
+import UserImage from '../assets/user.png'
+
 // Render stats component
 const renderStats = ({ followers, followings, points, t }) => (
   <>
@@ -79,7 +80,6 @@ const CustomImagePickerModal = ({
             <TouchableOpacity onPress={handleLibraryPress} style={styles.modalButton}>
               <MaterialIcons name="photo-library" size={24} color="#fff" />
             </TouchableOpacity>
-
           </View>
 
           <TouchableOpacity
@@ -112,7 +112,6 @@ const ProfileScreen = ({ navigation }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
 
-
   const fetchUserData = async () => {
     try {
       const data = await getSelf();
@@ -123,9 +122,6 @@ const ProfileScreen = ({ navigation }) => {
       setLoading(false);
     }
   };
-
-  // Fetch user data
-
 
   // Fetch user posts
   const fetchUserPosts = useCallback(async () => {
@@ -151,10 +147,8 @@ const ProfileScreen = ({ navigation }) => {
 
   const fetchAll = async () => {
     await Promise.all([fetchUserPosts(), fetchUserData()]);
-    return true; // this is spagetti code i know but if i dont have this it will throw an error and i dont want to have to deal with remaking our functions
+    return true; // this is spaghetti code i know but if i dont have this it will throw an error and i dont want to have to deal with remaking our functions
   };
-
-
 
   useQuery({
     queryKey: ['profile'],
@@ -162,7 +156,6 @@ const ProfileScreen = ({ navigation }) => {
     staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
     refetchOnWindowFocus: false, // Only refetch when manually triggered
   });
-
 
   // Handle image selection from the library
   const handleLibraryPress = async () => {
@@ -180,7 +173,10 @@ const ProfileScreen = ({ navigation }) => {
   // Handle profile picture update
   const handleProfilePictureUpdate = async () => {
     if (!selectedImage) {
-      Alert.alert(t("profile.noImageSelected"));
+      Toast.show({
+        text1: t("profile.noImageSelected"),
+        type: 'error',
+      });
       return;
     }
 
@@ -191,13 +187,19 @@ const ProfileScreen = ({ navigation }) => {
       setUserData(updatedData.user);
       setModalVisible(false);
       setSelectedImage(null);
-      Alert.alert(t("profile.profileUpdated"));
+      Toast.show({
+        text1: t("profile.profileUpdated"),
+        type: 'success',
+      });
     } catch (err) {
       console.error(
         "Error updating profile picture:",
         err.response ? err.response.data : err.message
       );
-      Alert.alert(t("profile.failedToUpdateProfile"));
+      Toast.show({
+        text1: t("profile.failedToUpdateProfile"),
+        type: 'error',
+      });
     } finally {
       setIsUploading(false);
     }
@@ -225,7 +227,7 @@ const ProfileScreen = ({ navigation }) => {
         <View style={styles.profileImageContainer}>
           <Image
             source={{
-              uri: userData?.profilePicture || "https://via.placeholder.com/150",
+              uri: userData?.profilePicture || Image.resolveAssetSource(UserImage).uri,
             }}
             style={styles.profilePicture}
           />
@@ -278,6 +280,7 @@ const ProfileScreen = ({ navigation }) => {
         isUploading={isUploading}
         t={t}
       />
+
     </View>
   );
 };
@@ -338,7 +341,6 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-
     justifyContent: "center",
     alignItems: "center",
   },
@@ -352,13 +354,13 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   closeButton: {
-    padding: 10,
+    // padding: 10,
   },
   modalTitle: {
     fontSize: 24,
     color: "white",
     textAlign: "center",
-    marginBottom: 10,
+    marginBottom: 20,
   },
   imageOptionButtonContainer: {
     flexDirection: "row",
@@ -387,7 +389,6 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     width: "100%",
-
     backgroundColor: "#8AC149",
     height: 45,
     alignSelf: "flex-end",
@@ -417,10 +418,7 @@ const styles = StyleSheet.create({
     top: 15,
     right: 15,
   },
-  settingsButton: {
-
-
-  },
+  settingsButton: {},
 });
 
 export default ProfileScreen;

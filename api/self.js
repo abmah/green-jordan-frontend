@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { API_BASE_URL } from './config';
-import useUserStore from '../stores/useUserStore';
+// import useUserStore from '../stores/useUserStore';
+import * as SecureStore from 'expo-secure-store';
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -8,7 +9,7 @@ const apiClient = axios.create({
 });
 
 export const getSelf = async () => {
-  const { userId } = useUserStore.getState();
+  const userId = await SecureStore.getItemAsync('userId');
   if (!userId) {
     throw new Error('User ID is not available');
   }

@@ -7,28 +7,22 @@ const apiClient = axios.create({
   timeout: 10000,
 });
 
-
-export const getFeed = async () => {
+export const updatePassword = async (oldPassword, newPassword, userId) => {
   try {
-    const response = await apiClient.get('posts/get-all-posts');
+    const response = await apiClient.put(`/auth/update-password/${userId}`, { oldPassword, newPassword });
     return response.data;
   } catch (error) {
     console.error('API call error:', error);
     throw error;
   }
-};
+}
 
-
-// getPersonalFeed
-export const getPersonalFeed = async (userId) => {
+export const updateUsername = async (username, userId) => {
   try {
-
-    const response = await apiClient.get('posts/get-timeline-posts', { userId });
+    const response = await apiClient.put(`/users/update-username/${userId}`, { username, userId });
     return response.data;
   } catch (error) {
     console.error('API call error:', error);
     throw error;
   }
-};
-
-
+}

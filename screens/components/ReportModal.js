@@ -8,9 +8,16 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons"; // For the close button icon
+import { useTranslation } from "react-i18next"; // Assuming you are using i18next
 
 const ReportModal = ({ visible, onClose, onReport }) => {
-  const reasons = ["Spam", "Hateful", "Graphic Content", "Other"];
+  const { t } = useTranslation(); // Use the translation hook
+  const reasons = [
+    t("report.spam"),
+    t("report.hateful"),
+    t("report.graphic_content"),
+    t("report.other"),
+  ];
 
   const [selectedReason, setSelectedReason] = useState(null);
 
@@ -32,7 +39,7 @@ const ReportModal = ({ visible, onClose, onReport }) => {
         <View style={styles.modalContent}>
           {/* Top Section: Header */}
           <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>Report</Text>
+            <Text style={styles.modalTitle}>{t("report.title")}</Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Ionicons name="close" size={24} color="#F5F5F5" />
             </TouchableOpacity>
@@ -69,7 +76,7 @@ const ReportModal = ({ visible, onClose, onReport }) => {
               onPress={handleConfirmReport}
               disabled={!selectedReason}
             >
-              <Text style={styles.confirmText}>Submit</Text>
+              <Text style={styles.confirmText}>{t("report.submit")}</Text>
             </Pressable>
           </View>
         </View>

@@ -32,8 +32,9 @@ const Teams = () => {
   const [loading, setLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const navigation = useNavigation();
-  const { t } = useTranslation(); // Use the translation function
+  const { t } = useTranslation();
 
+  // Fetch all teams
   const fetchTeams = async () => {
     try {
       const response = await getAllTeams();
@@ -41,10 +42,15 @@ const Teams = () => {
         setTeams(response.data);
       }
     } catch (error) {
-      console.error("Error fetching teams:", error);
+      Toast.show({
+        type: "error",
+        text1: t("teams.error.fetch_teams"),
+        text2: error.message || t("teams.error.default_message"),
+      });
     }
   };
 
+  // Fetch user team
   const fetchUserTeam = async () => {
     if (!userId) return setLoading(false);
 
@@ -56,7 +62,11 @@ const Teams = () => {
         setUserTeam(null);
       }
     } catch (error) {
-      console.error("Error fetching user team:", error);
+      Toast.show({
+        type: "error",
+        text1: t("teams.error.fetch_user_team"),
+        text2: error.message || t("teams.error.default_message"),
+      });
     } finally {
       setLoading(false);
     }
@@ -67,13 +77,7 @@ const Teams = () => {
     fetchUserTeam();
   }, [userId]);
 
-  const onRefresh = async () => {
-    setIsRefreshing(true);
-    await fetchTeams();
-    await fetchUserTeam();
-    setIsRefreshing(false);
-  };
-
+  // Handle team creation
   const handleCreateTeam = async (teamData) => {
     try {
       const response = await createTeam(userId, teamData);
@@ -88,6 +92,7 @@ const Teams = () => {
       Toast.show({
         type: "error",
         text1: t("teams.error.create_team"),
+        text2: error.message || t("teams.error.default_message"),
       });
     }
   };
@@ -96,9 +101,31 @@ const Teams = () => {
     ? teams.filter((team) => team._id !== userTeam._id)
     : teams;
 
-  const renderTeamItem = (item) => (
-    <TeamItem item={item} userId={userId} navigation={navigation} />
-  );
+  const renderContent = () => {
+    if (!userId) {
+      return renderLoginPrompt();
+    }
+    if (loading) {
+      return <Loader />;
+    }
+    return (
+      <>
+        {userTeam ? (
+          <UserTeam userTeam={userTeam} navigation={navigation} />
+        ) : (
+          <NoTeam setModalVisible={setModalVisible} />
+        )}
+        <Text style={styles.otherTeamsHeader}>{t("teams.other_teams")}</Text>
+        {filteredTeams.length > 0 ? (
+          filteredTeams.map((team) => (
+            <TeamItem key={team._id} item={team} userId={userId} navigation={navigation} />
+          ))
+        ) : (
+          <Text style={{ color: "white" }}>{t("teams.no_teams")}</Text>
+        )}
+      </>
+    );
+  };
 
   const renderLoginPrompt = () => (
     <View style={styles.loginPromptContainer}>
@@ -118,38 +145,19 @@ const Teams = () => {
       refreshControl={
         <RefreshControl
           refreshing={isRefreshing}
-          onRefresh={onRefresh}
+          onRefresh={async () => {
+            setIsRefreshing(true);
+            await fetchTeams();
+            await fetchUserTeam();
+            setIsRefreshing(false);
+          }}
           tintColor="white"
         />
       }
     >
       <View style={styles.container}>
-        <Text style={styles.header}>{t("teams.header")}</Text>
-        {loading ? (
-          <Loader />
-        ) : (
-          <>
-            {userId ? (
-              <>
-                {userTeam ? (
-                  <UserTeam userTeam={userTeam} navigation={navigation} />
-                ) : (
-                  <NoTeam setModalVisible={setModalVisible} />
-                )}
-                <Text style={styles.otherTeamsHeader}>{t("teams.other_teams")}</Text>
-                {filteredTeams.length > 0 ? (
-                  filteredTeams.map((team) => (
-                    <TeamItem key={team._id} item={team} userId={userId} navigation={navigation} />
-                  ))
-                ) : (
-                  <Text style={{ color: "white" }}>{t("teams.no_teams")}</Text>
-                )}
-              </>
-            ) : (
-              renderLoginPrompt()
-            )}
-          </>
-        )}
+        {userId && <Text style={styles.header}>{t("teams.header")}</Text>}
+        {renderContent()}
         <CreateTeamModal
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
@@ -186,7 +194,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   loginPromptContainer: {
-    marginTop: 20,
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },

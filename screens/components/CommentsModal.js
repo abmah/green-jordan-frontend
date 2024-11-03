@@ -13,7 +13,7 @@ import {
 import { postComment } from "../../api";
 import useUserStore from "../../stores/useUserStore";
 import { Ionicons } from "@expo/vector-icons";
-import { useTranslation } from "react-i18next"; // Import useTranslation
+import { useTranslation } from "react-i18next";
 
 const CommentsModal = ({
   visible,
@@ -21,17 +21,19 @@ const CommentsModal = ({
   postId,
   userData,
   comments: initialComments,
+  onCommentsUpdate, // Accept the callback as a prop
 }) => {
-  const { t } = useTranslation(); // Use the translation function
+  const { t } = useTranslation();
   const { userId } = useUserStore();
   const [comments, setComments] = useState(initialComments);
   const [newComment, setNewComment] = useState("");
   const [error, setError] = useState(null);
 
+
+
   useEffect(() => {
     setComments(initialComments);
   }, [initialComments]);
-
 
   const handleCommentSubmit = async () => {
     if (newComment.trim() === "") return;
@@ -51,16 +53,20 @@ const CommentsModal = ({
         updatedAt: new Date().toISOString(),
         userId: {
           _id: userId,
-          username: userData?.user.username || "You", // Use the username from userData
-          profilePicture: userData?.user.profilePicture || "", // Use the profile picture from userData
+          username: userData?.user.username || "You",
+          profilePicture: userData?.user.profilePicture || "",
         },
       };
 
-      setComments((prevComments) => [...prevComments, newCommentObject]);
+      const updatedComments = [...comments, newCommentObject];
+      setComments(updatedComments);
       setNewComment("");
       setError(null);
+
+      // Update the parent component with the new comments count
+      onCommentsUpdate(updatedComments.length);
     } catch (error) {
-      setError(t("comments_modal.error")); // Localized error message
+      setError(t("comments_modal.error"));
       console.error("API error:", error);
     }
   };
@@ -74,7 +80,10 @@ const CommentsModal = ({
             style={styles.profilePicture}
           />
         ) : (
-          <View style={styles.profilePicturePlaceholder} />
+          <Image
+            source={require("../../assets/user.png")}
+            style={styles.profilePicture}
+          />
         )}
         <View style={styles.commentContent}>
           <Text style={styles.username}>
@@ -117,7 +126,7 @@ const CommentsModal = ({
             <View style={styles.commentInputContainer}>
               <TextInput
                 style={styles.input}
-                placeholder={t("comments_modal.write_comment")} // Localized placeholder
+                placeholder={t("comments_modal.write_comment")}
                 placeholderTextColor="#000000"
                 value={newComment}
                 onChangeText={setNewComment}
@@ -132,7 +141,7 @@ const CommentsModal = ({
             </View>
           ) : (
             <Text style={styles.loginPrompt}>
-              {t("comments_modal.login_prompt")} {/* Localized "Please login first" */}
+              {t("comments_modal.login_prompt")}
             </Text>
           )}
 

@@ -10,24 +10,38 @@ import {
   Easing,
   Platform,
   TouchableOpacity,
+  I18nManager,
 } from "react-native";
 import { Signup } from "../api";
 import * as SecureStore from "expo-secure-store";
 import useUserStore from "../stores/useUserStore";
 import { useTranslation } from "react-i18next"; // Import useTranslation
 import { Ionicons } from "@expo/vector-icons";
+import { useQueryClient } from "@tanstack/react-query";
 const SignupScreen = ({ navigation }) => {
-  const { t } = useTranslation(); // Use the translation function
+  const { t, i18n } = useTranslation();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { setuserId } = useUserStore();
+  const queryClient = useQueryClient();
+
+  const isArabic = i18n.language === "ar";
+  I18nManager.allowRTL(isArabic);
 
   const buttonOffset = useState(new Animated.Value(0))[0];
 
   const handleSignup = async () => {
+    if (!username || !email || !password) {
+      setError(t("signup.complete_all_fields"));
+      setTimeout(() => {
+        setError(null);
+      }, 2000);
+      return;
+    }
+
     setLoading(true);
     setError(null);
     try {
@@ -36,10 +50,11 @@ const SignupScreen = ({ navigation }) => {
 
       await SecureStore.setItemAsync("userId", userId);
       await setuserId(userId);
+      queryClient.refetchQueries(["fetchUserHomeScreen"]);
       navigation.navigate("Profile");
     } catch (error) {
       console.error("API call error:", error);
-      setError(t("signup.signup_error")); // Use translation for signup error message
+      setError(t("signup.signup_error"));
       setTimeout(() => {
         setError(null);
       }, 2000);
@@ -80,22 +95,22 @@ const SignupScreen = ({ navigation }) => {
         <View style={styles.inputWrapper}>
           <View style={styles.inputUnderline}></View>
           <TextInput
-            placeholder={t("signup.username_placeholder")} // Translated username placeholder
+            placeholder={t("signup.username_placeholder")}
             placeholderTextColor={"#000"}
             value={username}
             onChangeText={setUsername}
-            style={styles.input}
+            style={[styles.input, { textAlign: isArabic ? "right" : "left" }]}
           />
         </View>
         <View style={styles.inputWrapper}>
           <View style={styles.inputUnderline}></View>
           <TextInput
-            placeholder={t("signup.email_placeholder")} // Translated email placeholder
+            placeholder={t("signup.email_placeholder")}
             placeholderTextColor={"#000"}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
-            style={styles.input}
+            style={[styles.input, { textAlign: isArabic ? "right" : "left" }]}
           />
         </View>
         <View style={styles.inputWrapper}>
@@ -105,7 +120,8 @@ const SignupScreen = ({ navigation }) => {
             placeholderTextColor={"#000"}
             value={password}
             onChangeText={setPassword}
-            style={styles.input}
+            style={[styles.input, { textAlign: isArabic ? "right" : "left" }]}
+            secureTextEntry={true}
           />
         </View>
       </View>
@@ -134,14 +150,22 @@ const SignupScreen = ({ navigation }) => {
 
         {error && <Text style={styles.errorText}>{error}</Text>}
       </View>
-      <View style={styles.loginContainer}>
+      <View
+        style={[
+          styles.loginContainer,
+          { flexDirection: isArabic ? "row-reverse" : "row" },
+        ]}
+      >
         <Text style={styles.loginText}>{t("signup.login_prompt")}</Text>
 
         <Pressable
           onPress={() => navigation.navigate("Login Screen")}
           style={styles.loginButton}
         >
-          <Text style={styles.loginButtonText}>{t("signup.login_button")}</Text>
+          <Text style={styles.loginButtonText}>
+            {" "}
+            {t("signup.login_button")}
+          </Text>
         </Pressable>
       </View>
     </View>

@@ -6,42 +6,50 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import { sendJoinRequest } from "../../../api";
 import useUserIdStore from "../../../stores/useUserStore";
 import Loader from "../Loader";
-import Toast from "react-native-toast-message"; // Importing Toast
-import { useTranslation } from "react-i18next"; // Import useTranslation
+import Toast from "react-native-toast-message";
+import { useTranslation } from "react-i18next";
+import UserImage from "../../../assets/user.png";
 
 const Overview = ({ teamData, members }) => {
-  const { t } = useTranslation(); // Use the translation function
+  const { t } = useTranslation();
   const { userId } = useUserIdStore();
 
   const [isLoading, setIsLoading] = useState(false);
   const [showNoMembersMessage, setShowNoMembersMessage] = useState(false);
+  const [requestSent, setRequestSent] = useState(false);
 
-  // Check if the user is a member
   const isMember = teamData.members.some((member) => member._id === userId);
   const isAdmin = teamData.admin === userId;
-  const showJoinButton = !isMember && !isAdmin;
+  const hasRequestedJoin = teamData.joinRequests.some(
+    (request) => request.userId._id === userId
+  );
+
+  const showJoinButton =
+    !isMember && !isAdmin && !hasRequestedJoin && !requestSent;
 
   const handleJoinRequest = async () => {
+    setIsLoading(true); // Start loading
     try {
       await sendJoinRequest(teamData._id, userId);
-      // Display success message using Toast
+      setRequestSent(true); // Disable the button after successful request
       Toast.show({
         type: "success",
-        text1: "Success",
-        text2: "Join request sent successfully!",
+        text1: t("success"),
+        text2: t("overview.join_request_sent"),
       });
     } catch (error) {
-      console.error("Error sending join request:", error);
-      // Display error message using Toast
       Toast.show({
         type: "error",
-        text1: "Error",
-        text2: error.message || "Failed to send join request.", // Show error message from server
+        text1: t("error"),
+        text2: error.message || t("overview.request_failed"),
       });
+    } finally {
+      setIsLoading(false); // Stop loading
     }
   };
 
@@ -50,7 +58,7 @@ const Overview = ({ teamData, members }) => {
       <View style={styles.memberCard}>
         <Image
           source={{
-            uri: item.profilePicture || "https://via.placeholder.com/100",
+            uri: item.profilePicture || Image.resolveAssetSource(UserImage).uri,
           }}
           style={styles.profilePicture}
         />
@@ -82,7 +90,7 @@ const Overview = ({ teamData, members }) => {
       const timer = setTimeout(() => {
         setIsLoading(false);
         setShowNoMembersMessage(true);
-      }, 2000);
+      }, 10000);
 
       return () => clearTimeout(timer);
     } else {
@@ -103,12 +111,26 @@ const Overview = ({ teamData, members }) => {
         {teamData.description}
       </Text>
 
-      {showJoinButton && (
-        <TouchableOpacity style={styles.joinButton} onPress={handleJoinRequest}>
-          <Text style={styles.joinButtonText}>
+      {showJoinButton ? (
+        <TouchableOpacity
+          style={isLoading ? styles.disabledJoinButton : styles.joinButton}
+          onPress={handleJoinRequest}
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <ActivityIndicator color="white" /> // Show loading indicator
+          ) : (
+            <Text style={styles.joinButtonText}>
+              {t("overview.send_join_request")}
+            </Text>
+          )}
+        </TouchableOpacity>
+      ) : (
+        <View style={styles.disabledJoinButton}>
+          <Text style={styles.disabledJoinButtonText}>
             {t("overview.send_join_request")}
           </Text>
-        </TouchableOpacity>
+        </View>
       )}
 
       <Text style={styles.membersTitle}>{t("overview.members")}</Text>
@@ -210,6 +232,18 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     marginTop: 10,
+  },
+  disabledJoinButton: {
+    backgroundColor: "#B0B0B0",
+    padding: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  disabledJoinButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontFamily: "Nunito-ExtraBold",
   },
   joinButtonText: {
     color: "white",

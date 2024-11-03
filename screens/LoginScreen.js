@@ -10,6 +10,7 @@ import {
   Easing,
   Pressable,
   StyleSheet,
+  I18nManager,
 } from "react-native";
 import { login } from "../api";
 import * as SecureStore from "expo-secure-store";
@@ -18,14 +19,17 @@ import GreenJordan from "../assets/green-jordan.svg";
 import MainLogo from "../assets/main-logo.svg";
 import { useTranslation } from "react-i18next"; // Import useTranslation
 import { Ionicons } from "@expo/vector-icons";
+import { useQueryClient } from "@tanstack/react-query";
 const LoginScreen = ({ navigation }) => {
-  const { t } = useTranslation(); // Use the translation function
+  const { t, i18n } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { setuserId } = useUserStore();
-
+  const queryClient = useQueryClient();
+  const isArabic = i18n.language === "ar";
+  I18nManager.allowRTL(isArabic);
   const handleLogin = async () => {
     setLoading(true);
     setError(null);
@@ -34,10 +38,11 @@ const LoginScreen = ({ navigation }) => {
       const userId = response.data._id;
       await SecureStore.setItemAsync("userId", userId);
       await setuserId(userId);
+      queryClient.refetchQueries(["fetchUserHomeScreen"]);
       navigation.navigate("Profile");
     } catch (error) {
       console.error("API call error:", error);
-      setError(t("login.login_error")); // Use translation for login error message
+      setError(t("login.login_error"));
 
       setTimeout(() => {
         setError(null);
@@ -86,7 +91,7 @@ const LoginScreen = ({ navigation }) => {
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
-            style={styles.input}
+            style={[styles.input, { textAlign: isArabic ? "right" : "left" }]}
             placeholderTextColor={"#000"}
           />
         </View>
@@ -96,8 +101,9 @@ const LoginScreen = ({ navigation }) => {
             placeholder={t("login.password_placeholder")}
             value={password}
             onChangeText={setPassword}
-            style={styles.input}
+            style={[styles.input, { textAlign: isArabic ? "right" : "left" }]}
             placeholderTextColor={"#000"}
+            secureTextEntry
           />
         </View>
       </View>
@@ -125,7 +131,12 @@ const LoginScreen = ({ navigation }) => {
         )}
         {error && <Text style={styles.errorText}>{error}</Text>}
       </View>
-      <View style={styles.signupContainer}>
+      <View
+        style={[
+          styles.signupContainer,
+          { flexDirection: isArabic ? "row-reverse" : "row" },
+        ]}
+      >
         <Text style={styles.signupText}>{t("login.signup_prompt")} </Text>
         <Pressable onPress={() => navigation.navigate("Signup Screen")}>
           <View>
