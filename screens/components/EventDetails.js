@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   I18nManager,
+  ActivityIndicator,
 } from "react-native";
 import Toast from "react-native-toast-message";
 import { useTranslation } from "react-i18next";
@@ -15,16 +16,16 @@ import useUserIdStore from "../../stores/useUserStore";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { AntDesign } from "@expo/vector-icons";
 
-let isArabic;
 const EventDetails = ({ route, navigation }) => {
   const { eventId } = route.params;
   const { t, i18n } = useTranslation();
   const [eventDetails, setEventDetails] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [actionLoading, setActionLoading] = useState(false);
   const [hasJoined, setHasJoined] = useState(false);
   const { userId } = useUserIdStore();
 
-  isArabic = i18n.language === "ar";
+  const isArabic = i18n.language === "ar";
   I18nManager.allowRTL(isArabic);
 
   useEffect(() => {
@@ -50,6 +51,7 @@ const EventDetails = ({ route, navigation }) => {
   }, [eventId, t, userId]);
 
   const handleJoinEvent = async () => {
+    setActionLoading(true);
     try {
       await joinEvent(eventId, userId);
       setHasJoined(true);
@@ -67,10 +69,13 @@ const EventDetails = ({ route, navigation }) => {
         type: "error",
         text1: t("eventDetails.joinError"),
       });
+    } finally {
+      setActionLoading(false);
     }
   };
 
   const handleLeaveEvent = async () => {
+    setActionLoading(true);
     try {
       await leaveEvent(eventId, userId);
       setHasJoined(false);
@@ -90,6 +95,8 @@ const EventDetails = ({ route, navigation }) => {
         type: "error",
         text1: t("eventDetails.leaveError"),
       });
+    } finally {
+      setActionLoading(false);
     }
   };
 
@@ -126,24 +133,16 @@ const EventDetails = ({ route, navigation }) => {
       </Text>
 
       <View style={styles.participantCard}>
-        <View
-          style={[
-            styles.participantInfo,
-            { justifyContent: isArabic ? "space-between" : "flex-start" },
-          ]}
-        >
+        {/* Participant Info */}
+        <View style={[styles.participantInfo]}>
           <AntDesign name="user" size={24} color="#FFF" />
           <Text style={styles.participantText}>
             {t("eventDetails.currentParticipants")} {currentParticipantCount}
           </Text>
         </View>
+        {/* Additional Details */}
         <View style={styles.separator} />
-        <View
-          style={[
-            styles.participantInfo,
-            { justifyContent: isArabic ? "space-between" : "flex-start" },
-          ]}
-        >
+        <View style={[styles.participantInfo]}>
           <AntDesign name="team" size={24} color="#FFF" />
           <Text style={styles.participantText}>
             {t("eventDetails.maxParticipants")}{" "}
@@ -151,12 +150,7 @@ const EventDetails = ({ route, navigation }) => {
           </Text>
         </View>
         <View style={styles.separator} />
-        <View
-          style={[
-            styles.participantInfo,
-            { justifyContent: isArabic ? "space-between" : "flex-start" },
-          ]}
-        >
+        <View style={[styles.participantInfo]}>
           <AntDesign name="calendar" size={24} color="#FFF" />
           <Text style={styles.participantText}>
             {new Date(eventDetails.date).toLocaleString(i18n.language, {
@@ -179,10 +173,15 @@ const EventDetails = ({ route, navigation }) => {
       <TouchableOpacity
         style={hasJoined ? styles.leaveButton : styles.joinButton}
         onPress={hasJoined ? handleLeaveEvent : handleJoinEvent}
+        disabled={actionLoading}
       >
-        <Text style={styles.buttonText}>
-          {hasJoined ? t("eventDetails.leave") : t("eventDetails.join")}
-        </Text>
+        {actionLoading ? (
+          <ActivityIndicator size="small" color="#FFF" />
+        ) : (
+          <Text style={styles.buttonText}>
+            {hasJoined ? t("eventDetails.leave") : t("eventDetails.join")}
+          </Text>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -192,15 +191,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#001c2c",
+    backgroundColor: "#0F1F26",
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
     paddingTop: 20,
     paddingBottom: 15,
-
-
   },
   backButton: {
     paddingVertical: 10,

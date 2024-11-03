@@ -116,7 +116,7 @@ const ImagePickerModal = ({
               disabled={isUploading}
             >
               {isUploading ? (
-                <ActivityIndicator size="{small}" color="#fff" />
+                <ActivityIndicator size="small" color="#fff" />
               ) : (
                 <Text style={styles.submitButtonText}>
                   {t("imagePickerModal.submit")}

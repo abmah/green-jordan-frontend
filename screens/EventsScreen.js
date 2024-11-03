@@ -13,6 +13,13 @@ import { useTranslation } from "react-i18next";
 import { getAllEvents } from "../api";
 import Loader from "./components/Loader";
 
+import beachCleanup from "../assets/eventimages/beach-cleanup.png";
+import communityGarden from "../assets/eventimages/community-garden.png";
+import parkRevitalization from "../assets/eventimages/park-revital.png";
+import riverCleanup from "../assets/eventimages/river-cleanup.png";
+import flowerPlanting from "../assets/eventimages/flower-planting.png";
+import treePlanting from "../assets/eventimages/tree-planting.png";
+
 const EventsScreen = ({ navigation }) => {
   const { t, i18n } = useTranslation();
   const [eventsData, setEventsData] = useState([]);
@@ -32,7 +39,7 @@ const EventsScreen = ({ navigation }) => {
       requiredParticipants: 50,
       conclusion: "Collected over 200 bags of waste. Great teamwork!",
       conclusionAR: "تم جمع أكثر من 200 كيس من النفايات. عمل جماعي رائع!",
-      image: "https://example.com/beach-cleanup.jpg",
+      image: beachCleanup, // Updated with local image
     },
     {
       _id: "2",
@@ -43,7 +50,7 @@ const EventsScreen = ({ navigation }) => {
       requiredParticipants: 30,
       conclusion: "Successfully planted all 100 trees in the park.",
       conclusionAR: "تمت زراعة جميع الأشجار بنجاح في الحديقة.",
-      image: "https://example.com/tree-planting.jpg",
+      image: treePlanting, // Updated with local image
     },
     {
       _id: "3",
@@ -54,7 +61,7 @@ const EventsScreen = ({ navigation }) => {
       requiredParticipants: 40,
       conclusion: "Park revitalized and improved for community use.",
       conclusionAR: "تم تجديد الحديقة وتحسينها للاستخدام المجتمعي.",
-      image: "https://example.com/park-revitalization.jpg",
+      image: parkRevitalization, // Updated with local image
     },
     {
       _id: "4",
@@ -65,7 +72,7 @@ const EventsScreen = ({ navigation }) => {
       requiredParticipants: 60,
       conclusion: "Collected over 300 pounds of trash. River is cleaner!",
       conclusionAR: "تم جمع أكثر من 300 رطل من النفايات. النهر أصبح أنظف!",
-      image: "https://example.com/river-cleanup.jpg",
+      image: riverCleanup, // Updated with local image
     },
     {
       _id: "5",
@@ -76,7 +83,7 @@ const EventsScreen = ({ navigation }) => {
       requiredParticipants: 20,
       conclusion: "Beautiful wildflowers now support pollinators.",
       conclusionAR: "الزهور البرية الجميلة الآن تدعم الملقحات.",
-      image: "https://example.com/wildflower-planting.jpg",
+      image: flowerPlanting, // Updated with local image
     },
     {
       _id: "6",
@@ -87,10 +94,9 @@ const EventsScreen = ({ navigation }) => {
       requiredParticipants: 25,
       conclusion: "Community garden is ready for planting season!",
       conclusionAR: "حديقة المجتمع جاهزة لموسم الزراعة!",
-      image: "https://example.com/community-garden.jpg",
+      image: communityGarden, // Updated with local image
     },
   ];
-
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -111,7 +117,9 @@ const EventsScreen = ({ navigation }) => {
     <View style={styles.eventCard}>
       {item.image && (
         <Image
-          source={{ uri: item.image }}
+          source={
+            typeof item.image === "string" ? { uri: item.image } : item.image
+          }
           style={[
             styles.eventImage,
             isArabic ? styles.imageLeft : styles.imageRight,
@@ -135,13 +143,11 @@ const EventsScreen = ({ navigation }) => {
           {t("eventScreen.maxMembers")} {item.requiredParticipants}
         </Text>
         <TouchableOpacity
-          style={[
-            styles.viewDetailsButton,
-            isPast && styles.disabledButton,
-          ]}
+          style={[styles.viewDetailsButton, isPast && styles.disabledButton]}
           disabled={isPast}
           onPress={() =>
-            !isPast && navigation.navigate("EventDetails", { eventId: item._id })
+            !isPast &&
+            navigation.navigate("EventDetails", { eventId: item._id })
           }
         >
           <Text style={styles.viewDetailsText}>
@@ -151,7 +157,6 @@ const EventsScreen = ({ navigation }) => {
       </View>
     </View>
   );
-
 
   if (loading) {
     return <Loader />;
@@ -172,13 +177,17 @@ const EventsScreen = ({ navigation }) => {
         data={eventsData}
         renderItem={(props) => renderEventCard({ ...props, isPast: false })}
         keyExtractor={(item) => item._id}
-        ListHeaderComponent={<Text style={styles.sectionTitle}>Upcoming Events</Text>}
+        ListHeaderComponent={
+          <Text style={styles.sectionTitle}>{t("eventScreen.upcoming")}</Text>
+        }
         ListFooterComponent={() => (
           <>
-            <Text style={styles.sectionTitle}>Past Events</Text>
+            <Text style={styles.sectionTitle}>{t("eventScreen.past")}</Text>
             <FlatList
               data={pastEventsData}
-              renderItem={(props) => renderEventCard({ ...props, isPast: true })}
+              renderItem={(props) =>
+                renderEventCard({ ...props, isPast: true })
+              }
               keyExtractor={(item) => item._id}
               contentContainerStyle={styles.listContainer}
             />
@@ -193,7 +202,7 @@ const EventsScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#001c2c",
+    backgroundColor: "#0F1F26",
   },
   header: {
     flexDirection: "row",
@@ -224,18 +233,17 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     height: 200,
     overflow: "hidden",
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 4 },
+    borderRadius: 18,
+    borderColor: "#2F3D45",
+    borderWidth: 1,
     backgroundColor: "#183d4d",
   },
   eventImage: {
     position: "absolute",
     top: 0,
-    height: 220,
-    width: 220,
-    opacity: 0.5,
+    height: 200,
+    width: 200,
+    opacity: 0.3,
     borderRadius: 10,
   },
   imageLeft: {
@@ -258,7 +266,7 @@ const styles = StyleSheet.create({
   },
   eventConclusion: {
     fontSize: 14,
-    color: "#B0BEC5",
+    color: "#FFFFFF",
     fontFamily: "Nunito-Regular",
     marginBottom: 15,
   },

@@ -177,7 +177,8 @@
     "admin_label": "Admin",
     "self_label": "You",
     "points": "pts",
-    "members": "Team Members: "
+    "members": "Team Members: ",
+    "join_request_sent": "Join request sent."
   },
 
   "team_item": {

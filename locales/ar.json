@@ -160,7 +160,8 @@
   "teamDetails": {
     "overview": "عام",
     "team_posts": "منشورات الفريق",
-    "manage_team": "إدارة الفريق"
+    "manage_team": "إدارة الفريق",
+    "join_request_sent": "تم ارسال طلب الانضمام"
   },
 
   "teamPosts": {
@@ -176,7 +177,8 @@
     "admin_label": "قائد",
     "self_label": "أنت",
     "points": "نقطة",
-    "members": "أعضاء الفريق"
+    "members": "أعضاء الفريق",
+    "join_request_sent": "تم ارسال طلب الانضمام"
   },
 
   "team_item": {
@@ -287,7 +289,9 @@
     "yes": "نعم",
     "viewDetails": "عرض التفاصيل",
     "maxMembers": "عدد الاشخاص المطلوبين:",
-    "pastEvent": "انتهت الفعالية"
+    "pastEvent": "انتهت الفعالية",
+    "past": "الفعاليات السابقة",
+    "upcoming": "الفعاليات القادمة"
   },
   "eventDetails": {
     "joinSuccess": "تم الانضمام بنجاح",

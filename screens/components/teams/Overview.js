@@ -39,8 +39,7 @@ const Overview = ({ teamData, members }) => {
       setRequestSent(true); // Disable the button after successful request
       Toast.show({
         type: "success",
-        text1: t("success"),
-        text2: t("overview.join_request_sent"),
+        text1: t("overview.join_request_sent"),
       });
     } catch (error) {
       Toast.show({
